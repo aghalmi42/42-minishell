@@ -1,0 +1,100 @@
+                                    ROADMAP :
+
+OBJECTIF : 
+
+-afficher une invite de cmd
+
+-conserver un historique de cmd
+
+-rechercher et lancer un fichier executable en fonction du PATH
+ls equivaut a /bin/ls etc
+
+-utiliser au maximum une variable globale afin d'indiquer la
+reception dun signal / cette variable doit seulement stocker le numero
+du signal et ne doit fournir aucune information ni acces au donnee
+
+-ne pas considirer les guillemet non fermer ni les char speciaux nn requis 
+par le sujet tel que \ ou ;
+
+-gerer l'apostrophe afin dempecher le terminal dinterpreter les metachractere
+dans la sequence entre guillemet
+
+-pour la double apostrophe meme chose que le precedent sauf le signe dollar $
+
+// REDIRECTION //
+-implementer les redirection > : redirige la sortie et < : redirige lentree
+
+// HEREDOC //
+-gerer les << recoit un delimiteur puis lit jusqua le rencontrer avec
+historique non mis a jour 
+
+-gerer les >> : redirige la sortie en mode ajout
+
+// PIPE //
+-implementer les pipe
+
+// ENV //
+-gerer les variable denvironnement $ suivi dune sequence de char
+-gerer $? qui doit etre remplacer par le code de sortie du dernier pipeline
+
+-gerer le comportement ctrl+D ctrl+C ctrl+\ qui doivent se comporter
+comme dans bash
+
+-en mode interactive ctrl+C affiche une nouvelle invite sur une new ligne
+-ctrl+D quitte linterpreteur de cmd
+-ctrl+\ ne fais rien 
+
+-implementer les commande :
+-->"echo" avec loption "-n" : option n empeche le retour a la ligne a la fin 
+-->"cd" avec un chemin relatif ou absolue
+-->"pwd" affiche le chemin
+-->"export" exporte des variable d'env em tant que processus enfant sans affecter
+celle existante
+-->"unset" permet de supprimer une variable
+-->"env" affiche lenvironnement actuel ou exec un cmd specifique dans un
+env modifier
+-->"exit" quitte une session de terminal
+
+- IMPORTANT : pas obliger de corriger les fuite de memoire de la fonction READLINE
+mais on va quand meme le faire ;)
+
+BONUS :
+
+-implementer les && et les || avec les parenthese pour la prioriter
+-le caractere "*" doit fonctionner pour le travail de repertoire courant
+
+DEF :
+
+1. metacaractere : type de caractere informatique exemple : ? * %
+2. READLINE() : lit une ligne depuis le terminal et la renvoie
+3. rl_clear_history() : efface la liste dhistorique en supprimant tt les entree.
+4. rl_on_new_line() : indique a la routine de maj que nous somme passer a une new ligne vide
+5. rl_replace_line() : ??????
+6. rl_redisplay() : modifier ce quil ya a lecran
+7. add_history() enrigistre une ligne passer en parametre dans lhistorique afin de la recup plus tard dans le terminal
+8. printf()
+9. malloc()
+10. free()
+11. write()
+12. acces() : verifie si le processus peut acceder au fichier pathname
+13. open()
+14. read()
+15. close()
+16. fork() : cree un processus (enfant) identique au processus de base (parent)
+    /cest une copie dun processus
+    /exemple : jai un processus (parent) j'appele fork() et pouf jai un clone (processus enfant)
+    les 2 ont exactement le meme code et les meme variable en memoire au moment du clonage donc
+    apres fork il ya 2 processus.
+    /fork retourne une valeur differente dans chaque processus 
+    le parent return le PID de lenfant ">0" et lenfant return "0"
+
+17. wait() : attend qu'un des processus (enfant) fini
+18. waitpid() : le parent se met en pause jusqua ce que le fils preciser se finit
+19. wait3() : obsolete aujourdhui
+20. wait4() : meme chose que waitpid mais avec des information detailler supplementaire
+21. signal() : msg emit a destination dun processus
+22. sigaction() : examine et modifie laction assocer a signal()
+23. sigemptyset() : vide lensemble des signaux fourni par le parametre set
+24. sigaddset() : ajoute le signal "signum" dans lensemble "set"
+25. kill() : utiliser pour envoyer nimporte quel signal a nimporte quel processus
+26. exit()
