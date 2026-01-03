@@ -1,4 +1,3 @@
-<<<<<<< HEAD
                                     ROADMAP :
 
 OBJECTIF : 
@@ -99,7 +98,7 @@ DEF :
 24. sigaddset() : ajoute le signal "signum" dans lensemble "set"
 25. kill() : utiliser pour envoyer nimporte quel signal a nimporte quel processus
 26. exit()
-=======
+
 getcwd : Permet de retourner le chemin absolu d un repertoire, buffer est la chaine qui va etre renvoye pour donner le nom, les erreurs indiquent taille de buffer pas assez grande ou pas acces au dossier
 chdir : Permet de changer de repertoire, le nouveau chemin passe en parametre return 0 si accessible -1 sinon erno gere les erreurs
 stat lstat fstat : toutes les trois identiques elles renvoient des informations sur le fichier en parametre, difference : stat et lstat doivent avoir la permission d execution pour tous les repertoires de path qui menent au fichier fstat meme chose que stat mais le fichier ouvert est pointe par le fd, lstat si lien symbolique, donne les stats du lien
@@ -137,4 +136,3 @@ cm 	cup 	déplace le curseur aux coordonnées souhaitées
 cl 	clear 	efface le texte affiché à l’écran
 me 	sgr0 	annule tous les changements opérés
 os 	os 	over strike, précise si le terminal efface ou non le contenu lors d’une réécriture par dessus du texte (par exemple à la suite d’un backspace)
->>>>>>> cce3eddec266feb17b30c2ed1631f68303923c70
