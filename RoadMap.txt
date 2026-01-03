@@ -1,3 +1,4 @@
+<<<<<<< HEAD
                                     ROADMAP :
 
 OBJECTIF : 
@@ -98,3 +99,42 @@ DEF :
 24. sigaddset() : ajoute le signal "signum" dans lensemble "set"
 25. kill() : utiliser pour envoyer nimporte quel signal a nimporte quel processus
 26. exit()
+=======
+getcwd : Permet de retourner le chemin absolu d un repertoire, buffer est la chaine qui va etre renvoye pour donner le nom, les erreurs indiquent taille de buffer pas assez grande ou pas acces au dossier
+chdir : Permet de changer de repertoire, le nouveau chemin passe en parametre return 0 si accessible -1 sinon erno gere les erreurs
+stat lstat fstat : toutes les trois identiques elles renvoient des informations sur le fichier en parametre, difference : stat et lstat doivent avoir la permission d execution pour tous les repertoires de path qui menent au fichier fstat meme chose que stat mais le fichier ouvert est pointe par le fd, lstat si lien symbolique, donne les stats du lien
+unlink : detruit un nom de fichier et le ficiher associe
+excve : permet d executer un programme, il execute seulement les fichiers binaire
+dup et dup2 : permet de duppliquer des fd
+pipe : cree un "tube" permettant de faire le lien de communication entre 2 processus
+opendir : ouvre un repertoire, renvoie un pointeur sur le flux ouvert
+readdir : permet de voir l etat du repertoire envoye en parametre 
+close dir : permet de fermer le flux d un repertoire ouvert
+streror et perror : permet d avoir l erreur d afficher sterror affiche le code derreur perror affiche l erreur et on peut afficher un message personnalise
+isatty : savoir si le fd est un termninal 
+ttyname : renvoie le nom du terminal
+ttyslot : permet  d avoir l emplacement terminal en cours dans un fichier valeur de retour d erreur 0 sur unix v6 v7 et BSD -1 sur les systeme V 
+ioctl : permet de forcer des operations sur les peripheriques en faisant des appels systemes, un code est envoye en parametre et un fd pour preciser sur quel peripherique on veut forcer quelle commande
+getenv : permet de recuperer le contenu d une variable d environnement
+tcsetattr tcgetattr : permet de recuperer et modifier les ports de communications asynchrone 
+tgetent, tgetflag, tgetnum, tgetstr, tgoto, tputs : Permet de gerer le terminal 
+    tgetent : permet de verifier que le base de donnes est fonctionnelle et utilisable 
+    tgetflag : marhce comme tgetnum juste renvoie un booleen permettant de savoir si lorsque l on va executer tel ou tel commande le terminal en est capable selon ses capacites
+    tgetnum : permet de recuperer le nombre de lignes et de colonnes du terminal par exemple il faut avoir le bon id pour recuperer l info numerique que lon veut
+    tgetstr : permet de recuperer les termcaps (par  exemple cl pour colonne) pour les utiliser
+    tputs : permet d executer le tgestr recuperer
+    tgoto : permet d avoir les capacites max des parametres col et lignes selon la commande a executer
+
+    Termcap 	Terminfo 	Description
+co 	cols 	nombre de colonnes affichées à l’écran
+li 	lines 	nombre de lignes affichées à l’écran
+AF 	setaf 	définit la couleur du texte
+AB 	setab 	définit la couleur de fond
+md 	bold 	affiche le texte en « gras »
+us 	smul 	affiche le texte en « souligné »
+mb 	blink 	affiche le texte en « clignotant »
+cm 	cup 	déplace le curseur aux coordonnées souhaitées
+cl 	clear 	efface le texte affiché à l’écran
+me 	sgr0 	annule tous les changements opérés
+os 	os 	over strike, précise si le terminal efface ou non le contenu lors d’une réécriture par dessus du texte (par exemple à la suite d’un backspace)
+>>>>>>> cce3eddec266feb17b30c2ed1631f68303923c70
