@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/01/03 18:20:20 by aghalmi          ###   ########.fr       */
+/*   Updated: 2026/01/03 19:11:34 by amoderan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,4 +16,15 @@
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <termios.h>
+# include <unistd.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <dirent.h>
+# include <string.h>
+# include <stdlib.h>
+# include <sys/ioctl.h>
+# include <curses.h>
+# include <term.h>
+
 #endif
