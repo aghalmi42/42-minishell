@@ -1,0 +1,14 @@
+fait : 
+
+tokenisation simple de notre chaine lexical analyzer
+
+====================================================================
+reste a faire :
+
+lexiacal analyzer des pipe redirection quote etc ...
+parsing en creant notre ast 
+executer les cmd simple les pipe redirection etc
+faire les builtins
+faire les signaux
+faire variable
+faire bonus
