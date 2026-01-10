@@ -136,3 +136,162 @@ cm 	cup 	déplace le curseur aux coordonnées souhaitées
 cl 	clear 	efface le texte affiché à l’écran
 me 	sgr0 	annule tous les changements opérés
 os 	os 	over strike, précise si le terminal efface ou non le contenu lors d’une réécriture par dessus du texte (par exemple à la suite d’un backspace)
+
+====================================================================================================================================================================================================================
+
+
+1. Un arbre c'est quoi ? 
+
+c'est une structure de donnee avec des noeud reliee entre eux de maniere hierarchique
+
+exemple :
+        [A]          racine
+       /   \
+     [B]   [C]       enfant de A
+     / \     \
+   [D] [E]   [F]     feuille 
+
+racine  : tjrs le noeud tout en haut
+branche : les noeud qui ont des enfant donc A B C 
+feuille : les noeud tt en bas qui n'ont pas d'enfant 
+
+
+bon voici un exemple plus concret de ce que jai compris imagine que tu as une expression mathematique que voici : 
+
+5 + 2 * 4
+
+comment lire de gauche ou de droite eh bien il ya une prioriter en math on va lire :
+
+2 * 4 = 8
+5 + 8 = 13
+
+si on represente ca en arbre ca donne ca :
+
+        [+]               racine --> donc operation final
+       /   \
+     [5]   [*]            enfant de + --> gauche : 5 et droite : une sous expression 2 * 4
+           /  \
+         [2]  [4]         feuille --> on resou dabord les feuille ensuite on remonte
+
+conclusion l'arbre va auutomatiquement respecter lordre des operation
+
+
+/--------------------------------------------------------------\
+
+
+2 . Mnt cest quoi AST (ABSTRACT SYNTAX TREE) ?
+
+c'est une representation simplifier et structrer
+
+TREE     --> ce quon a vu precedement est ce quon appelle : 
+SYNTAX   --> l'arbre represente la syntax dune expression donc les regle de grammaire
+             pour 5 + 2 * 4 :
+             la syntax nous dit multiplication prioritaire sur addition
+ABSTRACT --> on abstrait les detail inutile
+             pour 5 + 2 * 4 :
+             on garde les nombre et operation et on enleve les espace parenthese etc
+
+
+donc en conclusion un ast cest une structure en arbre facile a parcourir recursivement et abstrait
+les operation prioritaire sont plus bas et ceux avec faible prioriter sont plus haut
+
+en C donc ce qui nous interesse ca donne ca :
+
+typedef struct s_tree_node
+{
+    void    *data; // donne du noeud
+    struct s_tree_node  *left; // enfant gauche
+    struct s_tree_node  *right; // enfant droit
+} t_tree_node;
+
+
+/-------------------------------------------------------------\
+
+
+3. On va appliquer cette theorie a minishell hahahahahahhahaha
+
+dans minishell nos operation ca va etre :
+
+pipe        :  |
+redirection :  <, >, <<, >>
+
+et pour les bonus quon va bien evidement faire en LEGENDE (ps : je suis sous big music epic je suis hype hahaha):
+
+||, &&
+
+donc si on fais --> ls -la
+
+  [CMD]
+    |
+  ["ls", "-la", NULL]       feuille
+
+et si on fait    --> ls | grep test 
+en math ca donne :   ' ls PIPE grep ' donc :
+
+      [PIPE]           racine  --> notre operation final
+      /    \
+   [CMD]  [CMD]        feuille
+     |      |
+   ["ls"] ["grep", "test"]
+
+on va connecter stdout de ls vers stdin de grep ce qui est je rappelle le principe d'une pipe : un tuyaux de connexion 
+
+mnt si on fais uun big test : cat < input | grep test
+
+           [PIPE]              racine  --> la pipe est tjrs la prioriter la plus faible donc racine
+          /      \
+    [REDIR <]   [CMD]          branche --> a gauche : cat < input ya une redirection et droite : grep test donc cmd simple
+        |         |
+      [CMD]   ["grep", "test"]
+        |
+   ["cat", NULL]
+
+donc si on execute on va :
+
+cree la pipe 
+fork a gauche donc : ouvrir input (notre redirection) , execter cat , connecter stdout a la pipe 
+fork a droite donc : excuter grep test , connecter stdin a la pipe 
+
+
+/-------------------------------------------------------------\
+
+
+donc dcp on va cree nos structure de donnee a lavance puis decouper notre ligne de cmd je crois que c ca la tokenisation
+on va ensuite faire le parsing de nos token dcp construire notre ast 
+ensuite on va exec tout ca en parcourant notre ast de bas en haut 
+
+
+/-------------------------------------------------------------\
+
+
+4. Les redirection
+
+< : redirection dentree input // lit depuis stdin mais pointe vers fichier.txt au lieu d clavier
+exemple : cat < fichier.txt
+
+int fd = open("fichier.txt", O_RDONLY);
+dup2(fd, STDIN_FILENO);
+close(fd);
+execve("/bin/cat", args, envp);
+==============================================================
+
+> : redirection de sortie output // ecrit sur stdout mais pointe vers fichier.txt au lieu de l'ecran
+exemple : ls > fichier.txt
+
+int fd = open("fichier.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+dup2(fd, STDOUT_FILENO);
+close(fd);
+execve("/bin/ls", args, envp);
+===============================================================
+
+>> : redirection en mode ajout append
+exemple :
+echo "ligne 1" > fichier.txt   // ecrase le fichier
+echo "ligne 2" >> fichier.txt  // ajoute Ã  la fin
+
+int fd = open("fichier.txt", O_WRONLY | O_CREAT | O_APPEND, 0644);
+dup2(fd, STDOUT_FILENO);
+close(fd);
+execve("/bin/echo", args, envp);
+
+<< : heredoc // lit depuuis ce que tu va ecrire depuis le terminal avec comme arret le delimiteur
