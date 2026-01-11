@@ -6,7 +6,7 @@
 /*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/01/10 11:54:13 by aghalmi          ###   ########.fr       */
+/*   Updated: 2026/01/11 15:39:03 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef enum token_type
 	TOKEN_HEREDOC,
 }					t_token_type;
 
+/* structure de token en liste chaineer*/
 typedef struct s_token
 {
 	t_token_type	type;
@@ -56,5 +57,11 @@ t_token				*new_token(t_token_type type, char *value);
 void				add_token(t_token **up, t_token *new);
 void				print_token(t_token *token);
 void				free_token(t_token *token);
+void				skip_all_space(char *line, int *i);
+int					manage_pipe(char *line, int *i, t_token **up);
+int					manage_input_redirection(char *line, int *i, t_token **up);
+int					manage_output_redirection(char *line, int *i, t_token **up);
+int					manage_redirection(char *line, int *i, t_token **up);
+void				extract_word(char *line, int *i, t_token **up);
 t_token				*lexical_analyzer(char *line);
 #endif
