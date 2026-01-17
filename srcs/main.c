@@ -1,16 +1,8 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/10 11:54:20 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/01/11 15:36:42 by aghalmi          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+/*
+	MAIN DE TEST POUR LE LEXICALANALYZER
 
 int	main(void)
 {
@@ -63,6 +55,72 @@ int	main(void)
 	printf("\ntest sans espace\n");
 	token = lexical_analyzer("cat<input>output");
 	print_token(token);
+	free_token(token);
+	printf("\ntest guillemet double\n");
+	token = lexical_analyzer("echo \"hello world\"");
+	print_token(token);
+	free_token(token);
+	printf("\ntest quote simple\n");
+	token = lexical_analyzer("echo 'hello world'");
+	print_token(token);
+	free_token(token);
+	printf("\ntest quuote avec metachar\n");
+	token = lexical_analyzer("echo 'ls | grep'");
+	print_token(token);
+	free_token(token);
+	printf("\ntest melange des 2\n");
+	token = lexical_analyzer("echo \"hello\"world'test'");
+	print_token(token);
+	free_token(token);
+	printf("\ntest quote vide \n");
+	token = lexical_analyzer("echo \"\" ''");
+	print_token(token);
+	free_token(token);
+	return (0);
+}
+
+*/
+
+int	main(void)
+{
+	char	*line;
+	t_token	*token;
+	t_node	*ast;
+
+	printf("Test 1 ls -la\n");
+	line = "ls -la";
+	token = lexical_analyzer(line);
+	ast = parsing(token);
+	print_ast(ast, 0);
+	free_ast(ast);
+	free_token(token);
+	printf("\n Test 2 ls | grep test\n");
+	line = "ls | grep test";
+	token = lexical_analyzer(line);
+	ast = parsing(token);
+	print_ast(ast, 0);
+	free_ast(ast);
+	free_token(token);
+	printf("\nTest 3 cat < input\n");
+	line = "cat < input";
+	token = lexical_analyzer(line);
+	ast = parsing(token);
+	print_ast(ast, 0);
+	free_ast(ast);
+	free_token(token);
+	printf("\nTest 4 ls > outpu\n");
+	line = "ls > output";
+	token = lexical_analyzer(line);
+	ast = parsing(token);
+	print_ast(ast, 0);
+	free_ast(ast);
+	free_token(token);
+	printf("\nTest 5 cat < in | grep test > out\n");
+	line = "cat < in | grep test > out";
+	token = lexical_analyzer(line);
+	ast = parsing(token);
+	print_ast(ast, 0);
+	free_ast(ast);
 	free_token(token);
 	return (0);
 }
