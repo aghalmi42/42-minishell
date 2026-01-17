@@ -6,7 +6,7 @@
 /*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/10 11:39:45 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/01/10 11:51:28 by aghalmi          ###   ########.fr       */
+/*   Updated: 2026/01/14 15:32:47 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,11 @@ void	free_token(t_token *token)
 		free(current);
 		current = next;
 	}
+}
+
+/* on saute les espace et les tab */
+void	skip_all_space(char *line, int *i)
+{
+	while (line[*i] == ' ' || line[*i] == '\t')
+		(*i)++;
 }

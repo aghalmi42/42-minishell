@@ -295,3 +295,19 @@ close(fd);
 execve("/bin/echo", args, envp);
 
 << : heredoc // lit depuuis ce que tu va ecrire depuis le terminal avec comme arret le delimiteur
+
+
+/-------------------------------------------------------------------\
+
+
+5. Les quote
+
+les quote simple : tout les metacharactere sont ignorer
+
+les quote double : tout les metacharactere sont ignorer hormis $
+exemple : echo "hello $USER" va etre remplacer par luusername 
+les expansion de variable sont interpreter
+
+si les quote sont coller alors on a un seul token
+
+si les quote sont vide alors le token aussi est vide 
