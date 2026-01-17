@@ -6,7 +6,7 @@
 #    By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/03 18:20:38 by aghalmi           #+#    #+#              #
-#    Updated: 2026/01/11 15:35:02 by aghalmi          ###   ########.fr        #
+#    Updated: 2026/01/17 17:54:16 by aghalmi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,12 @@ NAME = minishell
 SRCS = srcs/main.c \
        srcs/lexical_analyzer/lexical_analyzer.c \
        srcs/lexical_analyzer/lexical_analyzer_utils.c \
-	   srcs/lexical_analyzer/lexical_analyzer_utils2.c
+	   srcs/lexical_analyzer/lexical_analyzer_pipe.c \
+	   srcs/lexical_analyzer/lexical_analyzer_redir.c \
+	   srcs/lexical_analyzer/lexical_analyzer_quote.c \
+	   srcs/parsing/parsing.c \
+	   srcs/parsing/parsing_utils.c \
+	   srcs/parsing/parsing_utils_2.c
 
 OBJS = $(SRCS:.c=.o)
 

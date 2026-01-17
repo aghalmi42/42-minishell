@@ -3,12 +3,12 @@ fait :
 tokenisation simple de notre chaine lexical analyzer
 lexiacal analyzer gestion des pipe
 lexiacal analyzer gestion des redirection
+lexiacal analyzer gestion de quotes
+parsing en creant notre ast 
 
 ====================================================================
 reste a faire :
 
-lexiacal analyzer gestion de quotes
-parsing en creant notre ast 
 executer les cmd simple les pipe redirection etc
 faire les builtins
 faire les signaux

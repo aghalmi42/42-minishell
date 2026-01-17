@@ -6,7 +6,7 @@
 /*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/01/11 15:39:03 by aghalmi          ###   ########.fr       */
+/*   Updated: 2026/01/17 17:53:36 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@
 /*typedef enum sert a faire une enumeration pour bien eclaircir le code
 avec des nom explicite c comme si on faisait un define
 c defini pour le 1er a 1 le 2eme a 2 etc .... */
-typedef enum token_type
+typedef enum e_token_type
 {
 	TOKEN_WORD,
 	TOKEN_PIPE,
@@ -52,6 +52,25 @@ typedef struct s_token
 	struct s_token	*next;
 }					t_token;
 
+/* type de noeud de notre ast */
+typedef enum e_node_type
+{
+	NODE_CMD,
+	NODE_REDIR,
+	NODE_PIPE,
+}					t_node_type;
+
+/* struct des noeud de notre ast */
+typedef struct s_node
+{
+	t_node_type		type;
+	char			**av;
+	int				redir_type;
+	char			*redir_file;
+	struct s_node	*left;
+	struct s_node	*right;
+}					t_node;
+
 /* fonction du lexical analyzer */
 t_token				*new_token(t_token_type type, char *value);
 void				add_token(t_token **up, t_token *new);
@@ -62,6 +81,25 @@ int					manage_pipe(char *line, int *i, t_token **up);
 int					manage_input_redirection(char *line, int *i, t_token **up);
 int					manage_output_redirection(char *line, int *i, t_token **up);
 int					manage_redirection(char *line, int *i, t_token **up);
+void				manage_quote(char *line, int *i, char *word, int *j);
+void				manage_double_quote(char *line, int *i, char *word, int *j);
+int					delimiter(char c);
+void				construct_word(char *line, int *i, char *word, int *j);
 void				extract_word(char *line, int *i, t_token **up);
 t_token				*lexical_analyzer(char *line);
+
+/* fonction de parsing */
+t_node				*new_node(t_node_type type);
+void				free_ast(t_node *node);
+int					count_av(t_token *token);
+char				**token_tab_av(t_token *token);
+void				print_ast(t_node *node, int tmp);
+t_token				*search_pipe(t_token *token);
+t_token				*search_redir(t_token *token);
+t_token				*split_token(t_token *token, t_token *split);
+t_node				*parsing_cmd(t_token *token);
+t_node				*parsing_pipe(t_token *token, t_token *pipe_token);
+t_node				*parsing_redir(t_token *token, t_token *redir_token);
+t_node				*parsing(t_token *token);
+
 #endif
