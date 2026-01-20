@@ -87,6 +87,27 @@ int	main(void)
 	t_token	*token;
 	t_node	*ast;
 
+	line = "echo \"hello";
+	token = lexical_analyzer(line);
+	if (token == NULL)
+	{
+		printf("minishell: syntax error unclosed quote\n");
+		return (2);
+	}
+	ast = parsing(token);
+	print_ast(ast, 0);
+	free_ast(ast);
+	free_token(token);
+	return (0);
+}
+
+/*
+int	main(void)
+{
+	char	*line;
+	t_token	*token;
+	t_node	*ast;
+
 	printf("Test 1 ls -la\n");
 	line = "ls -la";
 	token = lexical_analyzer(line);
@@ -124,3 +145,4 @@ int	main(void)
 	free_token(token);
 	return (0);
 }
+*/
