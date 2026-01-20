@@ -68,6 +68,10 @@ t_node	*parsing(t_token *token)
 
 	if (!token)
 		return (NULL);
+	if (check_pipe_syntax(token) == -1)
+		return (NULL);
+	if (check_redir_syntax(token) == -1)
+		return (NULL);
 	pipe_token = search_pipe(token);
 	if (pipe_token)
 		return (parsing_pipe(token, pipe_token));

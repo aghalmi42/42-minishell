@@ -2,7 +2,7 @@
 #include "../../include/minishell.h"
 
 /* on gere les single quote */
-void	manage_quote(char *line, int *i, char *word, int *j)
+int	manage_quote(char *line, int *i, char *word, int *j)
 {
 	(*i)++;
 	while (line[*i] && line[*i] != '\'')
@@ -11,12 +11,14 @@ void	manage_quote(char *line, int *i, char *word, int *j)
 		(*i)++;
 		(*j)++;
 	}
-	if (line[*i] == '\'')
-		(*i)++;
+	if (line[*i] == '\0')
+		return (-1);
+	(*i)++;
+	return (0);
 }
 
 /* on gere les double quote */
-void	manage_double_quote(char *line, int *i, char *word, int *j)
+int	manage_double_quote(char *line, int *i, char *word, int *j)
 {
 	(*i)++;
 	while (line[*i] && line[*i] != '"')
@@ -25,8 +27,10 @@ void	manage_double_quote(char *line, int *i, char *word, int *j)
 		(*i)++;
 		(*j)++;
 	}
-	if (line[*i] == '"')
-		(*i)++;
+	if (line[*i] == '\0')
+		return (-1);
+	(*i)++;
+	return (0);
 }
 
 /* on verifie si le char est un delimiter */
