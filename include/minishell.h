@@ -6,7 +6,7 @@
 /*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/01/17 17:53:36 by aghalmi          ###   ########.fr       */
+/*   Updated: 2026/01/20 17:53:26 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,11 @@ int					manage_pipe(char *line, int *i, t_token **up);
 int					manage_input_redirection(char *line, int *i, t_token **up);
 int					manage_output_redirection(char *line, int *i, t_token **up);
 int					manage_redirection(char *line, int *i, t_token **up);
-void				manage_quote(char *line, int *i, char *word, int *j);
-void				manage_double_quote(char *line, int *i, char *word, int *j);
+int					manage_quote(char *line, int *i, char *word, int *j);
+int					manage_double_quote(char *line, int *i, char *word, int *j);
 int					delimiter(char c);
-void				construct_word(char *line, int *i, char *word, int *j);
-void				extract_word(char *line, int *i, t_token **up);
+int					construct_word(char *line, int *i, char *word, int *j);
+int					extract_word(char *line, int *i, t_token **up);
 t_token				*lexical_analyzer(char *line);
 
 /* fonction de parsing */
@@ -96,6 +96,8 @@ char				**token_tab_av(t_token *token);
 void				print_ast(t_node *node, int tmp);
 t_token				*search_pipe(t_token *token);
 t_token				*search_redir(t_token *token);
+int					check_pipe_syntax(t_token *token);
+int					check_redir_syntax(t_token *token);
 t_token				*split_token(t_token *token, t_token *split);
 t_node				*parsing_cmd(t_token *token);
 t_node				*parsing_pipe(t_token *token, t_token *pipe_token);

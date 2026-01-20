@@ -1,26 +1,25 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   lexical_analyzer.c                                 :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/10 11:39:34 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/01/17 17:06:44 by aghalmi          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 /* on construit le mot char par char */
-void	construct_word(char *line, int *i, char *word, int *j)
+int	construct_word(char *line, int *i, char *word, int *j)
 {
+	int	result;
+
 	while (line[*i] && !delimiter(line[*i]))
 	{
 		if (line[*i] == '\'')
-			manage_quote(line, i, word, j);
+		{
+			result = manage_quote(line, i, word, j);
+			if (result == -1)
+				return (-1);
+		}
 		else if (line[*i] == '"')
-			manage_double_quote(line, i, word, j);
+		{
+			result = manage_double_quote(line, i, word, j);
+			if (result == -1)
+				return (-1);
+		}
 		else
 		{
 			word[*j] = line[*i];
@@ -28,24 +27,32 @@ void	construct_word(char *line, int *i, char *word, int *j)
 			(*j)++;
 		}
 	}
+	return (0);
 }
 
 /* extrait un  mot en gerant les quote et cree un token */
-void	extract_word(char *line, int *i, t_token **up)
+int	extract_word(char *line, int *i, t_token **up)
 {
 	int		j;
+	int		result;
 	char	*word;
 	t_token	*token;
 
 	j = 0;
 	word = malloc(1000);
 	if (!word)
-		return ;
-	construct_word(line, i, word, &j);
+		return (-1);
+	result = construct_word(line, i, word, &j);
+	if (result == -1)
+	{
+		free(word);
+		return (-1);
+	}
 	word[j] = '\0';
 	token = new_token(TOKEN_WORD, word);
 	add_token(up, token);
 	free(word);
+	return (0);
 }
 
 /* fonction principal celle qui va tt orchestrer */
@@ -53,6 +60,7 @@ t_token	*lexical_analyzer(char *line)
 {
 	t_token	*up;
 	int		i;
+	int		result;
 
 	up = NULL;
 	i = 0;
@@ -65,7 +73,12 @@ t_token	*lexical_analyzer(char *line)
 			continue ;
 		if (manage_redirection(line, &i, &up))
 			continue ;
-		extract_word(line, &i, &up);
+		result = extract_word(line, &i, &up);
+		if (result == -1)
+		{
+			free_token(up);
+			return (NULL);
+		}
 	}
 	return (up);
 }
