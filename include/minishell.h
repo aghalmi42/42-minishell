@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/01/20 17:53:26 by aghalmi          ###   ########.fr       */
+/*   Updated: 2026/01/26 03:39:39 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
-// # include <readline/readline.h>
-// # include <readline/history.h>
-# include "../../libft/libft.h"
+# include <readline/readline.h>
+# include <readline/history.h>
+# include "../libft/libft.h"
 # include <curses.h>
 # include <dirent.h>
 # include <signal.h>
@@ -104,4 +104,15 @@ t_node				*parsing_pipe(t_token *token, t_token *pipe_token);
 t_node				*parsing_redir(t_token *token, t_token *redir_token);
 t_node				*parsing(t_token *token);
 
+/* path_finding */
+char				*path_to_find(char *cmd, char **envp);
+char				*join_possible_path(char *cmd, char *folder);
+void				free_split(char **split);
+int					count_env(char **envp);
+int					countain_a_slash(char *str);
+char				*search_possible_path(char **possible_paths, char *cmd);
+
+/* exec */
+
+void				exec_one_cmd(t_node *node, char **envp);
 #endif

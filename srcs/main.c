@@ -81,68 +81,104 @@ int	main(void)
 
 */
 
-int	main(void)
+// int	main(void)
+// {
+// 	char	*line;
+// 	t_token	*token;
+// 	t_node	*ast;
+
+// 	line = "echo \"hello";
+// 	token = lexical_analyzer(line);
+// 	if (token == NULL)
+// 	{
+// 		printf("minishell: syntax error unclosed quote\n");
+// 		return (2);
+// 	}
+// 	ast = parsing(token);
+// 	print_ast(ast, 0);
+// 	free_ast(ast);
+// 	free_token(token);
+// 	return (0);
+// }
+
+
+// int	main(void)
+// {
+// 	char *line;
+// 	const char *prompt = "$>";
+
+// 	while (1)
+// 	{
+// 		line = readline(prompt);
+// 		if (!line)
+// 			break;
+// 		if (line[0] == 'a')
+// 			break;
+// 	}
+// 	return (0);
+// }
+
+int	main(int argc, char **argv, char **envp)
 {
+	(void) argc;
+	(void) argv;
 	char	*line;
 	t_token	*token;
 	t_node	*ast;
+	const char *prompt = "$>";
+	int	i = 0;
 
-	line = "echo \"hello";
-	token = lexical_analyzer(line);
-	if (token == NULL)
+	while(i != 3)
 	{
-		printf("minishell: syntax error unclosed quote\n");
-		return (2);
+		line = readline(prompt);
+		token = lexical_analyzer(line);
+		ast = parsing(token);
+		i++;
+		exec_one_cmd(ast, envp);
 	}
-	ast = parsing(token);
-	print_ast(ast, 0);
-	free_ast(ast);
-	free_token(token);
-	return (0);
 }
 
-/*
-int	main(void)
-{
-	char	*line;
-	t_token	*token;
-	t_node	*ast;
+// int	main(void)
+// {
+// 	char	*line;
+// 	t_token	*token;
+// 	t_node	*ast;
 
-	printf("Test 1 ls -la\n");
-	line = "ls -la";
-	token = lexical_analyzer(line);
-	ast = parsing(token);
-	print_ast(ast, 0);
-	free_ast(ast);
-	free_token(token);
-	printf("\n Test 2 ls | grep test\n");
-	line = "ls | grep test";
-	token = lexical_analyzer(line);
-	ast = parsing(token);
-	print_ast(ast, 0);
-	free_ast(ast);
-	free_token(token);
-	printf("\nTest 3 cat < input\n");
-	line = "cat < input";
-	token = lexical_analyzer(line);
-	ast = parsing(token);
-	print_ast(ast, 0);
-	free_ast(ast);
-	free_token(token);
-	printf("\nTest 4 ls > outpu\n");
-	line = "ls > output";
-	token = lexical_analyzer(line);
-	ast = parsing(token);
-	print_ast(ast, 0);
-	free_ast(ast);
-	free_token(token);
-	printf("\nTest 5 cat < in | grep test > out\n");
-	line = "cat < in | grep test > out";
-	token = lexical_analyzer(line);
-	ast = parsing(token);
-	print_ast(ast, 0);
-	free_ast(ast);
-	free_token(token);
-	return (0);
-}
-*/
+// 	printf("Test 1 ls -la\n");
+// 	line = "ls -la";
+// 	token = lexical_analyzer(line);
+// 	ast = parsing(token);
+// 	print_ast(ast, 0);
+// 	free_ast(ast);
+// 	free_token(token);
+// 	printf("\n Test 2 ls | grep test\n");
+// 	line = "ls | grep test";
+// 	token = lexical_analyzer(line);
+// 	ast = parsing(token);
+// 	print_ast(ast, 0);
+// 	free_ast(ast);
+// 	free_token(token);
+// 	printf("\nTest 3 cat < input\n");
+// 	line = "cat < input";
+// 	token = lexical_analyzer(line);
+// 	ast = parsing(token);
+// 	print_ast(ast, 0);
+// 	free_ast(ast);
+// 	free_token(token);
+// 	printf("\nTest 4 ls > output\n");
+// 	line = "ls > output";
+// 	token = lexical_analyzer(line);
+// 	ast = parsing(token);
+// 	print_ast(ast, 0);
+// 	free_ast(ast);
+// 	free_token(token);
+// 	printf("\nTest 5 cat < in | grep test > out\n");
+// 	line = "cat < in | grep test > out";
+// 	token = lexical_analyzer(line);
+// 	ast = parsing(token);
+// 	print_ast(ast, 0);
+// 	free_ast(ast);
+// 	free_token(token);
+// 	return (0);
+// }
+
