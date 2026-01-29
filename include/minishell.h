@@ -6,7 +6,7 @@
 /*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/01/20 17:53:26 by aghalmi          ###   ########.fr       */
+/*   Updated: 2026/01/27 04:12:23 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,5 +103,24 @@ t_node				*parsing_cmd(t_token *token);
 t_node				*parsing_pipe(t_token *token, t_token *pipe_token);
 t_node				*parsing_redir(t_token *token, t_token *redir_token);
 t_node				*parsing(t_token *token);
+
+/* fonction expansion */
+int					single_quote(char *str);
+int					dollar(char *str);
+char				*remove_quote(char *str);
+void				copy_char(char *str, int *i, char *result, int *j);
+int					to_expand(char *str, int i, int in_quote);
+char				*find_env_value(char *var_name, char **env);
+char				extract_var_name(char *str, int *i);
+int					copy_to_result(char *src, char *result);
+int					manage_variable(char *str, int *i, char *result,
+						char **env);
+void				manage_exp_quote(char c, int *in_quote, int *i);
+int					manage_exit_code(int *i, char *result);
+int					manage_pid(int *i, char *result);
+void				expand_token(t_token *token, char **env);
+void				expand_word(t_token *token, char **env);
+void				case_expand(char *str, char *result, int *var, char **env);
+char				*expand_value(char *str, char **env);
 
 #endif
