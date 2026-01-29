@@ -6,7 +6,7 @@
 #    By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/03 18:20:38 by aghalmi           #+#    #+#              #
-#    Updated: 2026/01/20 17:47:13 by aghalmi          ###   ########.fr        #
+#    Updated: 2026/01/27 03:11:32 by aghalmi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,11 @@ SRCS = srcs/main.c \
 	   srcs/parsing/parsing.c \
 	   srcs/parsing/parsing_utils.c \
 	   srcs/parsing/parsing_utils_2.c \
-	   srcs/parsing/check_syntax.c
+	   srcs/parsing/check_syntax.c \
+	   srcs/expansion/expansion.c \
+	   srcs/expansion/expansion_utils.c \
+	   srcs/expansion/expansion_variable.c \
+	   srcs/expansion/expansion_special.c
 
 OBJS = $(SRCS:.c=.o)
 

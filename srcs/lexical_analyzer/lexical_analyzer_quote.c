@@ -4,6 +4,8 @@
 /* on gere les single quote */
 int	manage_quote(char *line, int *i, char *word, int *j)
 {
+	word[*j] = line[*i];
+	(*j)++;
 	(*i)++;
 	while (line[*i] && line[*i] != '\'')
 	{
@@ -13,6 +15,8 @@ int	manage_quote(char *line, int *i, char *word, int *j)
 	}
 	if (line[*i] == '\0')
 		return (-1);
+	word[*j] = line[*i];
+	(*j)++;
 	(*i)++;
 	return (0);
 }
@@ -20,6 +24,8 @@ int	manage_quote(char *line, int *i, char *word, int *j)
 /* on gere les double quote */
 int	manage_double_quote(char *line, int *i, char *word, int *j)
 {
+	word[*j] = line[*i];
+	(*j)++;
 	(*i)++;
 	while (line[*i] && line[*i] != '"')
 	{
@@ -29,6 +35,8 @@ int	manage_double_quote(char *line, int *i, char *word, int *j)
 	}
 	if (line[*i] == '\0')
 		return (-1);
+	word[*j] = line[*i];
+	(*j)++;
 	(*i)++;
 	return (0);
 }
