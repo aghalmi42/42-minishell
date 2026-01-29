@@ -1,26 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec.c                                             :+:      :+:    :+:   */
+/*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/28 22:20:26 by alex              #+#    #+#             */
-/*   Updated: 2026/01/29 08:10:03 by alex             ###   ########.fr       */
+/*   Created: 2026/01/29 08:46:26 by alex              #+#    #+#             */
+/*   Updated: 2026/01/29 08:46:49 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	exec_main(t_node *ast, t_exec_data *data)
+void	exec_cmd(t_node *node, t_exec_data *data)
 {
-	if (!ast)
-		return ;
-
-	if (ast->type == NODE_PIPE)
-		exec_pipe(ast, data);
-	else if (ast->type == NODE_REDIR)
-		exec_redirection(ast, data);
-	else if (ast->type == NODE_CMD)
-		exec_cmd(ast, data);
+	
 }

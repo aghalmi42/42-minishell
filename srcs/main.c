@@ -101,23 +101,6 @@ int	main(void)
 // 	return (0);
 // }
 
-
-// int	main(void)
-// {
-// 	char *line;
-// 	const char *prompt = "$>";
-
-// 	while (1)
-// 	{
-// 		line = readline(prompt);
-// 		if (!line)
-// 			break;
-// 		if (line[0] == 'a')
-// 			break;
-// 	}
-// 	return (0);
-// }
-
 int	main(int argc, char **argv, char **envp)
 {
 	(void) argc;
@@ -125,16 +108,37 @@ int	main(int argc, char **argv, char **envp)
 	char	*line;
 	t_token	*token;
 	t_node	*ast;
-	const char *prompt = "$>";
-	int	i = 0;
+	t_exec_data data;
 
-	while(i != 3)
+	data.envp = envp_to_lst(envp);
+	if (!data.envp)
+		return (0);
+	data.is_here_doc = NULL;
+	if (argc == 1 && isatty(STDIN_FILENO))
 	{
-		line = readline(prompt);
-		token = lexical_analyzer(line);
-		ast = parsing(token);
-		i++;
-		exec_one_cmd(ast, envp);
+		while(1)
+		{
+			line = readline("$>");
+			if (!line)
+				break;
+			token = lexical_analyzer(line);
+			if (token)
+			{
+				ast = parsing(token);
+				if (ast)
+				{
+					if (search_here_doc_to_execute(ast, &data) == -1)
+					{
+						free_ast(ast);
+						free_token(token);
+						continue ;
+					}
+					exec_main(ast, &data);
+					free_ast(ast);
+				}
+				free_token(token);
+			}
+		}
 	}
 }
 

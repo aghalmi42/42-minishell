@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/01/26 03:39:39 by alex             ###   ########.fr       */
+/*   Updated: 2026/01/29 07:28:14 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,34 @@ typedef struct s_node
 	struct s_node	*right;
 }					t_node;
 
+/* structure pour les data de l'exec */
+typedef struct s_exec_data
+{
+	int						is_here_doc;
+	t_list					*envp;
+	int						status;
+	struct s_here_doc_fd	*head;
+	int						pipe_fd[2];
+	pid_t					pid_left;
+	pid_t					pid_right;
+}					t_exec_data;
+
+/* structure pour le env en liste chaines, simplification pour refaire le code après */
+typedef struct s_env
+{
+	char	*key;
+	char	*value;
+}					t_env;
+
+/* structure pour contenir les fds des potentiels here_doc ouverts */
+
+typedef struct s_here_doc_fd
+{
+	int						fd_read;
+	struct s_here_doc_fd	*next;
+
+}					t_here_doc_fd;
+
 /* fonction du lexical analyzer */
 t_token				*new_token(t_token_type type, char *value);
 void				add_token(t_token **up, t_token *new);
@@ -112,7 +140,23 @@ int					count_env(char **envp);
 int					countain_a_slash(char *str);
 char				*search_possible_path(char **possible_paths, char *cmd);
 
+/* set l'environnement en liste chainées */
+
+t_list				*envp_to_lst(char **envp);
+t_env				*split_env_line(char *str);
+void				del_env(void	*content);
+
+/* node fd des here_doc , pretraitement des here_doc pour l'exec */
+
+t_here_doc_fd		*here_doc_new(int	content);
+t_here_doc_fd		*here_doc_last(t_list *here_doc);
+int					add_here_doc_fd(t_here_doc_fd **head, int fd);
+int					search_here_doc_to_execute(t_node *ast, t_exec_data *data);
+int					create_here_doc_to_execute(t_node *ast, t_exec_data *data);
+void				loop_here_doc(char	*limiter, int fd);
+
 /* exec */
 
 void				exec_one_cmd(t_node *node, char **envp);
+void				exec_main(t_node *ast, t_exec_data *data);
 #endif
