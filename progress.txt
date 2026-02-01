@@ -16,11 +16,8 @@ executer les cmd simple les pipe redirection etc
 faire les builtins
 faire les signaux
 faire bonus
+faire msg derreur parszing
 
-
-export 
-echo
-cd
 
 peut etre ajouter : 
 
