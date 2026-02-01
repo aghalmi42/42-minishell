@@ -114,4 +114,16 @@ void	print_ast(t_node *node, int tmp)
 		printf("REDIR %d --> %s\n", node->redir_type, node->redir_file);
 		print_ast(node->left, tmp + 1);
 	}
+	else if (node->type == NODE_AND)
+	{
+		printf("AND\n");
+		print_ast(node->left, tmp + 1);
+		print_ast(node->right, tmp + 1);
+	}
+	else if (node->type == NODE_OR)
+	{
+		printf("OR\n");
+		print_ast(node->left, tmp + 1);
+		print_ast(node->right, tmp + 1);
+	}
 }
