@@ -67,6 +67,8 @@ t_node	*parsing(t_token *token)
 
 	if (!token)
 		return (NULL);
+	if (check_syntax(token) == -1)
+		return (NULL);
 	logical_token = search_logical(token);
 	if (logical_token)
 	{

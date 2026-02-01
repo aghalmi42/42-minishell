@@ -6,7 +6,7 @@
 #    By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/03 18:20:38 by aghalmi           #+#    #+#              #
-#    Updated: 2026/02/01 14:24:05 by aghalmi          ###   ########.fr        #
+#    Updated: 2026/02/01 18:56:10 by aghalmi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,8 @@ SRCS = srcs/main.c \
 	   srcs/parsing/parsing_utils.c \
 	   srcs/parsing/parsing_utils_2.c \
 	   srcs/parsing/check_syntax.c \
+	   srcs/parsing/check_syntax_logical.c \
+	   srcs/parsing/check_syntax_main.c \
 	   srcs/parsing/parsing_logical.c \
 	   srcs/expansion/expansion.c \
 	   srcs/expansion/expansion_utils.c \
