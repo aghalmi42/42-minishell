@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 02:38:35 by alex              #+#    #+#             */
-/*   Updated: 2026/01/26 02:40:20 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/02 01:46:55 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,19 @@ int	count_env(char **envp)
 		return (0);
 	while (envp[i])
 		i++;
+	return (i);
+}
+
+int	count_env_lst(t_list	*envp)
+{
+	int		i;
+
+	i = 0;
+	while(envp)
+	{
+		envp = envp->next;
+		i++;
+	}
 	return (i);
 }
 

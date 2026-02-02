@@ -6,12 +6,14 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/01/29 07:28:14 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/02 08:43:17 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+# define _POSIX_C_SOURCE 200809L
 
 # include <fcntl.h>
 # include <stdio.h>
@@ -30,6 +32,7 @@
 # include <sys/wait.h>
 # include <term.h>
 # include <termios.h>
+# include <signal.h>
 
 /*typedef enum sert a faire une enumeration pour bien eclaircir le code
 avec des nom explicite c comme si on faisait un define
@@ -138,7 +141,10 @@ char				*join_possible_path(char *cmd, char *folder);
 void				free_split(char **split);
 int					count_env(char **envp);
 int					countain_a_slash(char *str);
+char				*it_contain_a_slash(char *cmd);
 char				*search_possible_path(char **possible_paths, char *cmd);
+char				**search_path(t_list *envp);
+char				*path_to_find_lst(char *cmd, t_exec_data *data);
 
 /* set l'environnement en liste chainées */
 
@@ -149,14 +155,31 @@ void				del_env(void	*content);
 /* node fd des here_doc , pretraitement des here_doc pour l'exec */
 
 t_here_doc_fd		*here_doc_new(int	content);
-t_here_doc_fd		*here_doc_last(t_list *here_doc);
+t_here_doc_fd		*here_doc_last(t_here_doc_fd *here_doc);
 int					add_here_doc_fd(t_here_doc_fd **head, int fd);
 int					search_here_doc_to_execute(t_node *ast, t_exec_data *data);
-int					create_here_doc_to_execute(t_node *ast, t_exec_data *data);
+int					create_here_doc_to_execute(char *redir_file, t_exec_data *data);
 void				loop_here_doc(char	*limiter, int fd);
 
 /* exec */
 
 void				exec_one_cmd(t_node *node, char **envp);
 void				exec_main(t_node *ast, t_exec_data *data);
+int					is_a_built_in(char *cmd);
+int					exec_built_in(char *cmd);
+char				**getenv_to_str(t_list *envp);
+char				*envp_value(t_env *content);
+int					envp_count(t_list *envp);
+void				exec_pipe(t_node *node, t_exec_data *data);
+void				exec_cmd(t_node *node, t_exec_data *data);
+
+/* redirection exec */
+void				exec_redirection(t_node *node, t_exec_data *data);
+int					open_redir_file(t_node *node);
+
+/* signals */
+
+extern volatile		sig_atomic_t status;
+void				set_signal_actions(void);
+void				handle_sigint(int	signal);
 #endif

@@ -6,13 +6,13 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 08:16:12 by alex              #+#    #+#             */
-/*   Updated: 2026/01/29 08:38:05 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/02 06:59:48 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	execute_redirection(t_node *node, t_exec_data *data)
+void	exec_redirection(t_node *node, t_exec_data *data)
 {
 	int	fd;
 

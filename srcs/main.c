@@ -113,7 +113,7 @@ int	main(int argc, char **argv, char **envp)
 	data.envp = envp_to_lst(envp);
 	if (!data.envp)
 		return (0);
-	data.is_here_doc = NULL;
+	set_signal_actions();
 	if (argc == 1 && isatty(STDIN_FILENO))
 	{
 		while(1)
@@ -131,12 +131,15 @@ int	main(int argc, char **argv, char **envp)
 					{
 						free_ast(ast);
 						free_token(token);
+						free(line);
 						continue ;
 					}
 					exec_main(ast, &data);
 					free_ast(ast);
+					free(line);
 				}
 				free_token(token);
+				free(line);
 			}
 		}
 	}

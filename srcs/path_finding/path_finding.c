@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 02:38:38 by alex              #+#    #+#             */
-/*   Updated: 2026/01/26 02:39:10 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/02 06:57:21 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*join_possible_path(char *cmd, char *folder)
 	return (path);
 }
 
-static char	*it_contain_a_slash(char *cmd)
+char	*it_contain_a_slash(char *cmd)
 {
 	if (!access(cmd, F_OK))
 		return (ft_strdup(cmd));
@@ -54,7 +54,6 @@ char	*path_to_find(char *cmd, char **envp)
 	possible_paths = ft_split(envp[i] + 5, ':');
 	if (!possible_paths)
 		return (perror("No such file or directory"), NULL);
-	i = 0;
 	possible_path = search_possible_path(possible_paths, cmd);
 	if (!possible_path)
 		return (free_split(possible_paths), perror("Command not found"), NULL);

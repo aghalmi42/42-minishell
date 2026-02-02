@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 05:07:58 by alex              #+#    #+#             */
-/*   Updated: 2026/01/29 06:59:36 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/02 07:03:41 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	search_here_doc_to_execute(t_node *ast, t_exec_data *data)
 }
 
 /* ici on créé le pipe qui va pouvoir être retrouver plus tard lorsque l'exec des commandes sera fait */
-int	create_here_doc_to_execute(t_node *ast, t_exec_data *data)
+int	create_here_doc_to_execute(char *redir_file, t_exec_data *data)
 {
 	int	pipe_fd[2];
 	pid_t	pid;
@@ -41,12 +41,12 @@ int	create_here_doc_to_execute(t_node *ast, t_exec_data *data)
 	if (pid == 0)
 	{
 		close(pipe_fd[0]);
-		loop_here_doc(ast->redir_file, pipe_fd[1]);
+		loop_here_doc(redir_file, pipe_fd[1]);
 		close(pipe_fd[1]);
 		exit(0);
 	}
 	close(pipe_fd[1]);
-	wait_pid(pid, &data->status, 0);
+	waitpid(pid, &data->status, 0);
 	if (WIFSIGNALED(data->status))
 	{
 		close(pipe_fd[0]);

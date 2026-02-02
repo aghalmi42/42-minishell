@@ -6,7 +6,7 @@
 #    By: alex <alex@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/03 18:20:38 by aghalmi           #+#    #+#              #
-#    Updated: 2026/01/29 05:19:46 by alex             ###   ########.fr        #
+#    Updated: 2026/02/02 08:42:27 by alex             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,10 +23,17 @@ SRCS = srcs/main.c \
 	   srcs/parsing/parsing_utils_2.c \
 	   srcs/parsing/check_syntax.c \
 	   srcs/path_finding/path_finding.c \
+	   srcs/path_finding/path_finding2.c \
 	   srcs/path_finding/path_finding_utils.c \
 	   srcs/exec/exec_one_cmd.c \
+	   srcs/exec/exec_cmd.c \
 	   srcs/exec/exec.c \
-	   srcs/set_envp/set_envp.c
+	   srcs/exec/exec_handle_here_doc.c \
+	   srcs/exec/exec_node_here_doc.c \
+	   srcs/exec/exec_pipe.c \
+	   srcs/exec/exec_redir.c \
+	   srcs/set_envp/set_envp.c \
+	   srcs/signals/signals.c
 
 OBJS = $(SRCS:.c=.o)
 
