@@ -6,7 +6,7 @@
 /*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/01 14:31:44 by aghalmi          ###   ########.fr       */
+/*   Updated: 2026/02/01 18:55:17 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,14 @@ char				**token_tab_av(t_token *token);
 void				print_ast(t_node *node, int tmp);
 t_token				*search_pipe(t_token *token);
 t_token				*search_redir(t_token *token);
+void 				print_syntax_error(char *token);
+void				print_redir_error(t_token_type type);
 int					check_pipe_syntax(t_token *token);
 int					check_redir_syntax(t_token *token);
+int					logical_start(t_token *token);
+int					check_logical_token(t_token *token);
+int					check_syntax_logical(t_token *token);
+int					check_syntax(t_token *token);
 t_token				*split_token(t_token *token, t_token *split);
 t_node				*parsing_cmd(t_token *token);
 t_node				*parsing_pipe(t_token *token, t_token *pipe_token);
