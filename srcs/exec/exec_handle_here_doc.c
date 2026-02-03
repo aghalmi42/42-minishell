@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 05:07:58 by alex              #+#    #+#             */
-/*   Updated: 2026/02/02 07:03:41 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/03 21:06:41 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ int	create_here_doc_to_execute(char *redir_file, t_exec_data *data)
 		return (close(pipe_fd[1]), close(pipe_fd[0]), -1);
 	if (pid == 0)
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_IGN);
 		close(pipe_fd[0]);
 		loop_here_doc(redir_file, pipe_fd[1]);
 		close(pipe_fd[1]);

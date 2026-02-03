@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 08:46:26 by alex              #+#    #+#             */
-/*   Updated: 2026/02/02 07:32:24 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/03 19:58:27 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@ void	exec_cmd(t_node *node, t_exec_data *data)
 {
 	char	*path_cmd;
 	char	**envp;
-	
-	if (is_a_built_in(node->av[0]))
-		exit(exec_built_in(node->av[0]));
+
 	path_cmd = path_to_find_lst(node->av[0], data);
 	if (!path_cmd)
 		exit(127);
@@ -36,7 +34,7 @@ void	exec_cmd(t_node *node, t_exec_data *data)
 	free(path_cmd);
 }
 
-int	exec_built_in(char *cmd)
+int	exec_built_in(char *cmd, t_exec_data *data)
 {
 	(void) cmd;
 	return (0);

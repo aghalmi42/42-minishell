@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/03 02:03:57 by amoderan         ###   ########.fr       */
+/*   Updated: 2026/02/03 21:01:30 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,13 +77,10 @@ typedef struct s_node
 /* structure pour les data de l'exec */
 typedef struct s_exec_data
 {
-	int						is_here_doc;
 	t_list					*envp;
 	int						status;
 	struct s_here_doc_fd	*head;
-	int						pipe_fd[2];
-	pid_t					pid_left;
-	pid_t					pid_right;
+	int						is_pipe;
 }					t_exec_data;
 
 /* structure pour le env en liste chaines, simplification pour refaire le code après */
@@ -166,7 +163,7 @@ void				loop_here_doc(char	*limiter, int fd);
 void				exec_one_cmd(t_node *node, char **envp);
 void				exec_main(t_node *ast, t_exec_data *data);
 int					is_a_built_in(char *cmd);
-int					exec_built_in(char *cmd);
+int					exec_built_in(char *cmd, t_exec_data *data);
 char				**getenv_to_str(t_list *envp);
 char				*envp_value(t_env *content);
 int					envp_count(t_list *envp);
