@@ -121,6 +121,7 @@ int	main(int argc, char **argv, char **envp)
 			line = readline("$>");
 			if (!line)
 				break;
+			add_history(line);
 			token = lexical_analyzer(line);
 			if (token)
 			{
@@ -134,13 +135,15 @@ int	main(int argc, char **argv, char **envp)
 						free(line);
 						continue ;
 					}
-					exec_main(ast, &data);
+					if(!ast->left && !ast->right)
+						exec_one_cmd_lst(ast, &data);
+					else
+						exec_main(ast, &data);
 					free_ast(ast);
-					free(line);
 				}
 				free_token(token);
-				free(line);
 			}
+			free(line);
 		}
 	}
 }
