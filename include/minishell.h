@@ -6,7 +6,7 @@
 /*   By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/04 05:49:51 by amoderan         ###   ########.fr       */
+/*   Updated: 2026/02/04 09:23:59 by amoderan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,14 +163,20 @@ void				loop_here_doc(char	*limiter, int fd);
 void				exec_one_cmd(t_node *node, char **envp);
 void				exec_main(t_node *ast, t_exec_data *data);
 int					is_a_built_in(char *cmd);
-void				exec_built_in(char *cmd, t_exec_data *data);
+void				exec_built_in(char *cmd, t_exec_data *data, t_node *node);
 char				**getenv_to_str(t_list *envp);
 char				*envp_value(t_env *content);
 int					envp_count(t_list *envp);
 void				exec_pipe(t_node *node, t_exec_data *data);
 void				exec_cmd(t_node *node, t_exec_data *data);
 void				exec_one_cmd_lst(t_node *node, t_exec_data *data);
+
+/* built-in */
+
 void    			built_in_env(t_exec_data *data);
+void    			built_in_export(t_exec_data *data, t_node *node);
+int					check_new_key(t_env *env);
+
 /* redirection exec */
 void				exec_redirection(t_node *node, t_exec_data *data);
 int					open_redir_file(t_node *node);

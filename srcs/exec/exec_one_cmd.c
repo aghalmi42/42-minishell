@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_one_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 03:35:09 by alex              #+#    #+#             */
-/*   Updated: 2026/02/03 21:15:06 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/04 09:21:33 by amoderan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	exec_one_cmd_lst(t_node *node, t_exec_data *data)
 
 	if (is_a_built_in(node->av[0]))
 	{
-		data->status = exec_built_in(node->av[0], data);
+		//data->status = exec_built_in(node->av[0], data);
 		return ;
 	}
 	path_cmd = path_to_find_lst(node->av[0], data);
