@@ -135,10 +135,11 @@ int	main(int argc, char **argv, char **envp)
 						free(line);
 						continue ;
 					}
-					if(ast->type == NODE_PIPE)
-						exec_main(ast, &data);
-					else
-						exec_one_cmd_lst(ast, &data);
+					exec_main(ast, &data);
+					// if(ast->type == NODE_PIPE)
+					// 	exec_main(ast, &data);
+					// else
+					// 	exec_one_cmd_lst(ast, &data);
 					free_ast(ast);
 				}
 				free_token(token);

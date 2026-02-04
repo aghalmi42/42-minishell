@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 08:46:26 by alex              #+#    #+#             */
-/*   Updated: 2026/02/03 19:58:27 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/04 05:50:54 by amoderan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	exec_cmd(t_node *node, t_exec_data *data)
 	char	*path_cmd;
 	char	**envp;
 
+	if(is_a_built_in(node->av[0]))
+		return (exec_built_in(node->av[0], data));
 	path_cmd = path_to_find_lst(node->av[0], data);
 	if (!path_cmd)
 		exit(127);
@@ -34,10 +36,13 @@ void	exec_cmd(t_node *node, t_exec_data *data)
 	free(path_cmd);
 }
 
-int	exec_built_in(char *cmd, t_exec_data *data)
+void	exec_built_in(char *cmd, t_exec_data *data)
 {
-	(void) cmd;
-	return (0);
+	// (void) cmd;
+	// (void) data;
+
+	if (!ft_strncmp("env", cmd, 4))
+		return(built_in_env(data));
 }
 
 int	is_a_built_in(char *cmd)
