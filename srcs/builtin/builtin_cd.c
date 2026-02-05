@@ -5,7 +5,7 @@
 char *search_home_path(char **env)
 {
 	char *path;
-
+	
 	path = find_env_value("HOME", env);
 	if (!path)
 		ft_putendl_fd("cd : HOME is not set", 2);
@@ -44,7 +44,7 @@ int change_directory(char *path)
 	if (chdir(path) == -1)
 	{
 		ft_putstr_fd("cd : ", 2);
-        perror(path);
+		perror(path);
 		return (1);
 	}
 	return (0);

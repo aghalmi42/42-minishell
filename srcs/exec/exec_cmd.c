@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 08:46:26 by alex              #+#    #+#             */
-/*   Updated: 2026/02/05 04:49:26 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/05 07:01:31 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,19 @@ void	exec_built_in(char *cmd, t_exec_data *data, t_node *node)
 	// (void) data;
 
 	if (!ft_strncmp("env", cmd, 4))
-		return(built_in_env(data, 0));
+		return(builtin_env(data, 0));
 	else if (!ft_strncmp("export", cmd, 7))
-		return (built_in_export(data, node));
+		return (builtin_export(data, node));
 	else if (!ft_strncmp("unset", cmd, 6))
-		return (built_in_unset(data, node));
+		return (builtin_unset(data, node));
 	else if (!ft_strncmp("exit", cmd, 5))
-		return (built_in_exit(data, node));
+		return (builtin_exit(data, node));
+	// else if (!ft_strncmp("echo", cmd, 5))
+	// 	return (builtin_echo(data, node));
+	// else if (!ft_strncmp("cd", cmd, 3))
+	// 	return (builtin_cd(data, node));
+	// else if (!ft_strncmp("pwd", cmd, 4))
+	// 	return (builtin_cd(data, node));
 }
 
 int	is_a_built_in(char *cmd)

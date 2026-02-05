@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/05 02:18:57 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/05 06:21:12 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,14 +227,22 @@ void				case_expand(char *str, char *result, int *var, char **env);
 char				*expand_value(char *str, char **env);
 
 /* fonction builtin */
-int 				builtin_pwd(void);
-int 				n_option(char *av);
-int 				builtin_echo(char **av);
-char 				*search_home_path(char **env);
-char 				*search_oldpwd_path(char **env);
-char 				*search_cd_path(char **av, char **env);
-int 				change_directory(char *path);
-int 				builtin_cd(char **av, char **env);
-int 				builtin(char *cmd);
-int 				exec_builtin(char **av, char **env);
+
+int					builtin_pwd(void);
+int					n_option(char *av);
+int					builtin_echo(char **av);
+char				*search_home_path(char **env);
+char				*search_oldpwd_path(char **env);
+char				*search_cd_path(char **av, char **env);
+int					change_directory(char *path);
+int					builtin_cd(char **av, char **env);
+int					builtin(char *cmd);
+int					exec_builtin(char **av, char **env);
+void				builtin_env(t_exec_data *data, int export);
+void				builtin_export(t_exec_data *data, t_node *node);
+int					check_new_key(t_env *env);
+void				print_env(t_env *e, int export);
+void				builtin_unset(t_exec_data *data, t_node *node);
+void				builtin_exit(t_exec_data *data, t_node *node);
+
 #endif
