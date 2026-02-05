@@ -18,6 +18,7 @@ SRCS = srcs/main.c \
 	   srcs/lexical_analyzer/lexical_analyzer_pipe.c \
 	   srcs/lexical_analyzer/lexical_analyzer_redir.c \
 	   srcs/lexical_analyzer/lexical_analyzer_quote.c \
+	   srcs/lexical_analyzer/lexical_analyzer_logical.c \
 	   srcs/parsing/parsing.c \
 	   srcs/parsing/parsing_utils.c \
 	   srcs/parsing/parsing_utils_2.c \
@@ -35,6 +36,17 @@ SRCS = srcs/main.c \
 	   srcs/exec/exec_built_in.c \
 	   srcs/set_envp/set_envp.c \
 	   srcs/signals/signals.c \
+	   srcs/parsing/check_syntax_logical.c \
+	   srcs/parsing/check_syntax_main.c \
+	   srcs/parsing/parsing_logical.c \
+	   srcs/expansion/expansion.c \
+	   srcs/expansion/expansion_utils.c \
+	   srcs/expansion/expansion_variable.c \
+	   srcs/expansion/expansion_special.c \
+	   srcs/builtin/builtin_pwd.c \
+	   srcs/builtin/builtin.c \
+	   srcs/builtin/builtin_echo.c \
+	   srcs/builtin/builtin_cd.c
 
 OBJS = $(SRCS:.c=.o)
 

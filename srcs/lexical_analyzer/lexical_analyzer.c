@@ -69,6 +69,8 @@ t_token	*lexical_analyzer(char *line)
 		skip_all_space(line, &i);
 		if (line[i] == '\0')
 			break ;
+		if (manage_logical(line, &i, &up))
+			continue ;
 		if (manage_pipe(line, &i, &up))
 			continue ;
 		if (manage_redirection(line, &i, &up))
