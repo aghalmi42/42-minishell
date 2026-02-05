@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 08:46:26 by alex              #+#    #+#             */
-/*   Updated: 2026/02/04 09:23:41 by amoderan         ###   ########.fr       */
+/*   Updated: 2026/02/05 02:20:26 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,13 @@ void	exec_built_in(char *cmd, t_exec_data *data, t_node *node)
 	// (void) data;
 
 	if (!ft_strncmp("env", cmd, 4))
-		return(built_in_env(data));
+		return(built_in_env(data, 0));
 	else if (!ft_strncmp("export", cmd, 7))
 		return (built_in_export(data, node));
+	else if (!ft_strncmp("unset", cmd, 6))
+		return (built_in_unset(data, node));
+	else if (!ft_strncmp("exit", cmd, 5))
+		return (built_in_exit(data, node));
 }
 
 int	is_a_built_in(char *cmd)

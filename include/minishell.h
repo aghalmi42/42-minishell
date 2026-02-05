@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/04 09:23:59 by amoderan         ###   ########.fr       */
+/*   Updated: 2026/02/05 02:18:57 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,7 @@ char				*path_to_find_lst(char *cmd, t_exec_data *data);
 t_list				*envp_to_lst(char **envp);
 t_env				*split_env_line(char *str);
 void				del_env(void	*content);
+void				free_envp(t_exec_data *data);
 
 /* node fd des here_doc , pretraitement des here_doc pour l'exec */
 
@@ -171,11 +172,15 @@ void				exec_pipe(t_node *node, t_exec_data *data);
 void				exec_cmd(t_node *node, t_exec_data *data);
 void				exec_one_cmd_lst(t_node *node, t_exec_data *data);
 
+
 /* built-in */
 
-void    			built_in_env(t_exec_data *data);
-void    			built_in_export(t_exec_data *data, t_node *node);
+void				built_in_env(t_exec_data *data, int export);
+void				built_in_export(t_exec_data *data, t_node *node);
 int					check_new_key(t_env *env);
+void				print_env(t_env *e, int export);
+void				built_in_unset(t_exec_data *data, t_node *node);
+void				built_in_exit(t_exec_data *data, t_node *node);
 
 /* redirection exec */
 void				exec_redirection(t_node *node, t_exec_data *data);

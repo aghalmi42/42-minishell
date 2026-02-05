@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 02:33:14 by alex              #+#    #+#             */
-/*   Updated: 2026/01/29 05:16:13 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/05 02:18:43 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,19 @@ void	del_env(void	*content)
 	if (dummy->value)
 		free(dummy->value);
 	free(dummy);
+}
+
+void	free_envp(t_exec_data *data)
+{
+	t_list	*cur;
+	t_list	*next;
+
+	cur = data->envp;
+	next = NULL;
+	while (cur)
+	{
+		next = cur->next;
+		ft_lstdelone(cur, del_env);
+		cur = next;
+	}
 }

@@ -146,6 +146,7 @@ int	main(int argc, char **argv, char **envp)
 			}
 			free(line);
 		}
+		free_envp(&data);
 	}
 }
 
