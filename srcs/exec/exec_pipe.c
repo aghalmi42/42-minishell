@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 07:24:39 by alex              #+#    #+#             */
-/*   Updated: 2026/02/02 08:48:12 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/05 05:45:11 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	exec_pipe(t_node *node, t_exec_data *data)
 	{
 		sigaction(SIGINT, &sa_default, NULL);
 		sigaction(SIGQUIT, &sa_default, NULL);
+		data->is_pipe = 1;
 		close(pipe_fd[0]);
 		dup2(pipe_fd[1], STDOUT_FILENO);
 		close(pipe_fd[1]);
@@ -41,6 +42,7 @@ void	exec_pipe(t_node *node, t_exec_data *data)
 		sigaction(SIGINT, &sa_default, NULL);
 		sigaction(SIGQUIT, &sa_default, NULL);
 		close(pipe_fd[1]);
+		data->is_pipe = 1;
 		dup2(pipe_fd[0], STDIN_FILENO);
 		close(pipe_fd[0]);
 		exec_main(node->right, data);

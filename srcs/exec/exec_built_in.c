@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/04 03:32:31 by amoderan          #+#    #+#             */
-/*   Updated: 2026/02/05 02:19:13 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/05 05:45:46 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	check_new_key(t_env *env)
 		return (0);
 	while(env->key[i])
 	{
-		if (env->key[0] != '_' && !ft_isalnum(env->key[0]))
+		if (env->key[i] != '_' && !ft_isalnum(env->key[i]))
 			return (0);
 		i++;
 	}
