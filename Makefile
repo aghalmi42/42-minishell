@@ -3,18 +3,18 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+         #
+#    By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/03 18:20:38 by aghalmi           #+#    #+#              #
-#    Updated: 2026/02/01 18:56:10 by aghalmi          ###   ########.fr        #
+#    Updated: 2026/02/04 05:48:23 by amoderan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
 SRCS = srcs/main.c \
-       srcs/lexical_analyzer/lexical_analyzer.c \
-       srcs/lexical_analyzer/lexical_analyzer_utils.c \
+	   srcs/lexical_analyzer/lexical_analyzer.c \
+	   srcs/lexical_analyzer/lexical_analyzer_utils.c \
 	   srcs/lexical_analyzer/lexical_analyzer_pipe.c \
 	   srcs/lexical_analyzer/lexical_analyzer_redir.c \
 	   srcs/lexical_analyzer/lexical_analyzer_quote.c \
@@ -23,6 +23,19 @@ SRCS = srcs/main.c \
 	   srcs/parsing/parsing_utils.c \
 	   srcs/parsing/parsing_utils_2.c \
 	   srcs/parsing/check_syntax.c \
+	   srcs/path_finding/path_finding.c \
+	   srcs/path_finding/path_finding2.c \
+	   srcs/path_finding/path_finding_utils.c \
+	   srcs/exec/exec_one_cmd.c \
+	   srcs/exec/exec_cmd.c \
+	   srcs/exec/exec.c \
+	   srcs/exec/exec_handle_here_doc.c \
+	   srcs/exec/exec_node_here_doc.c \
+	   srcs/exec/exec_pipe.c \
+	   srcs/exec/exec_redir.c \
+	   srcs/exec/exec_built_in.c \
+	   srcs/set_envp/set_envp.c \
+	   srcs/signals/signals.c \
 	   srcs/parsing/check_syntax_logical.c \
 	   srcs/parsing/check_syntax_main.c \
 	   srcs/parsing/parsing_logical.c \
