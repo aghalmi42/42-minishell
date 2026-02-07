@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/05 06:21:12 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/07 07:05:31 by amoderan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,14 +228,14 @@ char				*expand_value(char *str, char **env);
 
 /* fonction builtin */
 
-int					builtin_pwd(void);
+void				builtin_pwd(void);
 int					n_option(char *av);
 int					builtin_echo(char **av);
-char				*search_home_path(char **env);
-char				*search_oldpwd_path(char **env);
-char				*search_cd_path(char **av, char **env);
+// char				*search_home_path(char **env);
+// char				*search_oldpwd_path(char **env);
+// char				*search_cd_path(char **av, char **env);
+// int					builtin_cd(char **av, char **env);
 int					change_directory(char *path);
-int					builtin_cd(char **av, char **env);
 int					builtin(char *cmd);
 int					exec_builtin(char **av, char **env);
 void				builtin_env(t_exec_data *data, int export);
@@ -244,5 +244,11 @@ int					check_new_key(t_env *env);
 void				print_env(t_env *e, int export);
 void				builtin_unset(t_exec_data *data, t_node *node);
 void				builtin_exit(t_exec_data *data, t_node *node);
-
+void				builtin_cd(t_exec_data *data, t_node *node);
+char 				*search_cd_path(t_exec_data *data, t_node *node);
+char 				*search_oldpwd_path(t_exec_data *data, t_list *envp);
+char				*find_home_value(t_exec_data *data, t_list *envp);
+char 				*search_home_path(t_exec_data *data);
+void				change_env_directory(char *new_path, t_exec_data *data);
+char				*search_env_value(t_exec_data *data, char *search);
 #endif
