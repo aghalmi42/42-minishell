@@ -14,7 +14,6 @@ t_token	*new_token(t_token_type type, char *value)
 		token->value = ft_strdup(value);
 	else
 		token->value = NULL;
-	token->space_before = 0;
 	token->next = NULL;
 	return (token);
 }
