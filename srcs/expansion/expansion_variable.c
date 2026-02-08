@@ -1,20 +1,22 @@
 
 #include "../../include/minishell.h"
 
-char	*find_env_value(char *var_name, char **env)
+char	*find_env_value(char *var_name, t_list *envp)
 {
-	int	i;
+	t_list *current;
+	t_env	*env;
 	int	len;
 
-	i = 0;
-	if (!var_name || !env)
+	if (!var_name || !envp)
 		return (NULL);
 	len = ft_strlen(var_name);
-	while (env[i])
+	current = envp;
+	while (current)
 	{
-		if (ft_strncmp(env[i], var_name, len) == 0 && env[i][len] == '=')
-			return (env[i] + len + 1);
-		i++;
+		env = current->content;
+		if (ft_strncmp(env->key, var_name, len) == 0 && env->key[len] == '\0')
+			return (env->value);
+		current = current->next;
 	}
 	return (NULL);
 }
@@ -61,14 +63,16 @@ int	copy_to_result(char *src, char *result)
 }
 
 /* gere lexpansion dune variable $USER et return nb char ajt*/
-int	manage_variable(char *str, int *i, char *result, char **env)
+int	manage_variable(char *str, int *i, char *result, t_list *envp)
 {
 	char	*var_name;
 	char	*var_value;
 	int		count;
 
 	var_name = extract_var_name(str, i);
-	var_value = find_env_value(var_name, env);
+	if (!var_name)
+		return (0);
+	var_value = find_env_value(var_name, envp);
 	count = copy_to_result(var_value, result);
 	free(var_name);
 	return (count);
