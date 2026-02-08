@@ -77,11 +77,11 @@ void	builtin_cd(t_exec_data *data, t_node *node)
 		if (getcwd(new_path, sizeof(new_path)) == NULL)
 		{
 			perror("pwd");
+			ft_putstr_fd("Bof\n", 1);
 			return ;
 		}
 		change_env_directory(new_path, data);
 	}
-		
 	free(path);
 }
 
@@ -90,10 +90,17 @@ void	change_env_directory(char *new_path, t_exec_data *data)
 	t_list	*env;
 	t_env	*e;
 	char	*old_path;
+	char	*new_p;
 
 	old_path = search_env_value(data, "PWD");
 	if (!old_path)
 		return ;
+	new_p = ft_strdup(new_path);
+	if (!new_p)
+	{
+		data->status = 1;
+		return (free(old_path));
+	}
 	env = data->envp;
 	while (env)
 	{
@@ -101,7 +108,7 @@ void	change_env_directory(char *new_path, t_exec_data *data)
 		if (!ft_strncmp(e->key, "PWD", 4))
 		{
 			free(e->value);
-			e->value = new_path;
+			e->value = new_p;
 		}
 		if (!ft_strncmp(e->key, "OLDPWD", 7))
 		{
@@ -144,6 +151,17 @@ char *search_home_path(t_exec_data *data)
 	if (!path)
 		ft_putendl_fd("cd : HOME is not set", 2);
 	return (path);
+}
+
+/* on va determiner le chemin de la dest */
+char *search_cd_path(t_exec_data *data, t_node *node)
+{
+	if (!node->av[1])
+		return (search_home_path(data));
+	else if (ft_strncmp(node->av[1], "-", 2) == 0 && node->av[1][1] == '\0')
+		return (search_env_value(data, "OLDPWD"));
+	else
+		return (ft_strdup(node->av[1]));
 }
 
 // char	*find_home_value(t_exec_data *data, t_list *envp)
@@ -197,13 +215,3 @@ char *search_home_path(t_exec_data *data)
 // 	return (NULL);
 // }
 
-/* on va determiner le chemin de la dest */
-char *search_cd_path(t_exec_data *data, t_node *node)
-{
-	if (!node->av[1])
-		return (search_home_path(data));
-	else if (ft_strncmp(node->av[1], "-", 2) == 0 && node->av[1][1] == '\0')
-		return (search_env_value(data, "OLDPWD"));
-	else
-		return (ft_strdup(node->av[1]));
-}

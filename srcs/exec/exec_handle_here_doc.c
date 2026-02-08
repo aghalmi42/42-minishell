@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_handle_here_doc.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 05:07:58 by alex              #+#    #+#             */
-/*   Updated: 2026/02/07 05:43:46 by amoderan         ###   ########.fr       */
+/*   Updated: 2026/02/08 08:03:07 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,28 +30,33 @@ int	search_here_doc_to_execute(t_node *ast, t_exec_data *data)
 /* ici on créé le pipe qui va pouvoir être retrouver plus tard lorsque l'exec des commandes sera fait */
 int	create_here_doc_to_execute(char *redir_file, t_exec_data *data)
 {
+	(void) redir_file;
 	int	pipe_fd[2];
 	pid_t	pid;
 
 	if(pipe(pipe_fd) == -1)
 		return (-1);
+	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid < 0)
 		return (close(pipe_fd[1]), close(pipe_fd[0]), -1);
 	if (pid == 0)
 	{
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_IGN);
+		set_signal_actions_default();
 		close(pipe_fd[0]);
 		loop_here_doc(redir_file, pipe_fd[1]);
 		close(pipe_fd[1]);
+		data->status = 0;
 		exit(0);
 	}
 	close(pipe_fd[1]);
 	waitpid(pid, &data->status, 0);
+	set_signal_actions();
+	//printf("Fin waitpid, status = %d, WIFSIGNALED = %d\n", status, WIFSIGNALED(status));
 	if (WIFSIGNALED(data->status))
 	{
 		close(pipe_fd[0]);
+		data->status = 130;
 		return (-1);
 	}
 	return (add_here_doc_fd(&data->head, pipe_fd[0]));
@@ -66,11 +71,13 @@ void	loop_here_doc(char	*limiter, int fd)
 	{
 		line = readline("heredoc>");
 		if (!line)
-			break ;
+		{
+			ft_putendl_fd("minishell: warning: here-document delimited by end-of-file", 2);
+			break;
+		}
 		if (ft_strncmp(line, limiter, ft_strlen(limiter) + 1) == 0)
 		{
 			free(line);
-			close(fd);
 			break;
 		}
 		ft_putendl_fd(line, fd);

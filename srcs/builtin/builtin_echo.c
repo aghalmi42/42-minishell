@@ -13,7 +13,7 @@
 #include "../../include/minishell.h"
 
 /* verif si c avec uune option -n */
-int n_option(char *av)
+int	n_option(char *av)
 {
 	int i;
 
@@ -30,7 +30,7 @@ int n_option(char *av)
 }
 
 /* affiche les argv avec gestion option -n */
-int builtin_echo(char **av)
+void	builtin_echo(char **av, t_exec_data *data)
 {
 	int i;
 	int line;
@@ -51,5 +51,5 @@ int builtin_echo(char **av)
 	}
 	if (line)
 		ft_putchar_fd('\n', STDOUT_FILENO);
-	return (0);
+	data->status= 0;
 }

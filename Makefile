@@ -6,7 +6,7 @@
 #    By: alex <alex@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/03 18:20:38 by aghalmi           #+#    #+#              #
-#    Updated: 2026/02/05 06:25:11 by alex             ###   ########.fr        #
+#    Updated: 2026/02/08 04:31:56 by alex             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,7 @@ SRCS = srcs/main.c \
 	   srcs/exec/exec_node_here_doc.c \
 	   srcs/exec/exec_pipe.c \
 	   srcs/exec/exec_redir.c \
+	   srcs/exec/exec_or_and.c \
 	   srcs/set_envp/set_envp.c \
 	   srcs/signals/signals.c \
 	   srcs/parsing/check_syntax_logical.c \

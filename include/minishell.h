@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/07 07:05:31 by amoderan         ###   ########.fr       */
+/*   Updated: 2026/02/08 08:56:13 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ typedef struct s_exec_data
 	t_list					*envp;
 	int						status;
 	struct s_here_doc_fd	*head;
-	int						is_pipe;
+	int						is_fork;
 }					t_exec_data;
 
 /* structure pour le env en liste chaines, simplification pour refaire le code après */
@@ -187,7 +187,10 @@ int					envp_count(t_list *envp);
 void				exec_pipe(t_node *node, t_exec_data *data);
 void				exec_cmd(t_node *node, t_exec_data *data);
 void				exec_one_cmd_lst(t_node *node, t_exec_data *data);
-
+void				exec_or(t_node *node, t_exec_data *data);
+void				exec_and(t_node *node, t_exec_data *data);
+void				exec_final(char *path_cmd, char **envp, t_node *node, t_exec_data *data);
+void				exec_redir_and_cmd(t_node *ast, t_exec_data *data);
 
 /* built-in */
 
@@ -207,6 +210,8 @@ int					open_redir_file(t_node *node);
 extern volatile		sig_atomic_t status;
 void				set_signal_actions(void);
 void				handle_sigint(int	signal);
+void				set_signal_actions_default(void);
+
 /* fonction expansion */
 int					single_quote(char *str);
 int					dollar(char *str);
@@ -230,7 +235,7 @@ char				*expand_value(char *str, char **env);
 
 void				builtin_pwd(void);
 int					n_option(char *av);
-int					builtin_echo(char **av);
+void				builtin_echo(char **av,t_exec_data *data);
 // char				*search_home_path(char **env);
 // char				*search_oldpwd_path(char **env);
 // char				*search_cd_path(char **av, char **env);
