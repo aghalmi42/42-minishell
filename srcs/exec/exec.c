@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 22:20:26 by alex              #+#    #+#             */
-/*   Updated: 2026/02/08 07:21:24 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/08 13:39:11 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,31 @@ void	exec_main(t_node *ast, t_exec_data *data)
 		exec_redir_and_cmd(ast, data);
 }
 
+int builtin_parent(char *cmd)
+{
+	if (!cmd)
+		return (0);
+	if (!ft_strncmp("cd", cmd, 3) && cmd[2] == '\0')
+		return (1);
+	if (!ft_strncmp("export", cmd, 7) && cmd[6] == '\0')
+		return (1);
+	if (!ft_strncmp("unset", cmd, 6) && cmd[5] == '\0')
+		return (1);
+	if (!ft_strncmp("exit", cmd, 5) && cmd[4] == '\0')
+		return (1);
+	return (0);
+}
+
 void	exec_redir_and_cmd(t_node *ast, t_exec_data *data)
 {
 	pid_t	pid;
 	int		status;
 
+	if (ast->type == NODE_CMD && ast->av && ast->av[0] && builtin_parent(ast->av[0]))
+	{
+		exec_built_in(ast->av[0], data, ast);
+		return ;
+	}
 	pid = fork();
 	if (pid < 0)
 	{

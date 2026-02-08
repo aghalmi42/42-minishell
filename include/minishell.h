@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/08 08:56:13 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/08 15:36:34 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ typedef struct s_token
 {
 	t_token_type	type;
 	char			*value;
+	int space_before;
 	struct s_token	*next;
 }					t_token;
 
@@ -120,6 +121,7 @@ int					manage_logical(char *line, int *i, t_token **up);
 int					delimiter(char c);
 int					construct_word(char *line, int *i, char *word, int *j);
 int					extract_word(char *line, int *i, t_token **up);
+void 				fusion_all_word(t_token **head);
 t_token				*lexical_analyzer(char *line);
 
 /* fonction de parsing */
@@ -190,6 +192,7 @@ void				exec_one_cmd_lst(t_node *node, t_exec_data *data);
 void				exec_or(t_node *node, t_exec_data *data);
 void				exec_and(t_node *node, t_exec_data *data);
 void				exec_final(char *path_cmd, char **envp, t_node *node, t_exec_data *data);
+int 				builtin_parent(char *cmd);
 void				exec_redir_and_cmd(t_node *ast, t_exec_data *data);
 
 /* built-in */
@@ -218,22 +221,22 @@ int					dollar(char *str);
 char				*remove_quote(char *str);
 void				copy_char(char *str, int *i, char *result, int *j);
 int					to_expand(char *str, int i, int in_quote);
-char				*find_env_value(char *var_name, char **env);
+char				*find_env_value(char *var_name, t_list *envp);
 char				*extract_var_name(char *str, int *i);
 int					copy_to_result(char *src, char *result);
 int					manage_variable(char *str, int *i, char *result,
-						char **env);
+						t_list *envp);
 void				manage_exp_quote(char c, int *in_quote, int *i);
-int					manage_exit_code(int *i, char *result);
+int					manage_exit_code(int *i, char *result, t_exec_data *data);
 int					manage_pid(int *i, char *result);
-void				expand_token(t_token *token, char **env);
-void				expand_word(t_token *token, char **env);
-void				case_expand(char *str, char *result, int *var, char **env);
-char				*expand_value(char *str, char **env);
+void				expand_token(t_token *token, t_exec_data *data);
+void				expand_word(t_token *token, t_exec_data *data);
+void				case_expand(char *str, char *result, int *var, t_exec_data *data);
+char				*expand_value(char *str, t_exec_data *data);
 
 /* fonction builtin */
 
-void				builtin_pwd(void);
+void				builtin_pwd(t_exec_data *data, t_node *node);
 int					n_option(char *av);
 void				builtin_echo(char **av,t_exec_data *data);
 // char				*search_home_path(char **env);

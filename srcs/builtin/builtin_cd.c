@@ -69,20 +69,34 @@ void	builtin_cd(t_exec_data *data, t_node *node)
 	char	*path;
 	char	new_path[PATH_MAX];
 
+	if (node->av[1] && node->av[2])
+	{
+		ft_putendl_fd("cd : too many argument", 2);
+		data->status = 1;
+		return ;
+	}
 	path = search_cd_path(data, node);
 	if (!path)
-		return ;
-	if (!change_directory(path))
 	{
-		if (getcwd(new_path, sizeof(new_path)) == NULL)
-		{
-			perror("pwd");
-			ft_putstr_fd("Bof\n", 1);
-			return ;
-		}
-		change_env_directory(new_path, data);
+		data->status = 1;
+		return ;
 	}
+	if (change_directory(path))
+	{
+		free(path);
+		data->status = 1;
+		return ;
+	}
+	if (getcwd(new_path, sizeof(new_path)) == NULL)
+	{
+		perror("getcwd");
+		free(path);
+		data->status = 1;
+		return ;
+	}
+	change_env_directory(new_path, data);
 	free(path);
+	data->status = 0;
 }
 
 void	change_env_directory(char *new_path, t_exec_data *data)
@@ -94,7 +108,14 @@ void	change_env_directory(char *new_path, t_exec_data *data)
 
 	old_path = search_env_value(data, "PWD");
 	if (!old_path)
-		return ;
+	{
+		old_path = ft_strdup("");
+		if (!old_path)
+		{
+			data->status = 1;
+			return ;
+		}
+	}
 	new_p = ft_strdup(new_path);
 	if (!new_p)
 	{
@@ -110,7 +131,7 @@ void	change_env_directory(char *new_path, t_exec_data *data)
 			free(e->value);
 			e->value = new_p;
 		}
-		if (!ft_strncmp(e->key, "OLDPWD", 7))
+		else if (!ft_strncmp(e->key, "OLDPWD", 7))
 		{
 			free(e->value);
 			e->value = old_path;
@@ -149,17 +170,32 @@ char *search_home_path(t_exec_data *data)
 
 	path = search_env_value(data, "HOME");
 	if (!path)
+	{
 		ft_putendl_fd("cd : HOME is not set", 2);
+		data->status = 1;
+	}
 	return (path);
 }
 
 /* on va determiner le chemin de la dest */
 char *search_cd_path(t_exec_data *data, t_node *node)
 {
+	char *oldpwd;
+
 	if (!node->av[1])
 		return (search_home_path(data));
 	else if (ft_strncmp(node->av[1], "-", 2) == 0 && node->av[1][1] == '\0')
-		return (search_env_value(data, "OLDPWD"));
+	{
+		oldpwd = search_env_value(data, "OLDPWD");
+		if (!oldpwd)
+		{
+			ft_putendl_fd("cd : OLDPWD is not set", 2);
+			data->status = 1;
+			return (NULL);
+		}
+		ft_putendl_fd(oldpwd, STDOUT_FILENO);
+		return (oldpwd);
+	}
 	else
 		return (ft_strdup(node->av[1]));
 }

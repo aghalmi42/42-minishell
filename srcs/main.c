@@ -12,6 +12,8 @@ int	main(int argc, char **argv, char **envp)
 	data.envp = envp_to_lst(envp);
 	if (!data.envp)
 		return (0);
+	data.status = 0;
+	data.head = NULL;
 	set_signal_actions();
 	if (argc == 1 && isatty(STDIN_FILENO))
 	{
@@ -24,6 +26,7 @@ int	main(int argc, char **argv, char **envp)
 			token = lexical_analyzer(line);
 			if (token)
 			{
+				expand_token(token, &data);
 				ast = parsing(token);
 				if (ast)
 				{

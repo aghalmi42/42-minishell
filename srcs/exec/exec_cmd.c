@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 08:46:26 by alex              #+#    #+#             */
-/*   Updated: 2026/02/08 08:54:36 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/08 15:00:51 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,59 +18,70 @@ void	exec_cmd(t_node *node, t_exec_data *data)
 	char	**envp;
 
 	if(is_a_built_in(node->av[0]))
-		return (exec_built_in(node->av[0], data, node));
+	{
+		exec_built_in(node->av[0], data, node);
+		if (data->is_fork)
+			exit(data->status);
+		return ;
+	}
 	path_cmd = path_to_find_lst(node->av[0], data);
 	if (!path_cmd)
 	{
 		data->status = 127;
+		if (data->is_fork)
+			exit(127);
 		return ;
 	}
 	envp = getenv_to_str(data->envp);
 	if (!envp)
 	{
 		free(path_cmd);
-		exit(1);
-	}
-	exec_final(path_cmd, envp, node, data);
-	free(path_cmd);
-	free_split(envp);
-}
-
-void	exec_final(char *path_cmd, char **envp, t_node *node, t_exec_data *data)
-{
-	pid_t	pid;
-
-	if (!data->is_fork)
-	{
-		pid = fork();
-		if (pid < 0)
-			data->status = 1;
-		if (pid == 0)
-		{
-			if (execve(path_cmd, node->av, envp) == - 1)
-			{
-				free_split(envp);
-				perror("execve fail");
-				exit(126);
-			}
-		}
-		waitpid(pid, &data->status, 0);
+		data->status = 1;
+		if (data->is_fork)
+			exit(1);
 		return ;
 	}
-	if (execve(path_cmd, node->av, envp) == - 1)
+	if (execve(path_cmd, node->av, envp) == -1)
 	{
-		perror("execve fail");
+		perror("execve");
+		free(path_cmd);
 		free_split(envp);
-		data->status = 126;
-		return ;
+		exit(126);
 	}
 }
+
+// void	exec_final(char *path_cmd, char **envp, t_node *node, t_exec_data *data)
+// {
+// 	pid_t	pid;
+
+// 	if (!data->is_fork)
+// 	{
+// 		pid = fork();
+// 		if (pid < 0)
+// 			data->status = 1;
+// 		if (pid == 0)
+// 		{
+// 			if (execve(path_cmd, node->av, envp) == - 1)
+// 			{
+// 				free_split(envp);
+// 				perror("execve fail");
+// 				exit(126);
+// 			}
+// 		}
+// 		waitpid(pid, &data->status, 0);
+// 		return ;
+// 	}
+// 	if (execve(path_cmd, node->av, envp) == - 1)
+// 	{
+// 		perror("execve fail");
+// 		free_split(envp);
+// 		data->status = 126;
+// 		return ;
+// 	}
+// }
 
 void	exec_built_in(char *cmd, t_exec_data *data, t_node *node)
 {
-	// (void) cmd;
-	// (void) data;
-
 	if (!ft_strncmp("env", cmd, 4))
 		return(builtin_env(data, 0));
 	else if (!ft_strncmp("export", cmd, 7))
@@ -84,11 +95,13 @@ void	exec_built_in(char *cmd, t_exec_data *data, t_node *node)
 	else if (!ft_strncmp("cd", cmd, 3))
 		return (builtin_cd(data, node));
 	else if (!ft_strncmp("pwd", cmd, 4))
-		return (builtin_pwd());
+		return (builtin_pwd(data, node));
 }
 
 int	is_a_built_in(char *cmd)
 {
+	if (!cmd)
+		return (0);
 	if (!ft_strncmp("echo", cmd, 5))
 		return (1);
 	else if (!ft_strncmp("cd", cmd, 3))
