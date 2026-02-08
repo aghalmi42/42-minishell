@@ -6,7 +6,7 @@
 /*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/08 15:36:34 by aghalmi          ###   ########.fr       */
+/*   Updated: 2026/02/08 15:45:29 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ typedef struct s_token
 {
 	t_token_type	type;
 	char			*value;
-	int space_before;
 	struct s_token	*next;
 }					t_token;
 
