@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 07:24:39 by alex              #+#    #+#             */
-/*   Updated: 2026/02/05 05:45:11 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/08 07:18:10 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,14 @@ void	exec_pipe(t_node *node, t_exec_data *data)
 	int	pipe_fd[2];
 	pid_t	pid_left;
 	pid_t	pid_right;
-	struct sigaction	sa_default;
 
 	if (pipe(pipe_fd) == -1)
 		return ;
 	pid_left = fork();
-	ft_memset(&sa_default, 0, sizeof(sa_default));
-	sa_default.sa_handler = SIG_DFL;
 	if (pid_left == 0)
 	{
-		sigaction(SIGINT, &sa_default, NULL);
-		sigaction(SIGQUIT, &sa_default, NULL);
-		data->is_pipe = 1;
+		set_signal_actions_default();
+		data->is_fork = 1;
 		close(pipe_fd[0]);
 		dup2(pipe_fd[1], STDOUT_FILENO);
 		close(pipe_fd[1]);
@@ -39,10 +35,9 @@ void	exec_pipe(t_node *node, t_exec_data *data)
 	pid_right = fork();
 	if (pid_right == 0)
 	{
-		sigaction(SIGINT, &sa_default, NULL);
-		sigaction(SIGQUIT, &sa_default, NULL);
+		set_signal_actions_default();
 		close(pipe_fd[1]);
-		data->is_pipe = 1;
+		data->is_fork = 1;
 		dup2(pipe_fd[0], STDIN_FILENO);
 		close(pipe_fd[0]);
 		exec_main(node->right, data);

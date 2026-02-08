@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 08:46:26 by alex              #+#    #+#             */
-/*   Updated: 2026/02/05 04:49:26 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/08 08:54:36 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,49 @@ void	exec_cmd(t_node *node, t_exec_data *data)
 		return (exec_built_in(node->av[0], data, node));
 	path_cmd = path_to_find_lst(node->av[0], data);
 	if (!path_cmd)
-		exit(127);
+	{
+		data->status = 127;
+		return ;
+	}
 	envp = getenv_to_str(data->envp);
 	if (!envp)
 	{
 		free(path_cmd);
 		exit(1);
 	}
+	exec_final(path_cmd, envp, node, data);
+	free(path_cmd);
+	free_split(envp);
+}
+
+void	exec_final(char *path_cmd, char **envp, t_node *node, t_exec_data *data)
+{
+	pid_t	pid;
+
+	if (!data->is_fork)
+	{
+		pid = fork();
+		if (pid < 0)
+			data->status = 1;
+		if (pid == 0)
+		{
+			if (execve(path_cmd, node->av, envp) == - 1)
+			{
+				free_split(envp);
+				perror("execve fail");
+				exit(126);
+			}
+		}
+		waitpid(pid, &data->status, 0);
+		return ;
+	}
 	if (execve(path_cmd, node->av, envp) == - 1)
 	{
 		perror("execve fail");
-		exit(126);
+		free_split(envp);
+		data->status = 126;
+		return ;
 	}
-	free(path_cmd);
 }
 
 void	exec_built_in(char *cmd, t_exec_data *data, t_node *node)
@@ -42,13 +72,19 @@ void	exec_built_in(char *cmd, t_exec_data *data, t_node *node)
 	// (void) data;
 
 	if (!ft_strncmp("env", cmd, 4))
-		return(built_in_env(data, 0));
+		return(builtin_env(data, 0));
 	else if (!ft_strncmp("export", cmd, 7))
-		return (built_in_export(data, node));
+		return (builtin_export(data, node));
 	else if (!ft_strncmp("unset", cmd, 6))
-		return (built_in_unset(data, node));
+		return (builtin_unset(data, node));
 	else if (!ft_strncmp("exit", cmd, 5))
-		return (built_in_exit(data, node));
+		return (builtin_exit(data, node));
+	else if (!ft_strncmp("echo", cmd, 5))
+		return (builtin_echo(node->av, data));
+	else if (!ft_strncmp("cd", cmd, 3))
+		return (builtin_cd(data, node));
+	else if (!ft_strncmp("pwd", cmd, 4))
+		return (builtin_pwd());
 }
 
 int	is_a_built_in(char *cmd)
