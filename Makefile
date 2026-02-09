@@ -6,7 +6,7 @@
 #    By: alex <alex@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/03 18:20:38 by aghalmi           #+#    #+#              #
-#    Updated: 2026/02/08 04:31:56 by alex             ###   ########.fr        #
+#    Updated: 2026/02/09 04:36:06 by alex             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ SRCS = srcs/main.c \
 	   srcs/exec/exec_pipe.c \
 	   srcs/exec/exec_redir.c \
 	   srcs/exec/exec_or_and.c \
+	   srcs/exec/exec_utils.c \
 	   srcs/set_envp/set_envp.c \
 	   srcs/signals/signals.c \
 	   srcs/parsing/check_syntax_logical.c \
@@ -50,7 +51,9 @@ SRCS = srcs/main.c \
 	   srcs/builtin/builtin_env.c \
 	   srcs/builtin/builtin_export.c \
 	   srcs/builtin/builtin_unset.c \
-	   srcs/builtin/builtin_exit.c 
+	   srcs/builtin/builtin_exit.c \
+	   srcs/gnl/get_next_line_bonus.c \
+	   srcs/gnl/get_next_line_utils_bonus.c
 
 OBJS = $(SRCS:.c=.o)
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/08 15:45:29 by aghalmi          ###   ########.fr       */
+/*   Updated: 2026/02/09 07:56:30 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../libft/libft.h"
+# include "get_next_line.h"
 # include <curses.h>
 # include <dirent.h>
 # include <signal.h>
@@ -193,10 +194,11 @@ void				exec_and(t_node *node, t_exec_data *data);
 void				exec_final(char *path_cmd, char **envp, t_node *node, t_exec_data *data);
 int 				builtin_parent(char *cmd);
 void				exec_redir_and_cmd(t_node *ast, t_exec_data *data);
+int					is_a_directory(char *path);
 
 /* built-in */
 
-void				built_in_env(t_exec_data *data, int export);
+void				built_in_env(t_exec_data *data,t_node *node,  int export);
 void				built_in_export(t_exec_data *data, t_node *node);
 int					check_new_key(t_env *env);
 void				print_env(t_env *e, int export);
@@ -209,7 +211,7 @@ int					open_redir_file(t_node *node);
 
 /* signals */
 
-extern volatile		sig_atomic_t status;
+extern volatile		sig_atomic_t s_status;
 void				set_signal_actions(void);
 void				handle_sigint(int	signal);
 void				set_signal_actions_default(void);
@@ -245,7 +247,7 @@ void				builtin_echo(char **av,t_exec_data *data);
 int					change_directory(char *path);
 int					builtin(char *cmd);
 int					exec_builtin(char **av, char **env);
-void				builtin_env(t_exec_data *data, int export);
+void				builtin_env(t_exec_data *data,t_node *node, int export);
 void				builtin_export(t_exec_data *data, t_node *node);
 int					check_new_key(t_env *env);
 void				print_env(t_env *e, int export);
@@ -258,4 +260,8 @@ char				*find_home_value(t_exec_data *data, t_list *envp);
 char 				*search_home_path(t_exec_data *data);
 void				change_env_directory(char *new_path, t_exec_data *data);
 char				*search_env_value(t_exec_data *data, char *search);
+void				print_export(t_exec_data *data);
+void				sort_env_selection(t_list *lst);
+int					compare_keys(t_env *e1, t_env *e2);
+int					check_new_unset(char *env);
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 22:20:26 by alex              #+#    #+#             */
-/*   Updated: 2026/02/08 13:39:11 by aghalmi          ###   ########.fr       */
+/*   Updated: 2026/02/09 08:11:11 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,14 @@ void	exec_redir_and_cmd(t_node *ast, t_exec_data *data)
 	pid_t	pid;
 	int		status;
 
+	if (ast->type == NODE_CMD && ast->av && ast->av[0])
+	{
+		if (!ft_strncmp(ast->av[0], ":", 2) || !ft_strncmp(ast->av[0],"!",2))
+		{
+			data->status = 1;
+			return ;
+		}
+	}
 	if (ast->type == NODE_CMD && ast->av && ast->av[0] && builtin_parent(ast->av[0]))
 	{
 		exec_built_in(ast->av[0], data, ast);

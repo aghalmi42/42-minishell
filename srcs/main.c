@@ -19,9 +19,21 @@ int	main(int argc, char **argv, char **envp)
 	{
 		while(1)
 		{
-			line = readline("$>");
+			if (isatty(STDIN_FILENO))
+				line = readline("minishell$ ");
+			else
+			{
+				char *tmp = get_next_line(STDIN_FILENO);
+				if (!tmp)
+					break ;
+			line = ft_strtrim(tmp, "\n");
+			free(tmp);
+			}
 			if (!line)
-				break;
+			{
+				printf("exit\n");
+				break ;
+			}
 			add_history(line);
 			token = lexical_analyzer(line);
 			if (token)
@@ -38,14 +50,14 @@ int	main(int argc, char **argv, char **envp)
 						continue ;
 					}
 					data.is_fork = 0;
-					print_ast(ast, 0);
+					//print_ast(ast, 0);
 					exec_main(ast, &data);
 					free_ast(ast);
 				}
 				free_token(token);
 			}
 			free(line);
-			printf("data.status :%d\n", data.status);
+			//printf("data.status :%d\n", data.status);
 		}
 		free_envp(&data);
 	}

@@ -81,6 +81,8 @@ void	builtin_cd(t_exec_data *data, t_node *node)
 		data->status = 1;
 		return ;
 	}
+	if(!path[0])
+		return ;
 	if (change_directory(path))
 	{
 		free(path);

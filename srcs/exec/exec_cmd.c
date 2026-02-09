@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 08:46:26 by alex              #+#    #+#             */
-/*   Updated: 2026/02/08 15:00:51 by aghalmi          ###   ########.fr       */
+/*   Updated: 2026/02/09 06:18:36 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,16 @@ void	exec_cmd(t_node *node, t_exec_data *data)
 		data->status = 127;
 		if (data->is_fork)
 			exit(127);
+		return ;
+	}
+	if (is_a_directory(path_cmd))
+	{
+		ft_putstr_fd("minishell : ", 2);
+		ft_putstr_fd(path_cmd, 2);
+		ft_putendl_fd(": Is a directory", 2);
+		data->status = 126;
+		if (data->is_fork)
+			exit(126);
 		return ;
 	}
 	envp = getenv_to_str(data->envp);
@@ -80,10 +90,11 @@ void	exec_cmd(t_node *node, t_exec_data *data)
 // 	}
 // }
 
+
 void	exec_built_in(char *cmd, t_exec_data *data, t_node *node)
 {
 	if (!ft_strncmp("env", cmd, 4))
-		return(builtin_env(data, 0));
+		return(builtin_env(data,node, 0));
 	else if (!ft_strncmp("export", cmd, 7))
 		return (builtin_export(data, node));
 	else if (!ft_strncmp("unset", cmd, 6))

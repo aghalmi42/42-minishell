@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 04:10:58 by alex              #+#    #+#             */
-/*   Updated: 2026/02/02 06:58:51 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/09 05:07:58 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*path_to_find_lst(char *cmd, t_exec_data *data)
 		return (perror("No such file or directory"), NULL);
 	possible_path = search_possible_path(possible_paths, cmd);
 	if (!possible_path)
-		return (free_split(possible_paths), perror("Command not found"), NULL);
+		return (free_split(possible_paths), ft_putstr_fd("minishell: command not found: ", 2),ft_putendl_fd(cmd, 2), NULL);
 	free_split(possible_paths);
 	return (possible_path);
 }
