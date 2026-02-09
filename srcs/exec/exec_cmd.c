@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 08:46:26 by alex              #+#    #+#             */
-/*   Updated: 2026/02/09 06:18:36 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/09 10:57:16 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,13 @@ void	exec_cmd(t_node *node, t_exec_data *data)
 	char	*path_cmd;
 	char	**envp;
 
+	if (!node->av || !node->av[0] || node->av[0][0] == '\0')
+	{
+		data->status = 0;
+		if (data->is_fork)
+			exit(0);
+		return ;
+	}
 	if(is_a_built_in(node->av[0]))
 	{
 		exec_built_in(node->av[0], data, node);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/09 07:56:30 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/09 10:54:51 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,6 +232,7 @@ int					manage_exit_code(int *i, char *result, t_exec_data *data);
 int					manage_pid(int *i, char *result);
 void				expand_token(t_token *token, t_exec_data *data);
 void				expand_word(t_token *token, t_exec_data *data);
+int					dollar_special(char *str, int *i);
 void				case_expand(char *str, char *result, int *var, t_exec_data *data);
 char				*expand_value(char *str, t_exec_data *data);
 

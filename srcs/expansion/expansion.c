@@ -29,15 +29,68 @@ void	expand_word(t_token *token, t_exec_data *data)
 	token->value = value;
 }
 
+int	dollar_special(char *str, int *i)
+{
+	if (ft_isdigit(str[*i + 1]))
+	{
+		(*i) += 2;
+		return (1);
+	}
+	if (str[*i + 1] == '"' || str[*i + 1] == '\'')
+	{
+		(*i)++;
+		return (1);
+	}
+	return (0);
+}
+
+/* boucle pour lexpansion */
+// void	case_expand(char *str, char *result, int *var, t_exec_data *data)
+// {
+// 	while (str[var[0]])
+// 	{
+// 		if (str[var[0]] == '\'' || str[var[0]] == '"')
+// 		{
+// 			manage_exp_quote(str[var[0]], &var[2], &var[0]);
+// 			continue ;
+// 		}
+// 		else if (to_expand(str, var[0], var[2]))
+// 			var[1] += manage_variable(str, &var[0], result + var[1], data->envp);
+// 		else if (str[var[0]] == '$' && str[var[0] + 1] == '?')
+// 			var[1] += manage_exit_code(&var[0], result + var[1], data);
+// 		else if (str[var[0]] == '$' && str[var[0] + 1] == '$')
+// 			var[1] += manage_pid(&var[0], result + var[1]);
+// 		else if (str[var[0]] == '$')
+// 			copy_char(str, &var[0], result, &var[1]);
+// 		else
+// 			copy_char(str, &var[0], result, &var[1]);
+// 	}
+// }
+
 /* boucle pour lexpansion */
 void	case_expand(char *str, char *result, int *var, t_exec_data *data)
 {
 	while (str[var[0]])
 	{
-		if (str[var[0]] == '\'' || str[var[0]] == '"')
+		if (str[var[0]] == '\'' && var[2] == 0)
 		{
+			var[2] = 1;
 			var[0]++;
-			continue ;
+		}
+		else if (str[var[0]] == '\'' && var[2] == 1)
+		{
+			var[2] = 0;
+			var[0]++;
+		}
+		else if (str[var[0]] == '"' && var[2] == 0)
+		{
+			var[2] = 2;
+			var[0]++;
+		}
+		else if (str[var[0]] == '"' && var[2] == 2)
+		{
+			var[2] = 0;
+			var[0]++;
 		}
 		else if (to_expand(str, var[0], var[2]))
 			var[1] += manage_variable(str, &var[0], result + var[1], data->envp);
@@ -45,12 +98,11 @@ void	case_expand(char *str, char *result, int *var, t_exec_data *data)
 			var[1] += manage_exit_code(&var[0], result + var[1], data);
 		else if (str[var[0]] == '$' && str[var[0] + 1] == '$')
 			var[1] += manage_pid(&var[0], result + var[1]);
-		else if (str[var[0]] == '$')
+		else if (str[var[0]] == '$' && var[2] != 1)
 		{
-			if (str[var[0] + 1] == ' ' || str[var[0] + 1] == '\0' || str[var[0] + 1] == '\'' || str[var[0] + 1] == '"')
-				copy_char(str, &var[0], result, &var[1]);
-			else
-				var[0]++;
+			if (dollar_special(str, &var[0]))
+				continue;
+			copy_char(str, &var[0], result, &var[1]);
 		}
 		else
 			copy_char(str, &var[0], result, &var[1]);
