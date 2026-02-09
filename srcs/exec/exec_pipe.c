@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 07:24:39 by alex              #+#    #+#             */
-/*   Updated: 2026/02/08 07:18:10 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/09 06:08:25 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,11 @@ void	exec_pipe(t_node *node, t_exec_data *data)
 	int	pipe_fd[2];
 	pid_t	pid_left;
 	pid_t	pid_right;
+	int		status;
 
 	if (pipe(pipe_fd) == -1)
 		return ;
+	signal(SIGINT, SIG_IGN);
 	pid_left = fork();
 	if (pid_left == 0)
 	{
@@ -45,11 +47,14 @@ void	exec_pipe(t_node *node, t_exec_data *data)
 	}
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
-	signal(SIGINT, SIG_IGN);
 	waitpid(pid_left, NULL, 0);
-	waitpid(pid_right, &data->status, 0);
-	if (WIFSIGNALED(data->status))
-		data->status = 128 + WTERMSIG(data->status);
+	waitpid(pid_right, &status, 0);
+	if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGINT)
+			write(1, "\n", 1);
+		data->status = 128 + WTERMSIG(status);
+	}
 	else
 		data->status = WEXITSTATUS(data->status);
 	set_signal_actions();
