@@ -6,7 +6,7 @@
 /*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 22:20:26 by alex              #+#    #+#             */
-/*   Updated: 2026/02/09 10:58:39 by aghalmi          ###   ########.fr       */
+/*   Updated: 2026/02/09 11:38:03 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,15 @@ void	exec_redir_and_cmd(t_node *ast, t_exec_data *data)
 		}
 		if (ast->av[0][0] == '\0')
 		{
-			data->status = 0;
+			data->status = 127;
+			ft_putendl_fd("minishell : command not found", 2);
 			return ;
 		}
 	}
 	if (ast->type == NODE_CMD && (!ast->av || !ast->av[0]))
 	{
-		data->status = 0;
+		data->status = 127;
+		ft_putendl_fd("minishell : command not found", 2);
 		return ;
 	}
 	if (ast->type == NODE_CMD && ast->av && ast->av[0] && builtin_parent(ast->av[0]))

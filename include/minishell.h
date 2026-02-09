@@ -6,7 +6,7 @@
 /*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/09 10:54:51 by aghalmi          ###   ########.fr       */
+/*   Updated: 2026/02/09 12:22:29 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,6 +231,11 @@ void				manage_exp_quote(char c, int *in_quote, int *i);
 int					manage_exit_code(int *i, char *result, t_exec_data *data);
 int					manage_pid(int *i, char *result);
 void				expand_token(t_token *token, t_exec_data *data);
+int					original_quote(char *str);
+int					count_split_word(char *str);
+char				*extract_next_word(char *str, int *pos);
+void				add_word_token(t_token **last, char *word);
+void				insert_split_token(t_token *current, char *expand);
 void				expand_word(t_token *token, t_exec_data *data);
 int					dollar_special(char *str, int *i);
 void				case_expand(char *str, char *result, int *var, t_exec_data *data);
