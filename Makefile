@@ -6,7 +6,7 @@
 #    By: alex <alex@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/03 18:20:38 by aghalmi           #+#    #+#              #
-#    Updated: 2026/02/08 04:31:56 by alex             ###   ########.fr        #
+#    Updated: 2026/02/08 23:43:13 by alex             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,7 +50,9 @@ SRCS = srcs/main.c \
 	   srcs/builtin/builtin_env.c \
 	   srcs/builtin/builtin_export.c \
 	   srcs/builtin/builtin_unset.c \
-	   srcs/builtin/builtin_exit.c 
+	   srcs/builtin/builtin_exit.c \
+	   srcs/gnl/get_next_line_bonus.c \
+	   srcs/gnl/get_next_line_utils_bonus.c
 
 OBJS = $(SRCS:.c=.o)
 

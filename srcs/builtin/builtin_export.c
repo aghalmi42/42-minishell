@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/05 06:12:33 by alex              #+#    #+#             */
-/*   Updated: 2026/02/05 06:29:08 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/09 02:20:35 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	builtin_export(t_exec_data *data, t_node *node)
 	if (!new_key)
 		return ;
 	if (!check_new_key(new_key))
-		return (perror("not and identifier"), free(new_key));
+		return (perror("not a valid identifier"), free(new_key));
 	while(head)
 	{
 		search = head->content;

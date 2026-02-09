@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/05 06:15:45 by alex              #+#    #+#             */
-/*   Updated: 2026/02/05 06:16:07 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/09 02:23:34 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	builtin_unset(t_exec_data *data, t_node *node)
 		return ;
 	prev = NULL;
 	curr = data->envp;
+	// if (!check_new_key(name))
+	// 	return (perror("not a valid identifier"));
 	while (curr)
 	{
 		env = curr->content;
@@ -38,6 +40,5 @@ void	builtin_unset(t_exec_data *data, t_node *node)
 		}
 		prev = curr;
 		curr = curr->next;
-		
 	}
 }
