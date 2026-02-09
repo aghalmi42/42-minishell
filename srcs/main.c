@@ -30,7 +30,10 @@ int	main(int argc, char **argv, char **envp)
 			free(tmp);
 			}
 			if (!line)
-				break;
+			{
+				printf("exit\n");
+				break ;
+			}
 			add_history(line);
 			token = lexical_analyzer(line);
 			if (token)
