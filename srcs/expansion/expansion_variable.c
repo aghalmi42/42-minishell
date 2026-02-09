@@ -81,7 +81,13 @@ int	manage_variable(char *str, int *i, char *result, t_list *envp)
 /* gere les quote simple et douvle */
 void	manage_exp_quote(char c, int *in_quote, int *i)
 {
-	if (c == '\'')
-		*in_quote = !(*in_quote);
+	if (c == '\'' && *in_quote == 0)
+		*in_quote = 1;
+	else if (c == '\'' && *in_quote == 1)
+		*in_quote = 0;
+	else if (c == '"' && *in_quote == 0)
+		*in_quote = 2;
+	else if (c == '"' && *in_quote == 2)
+		*in_quote = 0;
 	(*i)++;
 }

@@ -4,7 +4,14 @@
 /* detecte si mot est dans une single quote */
 int	single_quote(char *str)
 {
-	if (str[0] == '\'' && str[ft_strlen(str) - 1] == '\'')
+	int i;
+
+	i = 1;
+	if (!str || str[0] != '\'')
+		return (0);
+	while(str[i] && str[i] != '\'')
+		i++;
+	if (str[i] == '\'' && str[i + 1] == '\0')
 		return (1);
 	return (0);
 }
@@ -28,25 +35,21 @@ int	dollar(char *str)
 char	*remove_quote(char *str)
 {
 	char	*result;
-	int		i;
-	int		j;
+	int len;
 
-	i = 0;
-	j = 0;
-	result = malloc(ft_strlen(str) + 1);
-	if (!result)
+	if (!str)
 		return (NULL);
-	while (str[i])
+	len = ft_strlen(str);
+	if (len >= 2 && ((str[0] == '\'' && str[len - 1] == '\'') || (str[0] == '"' && str[len - 1] == '"')))
 	{
-		if (str[i] != '\'' && str[i] != '"')
-		{
-			result[j] = str[i];
-			j++;
-		}
-		i++;
+		result = malloc(len - 1);
+		if (!result)
+			return (NULL);
+		ft_memcpy(result, str + 1, len - 2);
+		result[len - 2] = '\0';
+		return (result);
 	}
-	result[j] = '\0';
-	return (result);
+	return (ft_strdup(str));
 }
 
 /* copie un caractere normal */
@@ -60,7 +63,9 @@ void	copy_char(char *str, int *i, char *result, int *j)
 /*verif si on doit expand le dollars */
 int	to_expand(char *str, int i, int in_quote)
 {
-	if (str[i] != '$' || in_quote)
+	if (str[i] != '$')
+		return (0);
+	if (in_quote == 1)
 		return (0);
 	if (ft_isalpha(str[i + 1]) || str[i + 1] == '_')
 		return (1);

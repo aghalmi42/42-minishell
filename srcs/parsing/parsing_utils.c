@@ -50,7 +50,8 @@ int	count_av(t_token *token)
 	count = 0;
 	while (token && token->type == TOKEN_WORD)
 	{
-		count++;
+		if (token->value && token->value[0] != '\0')
+			count++;
 		token = token->next;
 	}
 	return (count);
@@ -70,9 +71,12 @@ char	**token_tab_av(t_token *token)
 		return (NULL);
 	while (token && token->type == TOKEN_WORD)
 	{
-		av[i] = ft_strdup(token->value);
+		if (token->value && token->value[0] != '\0')
+		{
+			av[i] = ft_strdup(token->value);
+			i++;
+		}
 		token = token->next;
-		i++;
 	}
 	av[i] = NULL;
 	return (av);
