@@ -29,7 +29,7 @@ t_node	*parsing_cmd(t_token *token)
 }
 
 /* parsing pour pipe */
-t_node	*parsing_pipe(t_token *token, t_token *pipe_token)
+t_node	*parsing_pipe(t_token *token, t_token *pipe_token, t_exec_data *data)
 {
 	t_node	*node;
 	t_token	*right_token;
@@ -38,8 +38,8 @@ t_node	*parsing_pipe(t_token *token, t_token *pipe_token)
 	if (!node)
 		return (NULL);
 	right_token = split_token(token, pipe_token);
-	node->left = parsing_pipe_prio(token);
-	node->right = parsing_pipe_prio(right_token);
+	node->left = parsing_pipe_prio(token, data);
+	node->right = parsing_pipe_prio(right_token, data);
 	return (node);
 }
 
@@ -73,9 +73,9 @@ t_node	*parsing(t_token *token, t_exec_data *data)
 	if (logical_token)
 	{
 		if (logical_token->type == TOKEN_AND)
-			return (parsing_and(token, logical_token));
+			return (parsing_and(token, logical_token, data));
 		else
-			return (parsing_or(token, logical_token));
+			return (parsing_or(token, logical_token, data));
 	}
-	return (parsing_pipe_prio(token));
+	return (parsing_pipe_prio(token, data));
 }

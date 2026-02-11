@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/11 07:06:13 by amoderan         ###   ########.fr       */
+/*   Updated: 2026/02/11 07:24:02 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ int					check_syntax_logical(t_token *token, t_exec_data *data);
 int					check_syntax(t_token *token, t_exec_data *data);
 t_token				*split_token(t_token *token, t_token *split);
 t_node				*parsing_cmd(t_token *token);
-t_node				*parsing_pipe(t_token *token, t_token *pipe_token);
+t_node				*parsing_pipe(t_token *token, t_token *pipe_token, t_exec_data *data);
 t_node				*parsing_redir(t_token *token, t_token *redir_token, t_exec_data *data);
 t_token 			*search_logical(t_token *token);
 t_node 				*parsing_pipe_prio(t_token *token, t_exec_data *data);
@@ -270,4 +270,5 @@ void				print_export(t_exec_data *data);
 void				sort_env_selection(t_list *lst);
 int					compare_keys(t_env *e1, t_env *e2);
 int					check_new_unset(char *env);
+
 #endif
