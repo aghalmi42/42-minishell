@@ -39,7 +39,7 @@ int	main(int argc, char **argv, char **envp)
 			if (token)
 			{
 				expand_token(token, &data);
-				ast = parsing(token);
+				ast = parsing(token, &data);
 				if (ast)
 				{
 					if (search_here_doc_to_execute(ast, &data) == -1)
