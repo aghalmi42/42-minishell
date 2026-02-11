@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 22:20:26 by alex              #+#    #+#             */
-/*   Updated: 2026/02/09 11:38:03 by aghalmi          ###   ########.fr       */
+/*   Updated: 2026/02/11 05:37:20 by amoderan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	exec_redir_and_cmd(t_node *ast, t_exec_data *data)
 	{
 		if (!ft_strncmp(ast->av[0], ":", 2) || !ft_strncmp(ast->av[0],"!",2))
 		{
-			data->status = 1;
+			data->status = 0;
 			return ;
 		}
 		if (ast->av[0][0] == '\0')

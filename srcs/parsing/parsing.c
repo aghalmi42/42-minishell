@@ -44,7 +44,7 @@ t_node	*parsing_pipe(t_token *token, t_token *pipe_token)
 }
 
 /* parsing pour redir */
-t_node	*parsing_redir(t_token *token, t_token *redir_token)
+t_node	*parsing_redir(t_token *token, t_token *redir_token, t_exec_data *data)
 {
 	t_node	*node;
 	t_token	*right_token;
@@ -56,18 +56,18 @@ t_node	*parsing_redir(t_token *token, t_token *redir_token)
 	right_token = split_token(token, redir_token);
 	if (right_token && right_token->type == TOKEN_WORD)
 		node->redir_file = ft_strdup(right_token->value);
-	node->left = parsing(token);
+	node->left = parsing(token, data);
 	return (node);
 }
 
 /* parsing */
-t_node	*parsing(t_token *token)
+t_node	*parsing(t_token *token, t_exec_data *data)
 {
 	t_token	*logical_token;
 
 	if (!token)
 		return (NULL);
-	if (check_syntax(token) == -1)
+	if (check_syntax(token, data) == -1)
 		return (NULL);
 	logical_token = search_logical(token);
 	if (logical_token)
