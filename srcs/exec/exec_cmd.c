@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 08:46:26 by alex              #+#    #+#             */
-/*   Updated: 2026/02/09 10:57:16 by aghalmi          ###   ########.fr       */
+/*   Updated: 2026/02/12 05:33:04 by amoderan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,11 @@ void	exec_cmd(t_node *node, t_exec_data *data)
 	{
 		data->status = 127;
 		if (data->is_fork)
+		{
+			free_ast(node);
+			free_envp(data);
 			exit(127);
+		}
 		return ;
 	}
 	if (is_a_directory(path_cmd))
@@ -46,7 +50,12 @@ void	exec_cmd(t_node *node, t_exec_data *data)
 		ft_putendl_fd(": Is a directory", 2);
 		data->status = 126;
 		if (data->is_fork)
+		{
+			free_ast(node);
+			free_envp(data);
+			free(path_cmd);
 			exit(126);
+		}
 		return ;
 	}
 	envp = getenv_to_str(data->envp);
