@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redir.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 08:16:12 by alex              #+#    #+#             */
-/*   Updated: 2026/02/08 14:33:46 by aghalmi          ###   ########.fr       */
+/*   Updated: 2026/02/12 05:26:16 by amoderan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,14 @@ void	exec_redirection(t_node *node, t_exec_data *data)
 	{
 		data->status = 1;
 		if (data->is_fork)
+		{
+			free_ast(node);
+			free_envp(data);
+			if(tmp)
+				free(tmp);
 			exit(1);
+		}
+
 		return ;
 	}
 	if (node->redir_type == TOKEN_REDIR_IN || node->redir_type == TOKEN_HEREDOC)

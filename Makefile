@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: alex <alex@student.42.fr>                  +#+  +:+       +#+         #
+#    By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/03 18:20:38 by aghalmi           #+#    #+#              #
-#    Updated: 2026/02/09 04:36:06 by alex             ###   ########.fr        #
+#    Updated: 2026/02/12 05:18:00 by amoderan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ SRCS = srcs/main.c \
 	   srcs/exec/exec_redir.c \
 	   srcs/exec/exec_or_and.c \
 	   srcs/exec/exec_utils.c \
-	   srcs/set_envp/set_envp.c \
+	   srcs/set/set_envp.c \
 	   srcs/signals/signals.c \
 	   srcs/parsing/check_syntax_logical.c \
 	   srcs/parsing/check_syntax_main.c \
@@ -53,7 +53,8 @@ SRCS = srcs/main.c \
 	   srcs/builtin/builtin_unset.c \
 	   srcs/builtin/builtin_exit.c \
 	   srcs/gnl/get_next_line_bonus.c \
-	   srcs/gnl/get_next_line_utils_bonus.c
+	   srcs/gnl/get_next_line_utils_bonus.c \
+	   srcs/garbage_collector/garbage_collector.c
 
 OBJS = $(SRCS:.c=.o)
 

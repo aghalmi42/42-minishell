@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/11 07:24:02 by aghalmi          ###   ########.fr       */
+/*   Updated: 2026/02/12 05:27:59 by amoderan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ typedef struct s_node
 typedef struct s_exec_data
 {
 	t_list					*envp;
+	t_list					**gc_head;
 	int						status;
 	struct s_here_doc_fd	*head;
 	int						is_fork;
@@ -270,5 +271,10 @@ void				print_export(t_exec_data *data);
 void				sort_env_selection(t_list *lst);
 int					compare_keys(t_env *e1, t_env *e2);
 int					check_new_unset(char *env);
+
+/* garbage collector */
+
+void				*gb_malloc(size_t size, t_list **head);
+void				gb_delete(t_list	**head);
 
 #endif
