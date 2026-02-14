@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redir.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 08:16:12 by alex              #+#    #+#             */
-/*   Updated: 2026/02/12 05:26:16 by amoderan         ###   ########.fr       */
+/*   Updated: 2026/02/14 16:27:36 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ void	exec_redirection(t_node *node, t_exec_data *data)
 				free(tmp);
 			exit(1);
 		}
-
 		return ;
 	}
 	if (node->redir_type == TOKEN_REDIR_IN || node->redir_type == TOKEN_HEREDOC)
@@ -45,7 +44,10 @@ void	exec_redirection(t_node *node, t_exec_data *data)
 	else
 		dup2(fd, STDOUT_FILENO);
 	close(fd);
-	exec_main(node->left, data);
+	if (node->left)
+		exec_main(node->left, data);
+	else 
+		data->status = 0;
 }
 
 int	open_redir_file(t_node *node)
@@ -60,7 +62,6 @@ int	open_redir_file(t_node *node)
 		fd = open(node->redir_file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else
 		return (-1);
-
 	if (fd == -1)
 	{
 		perror(node->redir_file);

@@ -116,31 +116,51 @@ void	expand_token(t_token *token, t_exec_data *data)
 {
 	t_token	*current;
 	t_token	*next;
+	t_token *prev;
 	char	*expand;
+	char 	*tmp;
 	int		a_quote;
 
 	current = token;
+	prev = NULL;
 	while (current)
 	{
 		next = current->next;
 		if (current->type == TOKEN_WORD)
 		{
-			a_quote = original_quote(current->value);
-			if (single_quote(current->value))
+			if (prev && prev->type == TOKEN_HEREDOC)
+			{
+				a_quote = original_quote(current->value);
 				expand = remove_quote(current->value);
-			else
-				expand = expand_value(current->value, data);
-			if (!a_quote && expand)
-			{
-				insert_split_token(current, expand);
-				free(expand);
-			}
-			else
-			{
+				if (a_quote)
+				{
+					tmp = ft_strjoin("\x01", expand);
+					free(expand);
+					expand = tmp;
+				}
 				free(current->value);
 				current->value = expand;
 			}
+			else
+			{
+				a_quote = original_quote(current->value);
+				if (single_quote(current->value))
+					expand = remove_quote(current->value);
+				else
+					expand = expand_value(current->value, data);
+				if (!a_quote && expand)
+				{
+					insert_split_token(current, expand);
+					free(expand);
+				}
+				else
+				{
+					free(current->value);
+					current->value = expand;
+				}
+			}
 		}
+		prev = current;
 		current = next;
 	}
 }
