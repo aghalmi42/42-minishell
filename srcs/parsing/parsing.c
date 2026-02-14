@@ -5,6 +5,7 @@
 t_token	*split_token(t_token *token, t_token *split)
 {
 	t_token	*current;
+	t_token *next;
 
 	if (!token || !split)
 		return (NULL);
@@ -13,7 +14,11 @@ t_token	*split_token(t_token *token, t_token *split)
 		current = current->next;
 	if (current)
 		current->next = NULL;
-	return (split->next);
+	next = split->next;
+	if (split->value)
+		free(split->value);
+	free(split);
+	return (next);
 }
 
 /* parsing juste pour une cmd simple --> des token word */
@@ -25,6 +30,7 @@ t_node	*parsing_cmd(t_token *token)
 	if (!node)
 		return (NULL);
 	node->av = token_tab_av(token);
+	free_token(token);
 	return (node);
 }
 
@@ -40,6 +46,8 @@ t_node	*parsing_pipe(t_token *token, t_token *pipe_token, t_exec_data *data)
 	right_token = split_token(token, pipe_token);
 	node->left = parsing_pipe_prio(token, data);
 	node->right = parsing_pipe_prio(right_token, data);
+	// free_token(token);
+	// free_token(right_token);
 	return (node);
 }
 
@@ -66,6 +74,8 @@ t_node	*parsing_redir(t_token *token, t_token *redir_token, t_exec_data *data)
 		node->left = parsing(token, data);
 	else
 		node->left = parsing(file, data);
+	free_token(token);
+	//free_token(file);
 	return (node);
 }
 

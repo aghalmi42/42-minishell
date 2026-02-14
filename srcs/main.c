@@ -20,6 +20,8 @@ int	main(int argc, char **argv, char **envp)
 	{
 		while(1)
 		{
+			token = NULL;
+			ast = NULL;
 			if (isatty(STDIN_FILENO))
 				line = readline("minishell$ ");
 			else
@@ -27,8 +29,8 @@ int	main(int argc, char **argv, char **envp)
 				char *tmp = get_next_line(STDIN_FILENO);
 				if (!tmp)
 					break ;
-			line = ft_strtrim(tmp, "\n");
-			free(tmp);
+				line = ft_strtrim(tmp, "\n");
+				free(tmp);
 			}
 			if (!line)
 			{
@@ -46,25 +48,38 @@ int	main(int argc, char **argv, char **envp)
 					if (search_here_doc_to_execute(ast, &data) == -1)
 					{
 						free_ast(ast);
-						free_token(token);
 						free(line);
 						continue ;
 					}
 					data.is_fork = 0;
-					free_token(token);
 					token = NULL;
 					//print_ast(ast, 0);
 					exec_main(ast, &data);
 					free_ast(ast);
+					ast = NULL;
+				}
+				else
+				{
+					free_token(token);
+					token = NULL;
 				}
 			}
 			if (token)
+			{
 				free_token(token);
+				token = NULL;
+			}
+			if (ast)
+			{
+				free_ast(ast);
+				ast = NULL;
+			}
 			free(line);
 			//printf("data.status :%d\n", data.status);
 		}
 		free_envp(&data);
 	}
+	return (data.status);
 }
 
 // int main (void)
