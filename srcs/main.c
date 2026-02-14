@@ -14,6 +14,7 @@ int	main(int argc, char **argv, char **envp)
 		return (0);
 	data.status = 0;
 	data.head = NULL;
+	data.gc_head = NULL;
 	set_signal_actions();
 	if (argc == 1 && isatty(STDIN_FILENO))
 	{
@@ -39,7 +40,7 @@ int	main(int argc, char **argv, char **envp)
 			if (token)
 			{
 				expand_token(token, &data);
-				ast = parsing(token);
+				ast = parsing(token, &data);
 				if (ast)
 				{
 					if (search_here_doc_to_execute(ast, &data) == -1)
@@ -50,16 +51,38 @@ int	main(int argc, char **argv, char **envp)
 						continue ;
 					}
 					data.is_fork = 0;
+					free_token(token);
+					token = NULL;
 					//print_ast(ast, 0);
 					exec_main(ast, &data);
 					free_ast(ast);
 				}
-				free_token(token);
 			}
+			if (token)
+				free_token(token);
 			free(line);
 			//printf("data.status :%d\n", data.status);
 		}
 		free_envp(&data);
 	}
 }
+
+// int main (void)
+// {
+// 	t_exec_data *data = malloc(sizeof(t_exec_data));
+// 	printf("%p\n", data);
+// 	if (fork() == 0)
+// 	{
+// 		printf("%p\n", data);
+// 		free(data);
+// 		exit(126);
+// 	}
+// 	data->is_fork = 12;
+// 	printf("%d\n", data->is_fork);
+// 	t_list *test = ft_lstnew(NULL);
+// 	data->envp = test;
+// 	free(data->envp);
+// 	free(data);
+	
+// }
 
