@@ -6,7 +6,7 @@
 /*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 08:16:12 by alex              #+#    #+#             */
-/*   Updated: 2026/02/14 16:27:36 by aghalmi          ###   ########.fr       */
+/*   Updated: 2026/02/14 20:50:04 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@ void	exec_redirection(t_node *node, t_exec_data *data)
 	int				fd;
 	t_here_doc_fd	*tmp;
 
+	tmp = NULL;
 	if (node->redir_type == TOKEN_HEREDOC)
 	{
 		fd = data->head->fd_read; 
 		tmp = data->head;
 		data->head = data->head->next;
-		free(tmp);
 	}
 	else
 		fd = open_redir_file(node); 
@@ -37,6 +37,8 @@ void	exec_redirection(t_node *node, t_exec_data *data)
 				free(tmp);
 			exit(1);
 		}
+		if (tmp)
+			free(tmp);
 		return ;
 	}
 	if (node->redir_type == TOKEN_REDIR_IN || node->redir_type == TOKEN_HEREDOC)
@@ -44,6 +46,8 @@ void	exec_redirection(t_node *node, t_exec_data *data)
 	else
 		dup2(fd, STDOUT_FILENO);
 	close(fd);
+	if (tmp)
+		free(tmp);
 	if (node->left)
 		exec_main(node->left, data);
 	else 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 07:24:39 by alex              #+#    #+#             */
-/*   Updated: 2026/02/09 06:08:25 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/14 20:39:45 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,6 @@ void	exec_pipe(t_node *node, t_exec_data *data)
 		data->status = 128 + WTERMSIG(status);
 	}
 	else
-		data->status = WEXITSTATUS(data->status);
+		data->status = WEXITSTATUS(status);
 	set_signal_actions();
 }
