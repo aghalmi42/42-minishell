@@ -58,6 +58,8 @@ t_node	*parsing_redir(t_token *token, t_token *redir_token, t_exec_data *data)
 	t_token	*right_token;
 	t_token *file;
 
+	if (token == redir_token)
+		return (NULL);
 	node = new_node(NODE_REDIR);
 	if (!node)
 		return (NULL);
@@ -67,14 +69,17 @@ t_node	*parsing_redir(t_token *token, t_token *redir_token, t_exec_data *data)
 	{
 		node->redir_file = ft_strdup(right_token->value);
 		file = right_token->next;
+		free(right_token->value);
+		free(right_token);
 	}
 	else 
 		file = right_token;
-	if (token && token != redir_token)
-		node->left = parsing(token, data);
-	else
+	if (file)
 		node->left = parsing(file, data);
-	free_token(token);
+	else
+		node->left = parsing(token, data);
+	// if (token && token != redir_token)
+	// free_token(token);
 	//free_token(file);
 	return (node);
 }

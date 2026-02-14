@@ -16,7 +16,7 @@ int	main(int argc, char **argv, char **envp)
 	data.head = NULL;
 	data.gc_head = NULL;
 	set_signal_actions();
-	if (argc == 1 && isatty(STDIN_FILENO))
+	if (argc == 1)
 	{
 		while(1)
 		{
@@ -37,7 +37,8 @@ int	main(int argc, char **argv, char **envp)
 				printf("exit\n");
 				break ;
 			}
-			add_history(line);
+			if (isatty(STDIN_FILENO))
+				add_history(line);
 			token = lexical_analyzer(line);
 			if (token)
 			{
