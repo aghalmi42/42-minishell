@@ -6,13 +6,14 @@
 #    By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/03 18:20:38 by aghalmi           #+#    #+#              #
-#    Updated: 2026/02/15 22:15:05 by aghalmi          ###   ########.fr        #
+#    Updated: 2026/02/16 00:35:47 by aghalmi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
 SRCS = srcs/main.c \
+	   srcs/main_utils.c \
 	   srcs/lexical_analyzer/lexical_analyzer.c \
 	   srcs/lexical_analyzer/lexical_analyzer_utils.c \
 	   srcs/lexical_analyzer/lexical_analyzer_pipe.c \
@@ -31,6 +32,7 @@ SRCS = srcs/main.c \
 	   srcs/path_finding/path_finding_utils.c \
 	   srcs/exec/exec_one_cmd.c \
 	   srcs/exec/exec_cmd.c \
+	   srcs/exec/exec_cmd_utils.c \
 	   srcs/exec/exec.c \
 	   srcs/exec/exec_handle_here_doc.c \
 	   srcs/exec/exec_node_here_doc.c \
@@ -46,15 +48,24 @@ SRCS = srcs/main.c \
 	   srcs/parsing/parsing_logical.c \
 	   srcs/expansion/expansion.c \
 	   srcs/expansion/expansion_utils.c \
+	   srcs/expansion/expansion_utils_2.c \
+	   srcs/expansion/expansion_utils_3.c \
+	   srcs/expansion/expansion_utils_4.c \
 	   srcs/expansion/expansion_variable.c \
 	   srcs/expansion/expansion_special.c \
 	   srcs/expansion/expansion_wildcard.c \
+	   srcs/expansion/expansion_wildcard_utils.c \
+	   srcs/expansion/expansion_wildcard_utils_2.c \
+	   srcs/expansion/expansion_wildcard_utils_3.c \
 	   srcs/builtin/builtin_pwd.c \
 	   srcs/builtin/builtin.c \
 	   srcs/builtin/builtin_echo.c \
 	   srcs/builtin/builtin_cd.c \
+	   srcs/builtin/builtin_cd_utils.c \
+	   srcs/builtin/builtin_cd_utils_2.c \
 	   srcs/builtin/builtin_env.c \
 	   srcs/builtin/builtin_export.c \
+	   srcs/builtin/builtin_export_utils.c \
 	   srcs/builtin/builtin_unset.c \
 	   srcs/builtin/builtin_exit.c \
 	   srcs/gnl/get_next_line_bonus.c \

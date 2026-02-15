@@ -34,21 +34,6 @@ void	add_token(t_token **up, t_token *new)
 	}
 }
 
-/* pour voir si nos token sont bien cree grace au lexical analyzer
-fonction quon doit clean a la fin !!!!!1 */
-
-void	print_token(t_token *token)
-{
-	t_token	*current;
-
-	current = token;
-	while (current)
-	{
-		printf("type : %d ||| value %s\n", current->type, current->value);
-		current = current->next;
-	}
-}
-
 /* on va free tt les token et sa valeur */
 void	free_token(t_token *token)
 {

@@ -82,52 +82,22 @@ char	**token_tab_av(t_token *token)
 	return (av);
 }
 
-/* fonction quon va supp a la fin */
-void	print_ast(t_node *node, int tmp)
+/* split la lst de token au bon endroit */
+t_token	*split_token(t_token *token, t_token *split)
 {
-	int	i;
-	int	j;
+	t_token	*current;
+	t_token *next;
 
-	j = 0;
-	if (!node)
-		return ;
-	while (j < tmp)
-	{
-		printf("  ");
-		j++;
-	}
-	if (node->type == NODE_CMD)
-	{
-		printf("CMD : ");
-		i = 0;
-		while (node->av && node->av[i])
-		{
-			printf("%s ", node->av[i]);
-			i++;
-		}
-		printf("\n");
-	}
-	else if (node->type == NODE_PIPE)
-	{
-		printf("PIPE\n");
-		print_ast(node->left, tmp + 1);
-		print_ast(node->right, tmp + 1);
-	}
-	else if (node->type == NODE_REDIR)
-	{
-		printf("REDIR %d --> %s\n", node->redir_type, node->redir_file);
-		print_ast(node->left, tmp + 1);
-	}
-	else if (node->type == NODE_AND)
-	{
-		printf("AND\n");
-		print_ast(node->left, tmp + 1);
-		print_ast(node->right, tmp + 1);
-	}
-	else if (node->type == NODE_OR)
-	{
-		printf("OR\n");
-		print_ast(node->left, tmp + 1);
-		print_ast(node->right, tmp + 1);
-	}
+	if (!token || !split)
+		return (NULL);
+	current = token;
+	while (current && current->next != split)
+		current = current->next;
+	if (current)
+		current->next = NULL;
+	next = split->next;
+	if (split->value)
+		free(split->value);
+	free(split);
+	return (next);
 }

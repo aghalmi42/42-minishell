@@ -1,36 +1,47 @@
 
 #include "../../include/minishell.h"
 
+int	get_redir_fd(t_node *node, t_exec_data *data, t_here_doc_fd **tmp)
+{
+	int	fd;
+
+	*tmp = NULL;
+	if (node->redir_type == TOKEN_HEREDOC)
+	{
+		fd = data->head->fd_read;
+		*tmp = data->head;
+		data->head = data->head->next;
+	}
+	else
+		fd = open_redir_file(node);
+	return (fd);
+}
+
+void	handle_redir_error(t_node *node, t_exec_data *data, t_here_doc_fd *tmp)
+{
+	data->status = 1;
+	if (data->is_fork)
+	{
+		free_ast(node);
+		free_envp(data);
+		if (tmp)
+			free(tmp);
+		exit(1);
+	}
+	if (tmp)
+		free(tmp);
+}
+
 void	exec_redirection(t_node *node, t_exec_data *data)
 {
 	int				fd;
 	t_here_doc_fd	*tmp;
 
-	tmp = NULL;
-	if (node->redir_type == TOKEN_HEREDOC)
-	{
-		fd = data->head->fd_read; 
-		tmp = data->head;
-		data->head = data->head->next;
-	}
-	else
-		fd = open_redir_file(node); 
+	fd = get_redir_fd(node, data, &tmp);
 	if (fd == -1)
-	{
-		data->status = 1;
-		if (data->is_fork)
-		{
-			free_ast(node);
-			free_envp(data);
-			if(tmp)
-				free(tmp);
-			exit(1);
-		}
-		if (tmp)
-			free(tmp);
-		return ;
-	}
-	if (node->redir_type == TOKEN_REDIR_IN || node->redir_type == TOKEN_HEREDOC)
+		return (handle_redir_error(node, data, tmp));
+	if (node->redir_type == TOKEN_REDIR_IN
+		|| node->redir_type == TOKEN_HEREDOC)
 		dup2(fd, STDIN_FILENO);
 	else
 		dup2(fd, STDOUT_FILENO);
@@ -39,7 +50,7 @@ void	exec_redirection(t_node *node, t_exec_data *data)
 		free(tmp);
 	if (node->left)
 		exec_main(node->left, data);
-	else 
+	else
 		data->status = 0;
 }
 

@@ -55,6 +55,21 @@ int	extract_word(char *line, int *i, t_token **up)
 	return (0);
 }
 
+int	process_token(char *line, int *i, t_token **up)
+{
+	if (manage_parenthese(line, i, up))
+	return (1);
+	if (manage_logical(line, i, up))
+	return (1);
+	if (manage_pipe(line, i, up))
+	return (1);
+	if (manage_redirection(line, i, up))
+	return (1);
+	if (extract_word(line, i, up) == -1)
+	return (-1);
+	return (0);
+}
+
 /* fonction principal celle qui va tt orchestrer */
 t_token	*lexical_analyzer(char *line)
 {
@@ -69,15 +84,7 @@ t_token	*lexical_analyzer(char *line)
 		skip_all_space(line, &i);
 		if (line[i] == '\0')
 			break ;
-		if (manage_parenthese(line, &i, &up))
-			continue ;
-		if (manage_logical(line, &i, &up))
-			continue ;
-		if (manage_pipe(line, &i, &up))
-			continue ;
-		if (manage_redirection(line, &i, &up))
-			continue ;
-		result = extract_word(line, &i, &up);
+		result = process_token(line, &i, &up);
 		if (result == -1)
 		{
 			free_token(up);

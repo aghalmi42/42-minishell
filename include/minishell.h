@@ -6,7 +6,7 @@
 /*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/15 23:00:12 by aghalmi          ###   ########.fr       */
+/*   Updated: 2026/02/16 00:50:11 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,6 @@ typedef struct s_here_doc_fd
 /* fonction du lexical analyzer */
 t_token				*new_token(t_token_type type, char *value);
 void				add_token(t_token **up, t_token *new);
-void				print_token(t_token *token);
 void				free_token(t_token *token);
 void				skip_all_space(char *line, int *i);
 int					manage_pipe(char *line, int *i, t_token **up);
@@ -128,6 +127,7 @@ int  				manage_parenthese(char *line, int *i, t_token **up);
 int					delimiter(char c);
 int					construct_word(char *line, int *i, char *word, int *j);
 int					extract_word(char *line, int *i, t_token **up);
+int	process_token(char *line, int *i, t_token **up);
 t_token				*lexical_analyzer(char *line);
 
 /* fonction de parsing */
@@ -135,7 +135,6 @@ t_node				*new_node(t_node_type type);
 void				free_ast(t_node *node);
 int					count_av(t_token *token);
 char				**token_tab_av(t_token *token);
-void				print_ast(t_node *node, int tmp);
 t_token				*search_pipe(t_token *token);
 t_token				*search_redir(t_token *token);
 t_token 			*search_parenthese(t_token *token);
@@ -149,6 +148,8 @@ int					check_content_enter_paren(t_token *left_paren, t_exec_data *data);
 int					logical_start(t_token *token, t_exec_data *data);
 int					check_logical_token(t_token *token, t_exec_data *data);
 int					check_syntax_logical(t_token *token, t_exec_data *data);
+int	handle_close_paren(int count, int content, t_exec_data *data);
+int	process_paren_token(t_token *current, int *count, t_exec_data *data);
 int 				check_parenthese_syntax(t_token *token, t_exec_data *data);
 int					check_syntax(t_token *token, t_exec_data *data);
 t_token				*split_token(t_token *token, t_token *split);
@@ -160,6 +161,10 @@ t_node 				*parsing_pipe_prio(t_token *token, t_exec_data *data);
 t_node 				*parsing_and(t_token *token, t_token *and_token, t_exec_data *data);
 t_node 				*parsing_or(t_token *token, t_token *or_token, t_exec_data *data);
 t_node 				*parsing_subshell(t_token *token, t_exec_data *data);
+void	process_redir_file(t_node *node, t_token *right_token, t_token **file);
+t_node	*create_redir_node(t_token *redir_token, t_token *right_token, t_token *left_token, t_exec_data *data);
+t_node	*handle_redir_at_start(t_token *redir_token, t_exec_data *data);
+t_node	*parsing_redir(t_token *token, t_token *redir_token, t_exec_data *data);
 t_node				*parsing_no_check(t_token *token, t_exec_data *data);
 t_node				*parsing(t_token *token, t_exec_data *data);
 
@@ -188,6 +193,7 @@ t_here_doc_fd		*here_doc_last(t_here_doc_fd *here_doc);
 void				free_here_doc_list(t_here_doc_fd *head);
 int					add_here_doc_fd(t_here_doc_fd **head, int fd);
 int					search_here_doc_to_execute(t_node *ast, t_exec_data *data);
+int	handle_heredoc_child(char *redir_file, int pipe_fd[2], t_exec_data *data);
 int					create_here_doc_to_execute(char *redir_file, t_exec_data *data);
 void				loop_here_doc(char	*limiter, int fd);
 
@@ -200,27 +206,32 @@ void				exec_built_in(char *cmd, t_exec_data *data, t_node *node);
 char				**getenv_to_str(t_list *envp);
 char				*envp_value(t_env *content);
 int					envp_count(t_list *envp);
+void	exec_pipe_left(t_node *node, int pipe_fd[2], t_exec_data *data);
+void	exec_pipe_right(t_node *node, int pipe_fd[2], t_exec_data *data);
+void	handle_pipe_status(int status, t_exec_data *data);
 void				exec_pipe(t_node *node, t_exec_data *data);
+void	handle_builtin(t_node *node, t_exec_data *data);
+void	handle_path_error(t_node *node, t_exec_data *data);
+void	handle_directory_error(char *path, t_node *node, t_exec_data *data);
+void	execute_command(char *path_cmd, t_node *node, t_exec_data *data);
 void				exec_cmd(t_node *node, t_exec_data *data);
 void				exec_one_cmd_lst(t_node *node, t_exec_data *data);
+void	execute_in_child(char *path_cmd, t_node *node, char **envp);
 void				exec_or(t_node *node, t_exec_data *data);
 void				exec_and(t_node *node, t_exec_data *data);
 void				exec_final(char *path_cmd, char **envp, t_node *node, t_exec_data *data);
 int 				builtin_parent(char *cmd);
+int	check_special_cmd(t_node *ast, t_exec_data *data);
+int	handle_cmd_validation(t_node *ast, t_exec_data *data);
+void	exec_in_child(t_node *ast, t_exec_data *data);
+void	handle_exec_status(int status, t_exec_data *data);
 void				exec_redir_and_cmd(t_node *ast, t_exec_data *data);
+void	handle_subshell_status(int status, t_exec_data *data);
+void	exec_subshell_child(t_node *node, t_exec_data *data);
 void 				exec_subshell(t_node *node, t_exec_data *data);
 int					is_a_directory(char *path);
-
-/* built-in */
-
-void				built_in_env(t_exec_data *data,t_node *node,  int export);
-void				built_in_export(t_exec_data *data, t_node *node);
-int					check_new_key(t_env *env);
-void				print_env(t_env *e, int export);
-void				built_in_unset(t_exec_data *data, t_node *node);
-void				built_in_exit(t_exec_data *data, t_node *node);
-
-/* redirection exec */
+int	get_redir_fd(t_node *node, t_exec_data *data, t_here_doc_fd **tmp);
+void	handle_redir_error(t_node *node, t_exec_data *data, t_here_doc_fd *tmp);
 void				exec_redirection(t_node *node, t_exec_data *data);
 int					open_redir_file(t_node *node);
 
@@ -257,10 +268,25 @@ void				case_expand(char *str, char *result, int *var, t_exec_data *data);
 int 				have_wildcard(char *str);
 int 				match_pattern(char *pattern, char *str);
 void 				split_path_pattern(char *input, char **dir_path, char **pattern);
+void	free_path_pattern(char *dir_path, char *pattern);
+char	*build_full_path(char *dir_path, char *name);
+void	free_match_array(char **match, int i);
+char	**init_match(char *input, char **dir_path, char **pattern);
+int	process_entry(struct dirent *enter, char **match, int *i, char *dir_path);
+int	fill_matches(DIR *dir, char **match, char *dir_path, char *pattern);
 int 				count_match(char *pattern);
 char 				**get_match(char *pattern);
 void 				sort_match(char **match);
+int	count_expanded_size(char **av);
+void	add_matches_to_result(char **result, int *k, char **match);
+void	fill_result(char **result, char **av);
 char 				**expand_wildcard(char **av);
+void	process_words(t_token *current, char *expand, int word_count);
+void	handle_quotes(char *str, int *var);
+char	*handle_heredoc_expand(char *value, int *a_quote);
+char	*handle_normal_expand(char *value, int *a_quote, t_exec_data *data);
+void	process_expand(t_token *current, char *expand, int a_quote);
+void	process_word_token(t_token *current, t_token *prev, t_exec_data *data);
 char				*expand_value(char *str, t_exec_data *data);
 
 /* fonction builtin */
@@ -268,18 +294,27 @@ char				*expand_value(char *str, t_exec_data *data);
 void				builtin_pwd(t_exec_data *data, t_node *node);
 int					n_option(char *av);
 void				builtin_echo(char **av,t_exec_data *data);
-// char				*search_home_path(char **env);
-// char				*search_oldpwd_path(char **env);
-// char				*search_cd_path(char **av, char **env);
-// int					builtin_cd(char **av, char **env);
-int					change_directory(char *path);
+int	handle_cd_error(char *path, t_exec_data *data, char *msg);
+int	execute_cd(char *path, t_exec_data *data);
+void	update_pwd(t_env *e, char *new_p);
+void	update_oldpwd(t_env *e, char *old_path);
+void	update_env_vars(t_exec_data *data, char *new_p, char *old_path);
+void	change_env_directory(char *new_path, t_exec_data *data);
 int					builtin(char *cmd);
 int					exec_builtin(char **av, char **env);
 void				builtin_env(t_exec_data *data,t_node *node, int export);
+int	handle_export_error(t_env *new_key, t_exec_data *data);
+int	update_existing_key(t_exec_data *data, t_env *new_key);
+void	add_new_key(t_exec_data *data, t_env *new_key);
+void	process_export_arg(t_exec_data *data, char *arg);
 void				builtin_export(t_exec_data *data, t_node *node);
 int					check_new_key(t_env *env);
 void				print_env(t_env *e, int export);
+int	handle_unset_error(char *key);
+void	remove_env_key(t_exec_data *data, char *key);
 void				builtin_unset(t_exec_data *data, t_node *node);
+int	is_valid_number(char *str);
+void exit_with_error(t_exec_data *data, char *msg, int code);
 void				builtin_exit(t_exec_data *data, t_node *node);
 void				builtin_cd(t_exec_data *data, t_node *node);
 char 				*search_cd_path(t_exec_data *data, t_node *node);
@@ -288,9 +323,17 @@ char				*find_home_value(t_exec_data *data, t_list *envp);
 char 				*search_home_path(t_exec_data *data);
 void				change_env_directory(char *new_path, t_exec_data *data);
 char				*search_env_value(t_exec_data *data, char *search);
+void	free_copy_list(t_list *copy);
 void				print_export(t_exec_data *data);
 void				sort_env_selection(t_list *lst);
 int					compare_keys(t_env *e1, t_env *e2);
 int					check_new_unset(char *env);
+
+/* MAIN */
+char	*read_input_line(void);
+int	process_heredocs(t_node *ast, t_exec_data *data, char *line);
+void	execute_ast(t_node *ast, t_exec_data *data);
+void	process_line(char *line, t_exec_data *data);
+void	init_exec_data(t_exec_data *data, char **envp);
 
 #endif

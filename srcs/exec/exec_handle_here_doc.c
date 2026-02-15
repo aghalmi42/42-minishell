@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exec_handle_here_doc.c                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/29 05:07:58 by alex              #+#    #+#             */
-/*   Updated: 2026/02/14 16:28:18 by aghalmi          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
@@ -27,32 +16,32 @@ int	search_here_doc_to_execute(t_node *ast, t_exec_data *data)
 	return (search_here_doc_to_execute(ast->right, data));
 }
 
-/* ici on créé le pipe qui va pouvoir être retrouver plus tard lorsque l'exec des commandes sera fait */
+int	handle_heredoc_child(char *redir_file, int pipe_fd[2], t_exec_data *data)
+{
+	set_signal_actions_default();
+	close(pipe_fd[0]);
+	loop_here_doc(redir_file, pipe_fd[1]);
+	close(pipe_fd[1]);
+	data->status = 0;
+	exit(0);
+}
+
 int	create_here_doc_to_execute(char *redir_file, t_exec_data *data)
 {
-	(void) redir_file;
-	int	pipe_fd[2];
+	int		pipe_fd[2];
 	pid_t	pid;
 
-	if(pipe(pipe_fd) == -1)
+	if (pipe(pipe_fd) == -1)
 		return (-1);
 	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid < 0)
 		return (close(pipe_fd[1]), close(pipe_fd[0]), -1);
 	if (pid == 0)
-	{
-		set_signal_actions_default();
-		close(pipe_fd[0]);
-		loop_here_doc(redir_file, pipe_fd[1]);
-		close(pipe_fd[1]);
-		data->status = 0;
-		exit(0);
-	}
+		handle_heredoc_child(redir_file, pipe_fd, data);
 	close(pipe_fd[1]);
 	waitpid(pid, &data->status, 0);
 	set_signal_actions();
-	//printf("Fin waitpid, status = %d, WIFSIGNALED = %d\n", status, WIFSIGNALED(status));
 	if (WIFSIGNALED(data->status))
 	{
 		close(pipe_fd[0]);
@@ -85,4 +74,3 @@ void	loop_here_doc(char	*limiter, int fd)
 	}
 	close(fd);
 }
-

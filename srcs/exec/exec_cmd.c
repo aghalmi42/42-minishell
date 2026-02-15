@@ -1,59 +1,43 @@
 
 #include "../../include/minishell.h"
 
-void	exec_cmd(t_node *node, t_exec_data *data)
+void	handle_builtin(t_node *node, t_exec_data *data)
 {
-	char	*path_cmd;
+	exec_built_in(node->av[0], data, node);
+	if (data->is_fork)
+		exit(data->status);
+}
+
+void	handle_path_error(t_node *node, t_exec_data *data)
+{
+	data->status = 127;
+	if (data->is_fork)
+	{
+		free_ast(node);
+		free_envp(data);
+		exit(127);
+	}
+}
+
+void	handle_directory_error(char *path, t_node *node, t_exec_data *data)
+{
+	ft_putstr_fd("minishell : ", 2);
+	ft_putstr_fd(path, 2);
+	ft_putendl_fd(": Is a directory", 2);
+	data->status = 126;
+	if (data->is_fork)
+	{
+		free_ast(node);
+		free_envp(data);
+		free(path);
+		exit(126);
+	}
+}
+
+void	execute_command(char *path_cmd, t_node *node, t_exec_data *data)
+{
 	char	**envp;
-	char **expand_av;
-	
-	if (!node->av || !node->av[0] || node->av[0][0] == '\0')
-	{
-		data->status = 0;
-		if (data->is_fork)
-			exit(0);
-		return ;
-	}
-	expand_av = expand_wildcard(node->av);
-	if (expand_av)
-	{
-		free_split(node->av);
-		node->av = expand_av;
-	}
-	if(is_a_built_in(node->av[0]))
-	{
-		exec_built_in(node->av[0], data, node);
-		if (data->is_fork)
-			exit(data->status);
-		return ;
-	}
-	path_cmd = path_to_find_lst(node->av[0], data);
-	if (!path_cmd)
-	{
-		data->status = 127;
-		if (data->is_fork)
-		{
-			free_ast(node);
-			free_envp(data);
-			exit(127);
-		}
-		return ;
-	}
-	if (is_a_directory(path_cmd))
-	{
-		ft_putstr_fd("minishell : ", 2);
-		ft_putstr_fd(path_cmd, 2);
-		ft_putendl_fd(": Is a directory", 2);
-		data->status = 126;
-		if (data->is_fork)
-		{
-			free_ast(node);
-			free_envp(data);
-			free(path_cmd);
-			exit(126);
-		}
-		return ;
-	}
+
 	envp = getenv_to_str(data->envp);
 	if (!envp)
 	{
@@ -72,123 +56,30 @@ void	exec_cmd(t_node *node, t_exec_data *data)
 	}
 }
 
-// void	exec_final(char *path_cmd, char **envp, t_node *node, t_exec_data *data)
-// {
-// 	pid_t	pid;
-
-// 	if (!data->is_fork)
-// 	{
-// 		pid = fork();
-// 		if (pid < 0)
-// 			data->status = 1;
-// 		if (pid == 0)
-// 		{
-// 			if (execve(path_cmd, node->av, envp) == - 1)
-// 			{
-// 				free_split(envp);
-// 				perror("execve fail");
-// 				exit(126);
-// 			}
-// 		}
-// 		waitpid(pid, &data->status, 0);
-// 		return ;
-// 	}
-// 	if (execve(path_cmd, node->av, envp) == - 1)
-// 	{
-// 		perror("execve fail");
-// 		free_split(envp);
-// 		data->status = 126;
-// 		return ;
-// 	}
-// }
-
-
-void	exec_built_in(char *cmd, t_exec_data *data, t_node *node)
+void	exec_cmd(t_node *node, t_exec_data *data)
 {
-	if (!ft_strncmp("env", cmd, 4))
-		return(builtin_env(data,node, 0));
-	else if (!ft_strncmp("export", cmd, 7))
-		return (builtin_export(data, node));
-	else if (!ft_strncmp("unset", cmd, 6))
-		return (builtin_unset(data, node));
-	else if (!ft_strncmp("exit", cmd, 5))
-		return (builtin_exit(data, node));
-	else if (!ft_strncmp("echo", cmd, 5))
-		return (builtin_echo(node->av, data));
-	else if (!ft_strncmp("cd", cmd, 3))
-		return (builtin_cd(data, node));
-	else if (!ft_strncmp("pwd", cmd, 4))
-		return (builtin_pwd(data, node));
-}
+	char	*path_cmd;
+	char	**expand_av;
 
-int	is_a_built_in(char *cmd)
-{
-	if (!cmd)
-		return (0);
-	if (!ft_strncmp("echo", cmd, 5))
-		return (1);
-	else if (!ft_strncmp("cd", cmd, 3))
-		return (1);
-	else if (!ft_strncmp("pwd", cmd, 4))
-		return (1);
-	else if (!ft_strncmp("export", cmd, 7))
-		return (1);
-	else if (!ft_strncmp("unset", cmd, 6))
-		return (1);
-	else if (!ft_strncmp("env", cmd, 4))
-		return (1);
-	else if (!ft_strncmp("exit", cmd, 5))
-		return (1);
-	return (0);
-}
-
-char	**getenv_to_str(t_list *envp)
-{
-	char	**env;
-	int		i;
-	int		j;
-
-	i = envp_count(envp);
-	env = malloc(sizeof (char *) * (i + 1));
-	if (!env)
-		return (NULL);
-	j = 0;
-	while (j != i)
+	if (!node->av || !node->av[0] || node->av[0][0] == '\0')
 	{
-		env[j] = envp_value(envp->content);
-		if (!env[j])
-			return (free_split(env), NULL);
-		j++;
-		envp = envp->next;
+		data->status = 0;
+		if (data->is_fork)
+			exit(0);
+		return ;
 	}
-	env[j] = NULL;
-	return (env);
-}
-
-char	*envp_value(t_env *content)
-{
-	char	*tmp;
-	char	*value;
-
-	tmp = ft_strjoin(content->key, "=");
-	if(!tmp)
-		return (NULL);
-	value = ft_strjoin(tmp, content->value);
-	if (!value)
-		return(free(tmp), NULL);
-	free(tmp);
-	return (value);
-}
-
-int		envp_count(t_list *envp)
-{
-	int	i;
-
-	i = 0;
-	while (envp)
+	expand_av = expand_wildcard(node->av);
+	if (expand_av)
 	{
-		envp = envp->next;
-		i++;
+		free_split(node->av);
+		node->av = expand_av;
 	}
-	return (i);
+	if (is_a_built_in(node->av[0]))
+		return (handle_builtin(node, data));
+	path_cmd = path_to_find_lst(node->av[0], data);
+	if (!path_cmd)
+		return (handle_path_error(node, data));
+	if (is_a_directory(path_cmd))
+		return (handle_directory_error(path_cmd, node, data));
+	execute_command(path_cmd, node, data);
 }

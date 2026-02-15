@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   builtin_env.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/05 06:11:35 by alex              #+#    #+#             */
-/*   Updated: 2026/02/15 18:05:42 by aghalmi          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
@@ -68,11 +57,22 @@ void	sort_env_selection(t_list *lst)
 }
 
 
+void	free_copy_list(t_list *copy)
+{
+	t_list	*tmp;
+
+	while (copy)
+	{
+		tmp = copy->next;
+		free(copy);
+		copy = tmp;
+	}
+}
+
 void	print_export(t_exec_data *data)
 {
 	t_list	*copy;
 	t_list	*curr;
-	t_list *tmp;
 	t_env	*e;
 
 	copy = NULL;
@@ -87,14 +87,8 @@ void	print_export(t_exec_data *data)
 	while (curr)
 	{
 		e = curr->content;
-		printf("export %s=\"%s\"\n",e->key, e->value);
+		printf("export %s=\"%s\"\n", e->key, e->value);
 		curr = curr->next;
 	}
-	while(copy)
-	{
-		tmp = copy->next;
-		free(copy);
-		copy = tmp;
-	}
+	free_copy_list(copy);
 }
-

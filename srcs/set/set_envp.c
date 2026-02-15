@@ -1,19 +1,7 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   set_envp.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/29 02:33:14 by alex              #+#    #+#             */
-/*   Updated: 2026/02/12 05:16:41 by amoderan         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 /* passe l'environnement en listes chainées pour permettre de coder et d'executer plus facilement unset et export*/
-
 t_list	*envp_to_lst(char **envp)
 {
 	t_list	*env;
@@ -38,7 +26,6 @@ t_list	*envp_to_lst(char **envp)
 }
 
 /* fais la séparation du egale pour chaque variable du env */
-
 t_env *split_env_line(char *str)
 {
 	t_env	*node;
@@ -62,7 +49,6 @@ t_env *split_env_line(char *str)
 }
 
 /* free le content de chaque noeud de env */
-
 void	del_env(void	*content)
 {
 	t_env *dummy;

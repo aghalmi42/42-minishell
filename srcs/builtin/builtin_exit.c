@@ -1,26 +1,38 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   builtin_exit.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/05 06:12:14 by alex              #+#    #+#             */
-/*   Updated: 2026/02/14 20:43:39 by aghalmi          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+int	is_valid_number(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (str[i] == '+' || str[i] == '-')
+		i++;
+	if (!str[i])
+		return (0);
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+void exit_with_error(t_exec_data *data, char *msg, int code)
+{
+	ft_putstr_fd(msg, 2);
+	data->status = code;
+	exit(code);
+}
+
 void	builtin_exit(t_exec_data *data, t_node *node)
 {
-	int		i;
-	char	*number;
 	int		cpt;
-	int exit_code;
-	
+	int		exit_code;
+
 	cpt = 0;
-	while(node->av[cpt])
+	while (node->av[cpt])
 		cpt++;
 	if (cpt > 2)
 	{
@@ -29,32 +41,10 @@ void	builtin_exit(t_exec_data *data, t_node *node)
 		return ;
 	}
 	if (cpt == 1)
-	{
-		exit_code = data->status;
-		data->status = exit_code;
-		exit(exit_code);
-	}
-	i = 0;
-	number = node->av[1];
-	if (number[i] == '+' || number[i] == '-')
-		i++;
-	if (!number[i])
-	{
-		ft_putstr_fd("exit : argument numeric is required\n", 2);
-		data->status = 2;
-		exit(2);
-	}
-	while(number[i])
-	{
-		if (!ft_isdigit(number[i]))
-		{
-			ft_putstr_fd("exit : argument numeric is required\n", 2);
-			data->status = 2;
-			exit(2);
-		}
-		i++;
-	}
-	exit_code = ft_atoi(number);
+		exit(data->status);
+	if (!is_valid_number(node->av[1]))
+		exit_with_error(data, "exit : argument numeric is required\n", 2);
+	exit_code = ft_atoi(node->av[1]);
 	data->status = exit_code;
 	exit(exit_code);
 }
