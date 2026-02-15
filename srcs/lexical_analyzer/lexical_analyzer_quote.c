@@ -45,5 +45,5 @@ int	manage_double_quote(char *line, int *i, char *word, int *j)
 int	delimiter(char c)
 {
 	return (c == ' ' || c == '\t' || c == '\0' || c == '|' || c == '<'
-		|| c == '>');
+		|| c == '>' || c == '(' || c == ')');
 }

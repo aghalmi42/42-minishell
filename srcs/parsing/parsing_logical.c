@@ -1,7 +1,6 @@
 
 #include "../../include/minishell.h"
 
-
 /* cherche le premier && ouu || dans la lst de token */
 t_token	*search_logical(t_token *token)
 {
@@ -19,9 +18,13 @@ t_node	*parsing_pipe_prio(t_token *token, t_exec_data *data)
 {
 	t_token *pipe_token;
 	t_token *redir_token;
+	t_token *paren_token;
 
 	if (!token)
 		return (NULL);
+	paren_token = search_parenthese(token);
+	if (paren_token)
+		return (parsing_subshell(token, data));
 	pipe_token = search_pipe(token);
 	if (pipe_token)
 		return (parsing_pipe(token, pipe_token, data));
@@ -42,7 +45,7 @@ t_node	*parsing_and(t_token *token, t_token *and_token, t_exec_data *data)
 		return (NULL);
 	right_token = split_token(token, and_token);
 	node->left = parsing_pipe_prio(token, data);
-	node->right = parsing(right_token, data);
+	node->right = parsing_no_check(right_token, data);
 	// free_token(token);
 	// free_token(right_token);
 	return (node);
@@ -59,7 +62,7 @@ t_node	*parsing_or(t_token *token, t_token *or_token, t_exec_data *data)
 		return (NULL);
 	right_token = split_token(token, or_token);
 	node->left = parsing_pipe_prio(token, data);
-	node->right = parsing(right_token, data);
+	node->right = parsing_no_check(right_token, data);
 	// free_token(token);
 	// free_token(right_token);
 	return (node);

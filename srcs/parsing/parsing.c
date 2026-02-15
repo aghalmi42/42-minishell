@@ -56,10 +56,30 @@ t_node	*parsing_redir(t_token *token, t_token *redir_token, t_exec_data *data)
 {
 	t_node	*node;
 	t_token	*right_token;
-	t_token *file;
+	t_token	*file;
 
 	if (token == redir_token)
-		return (NULL);
+	{
+		node = new_node(NODE_REDIR);
+		if (!node)
+			return (NULL);
+		node->redir_type = redir_token->type;
+		right_token = redir_token->next;
+		if (right_token && right_token->type == TOKEN_WORD)
+		{
+			node->redir_file = ft_strdup(right_token->value);
+			file = right_token->next;
+			free(right_token->value);
+			free(right_token);
+		}
+		else
+			file = right_token;
+		if (file)
+			node->left = parsing_no_check(file, data);
+		else
+			node->left = NULL;
+		return (node);
+	}
 	node = new_node(NODE_REDIR);
 	if (!node)
 		return (NULL);
@@ -72,26 +92,21 @@ t_node	*parsing_redir(t_token *token, t_token *redir_token, t_exec_data *data)
 		free(right_token->value);
 		free(right_token);
 	}
-	else 
+	else
 		file = right_token;
 	if (file)
-		node->left = parsing(file, data);
+		node->left = parsing_no_check(file, data);
 	else
-		node->left = parsing(token, data);
-	// if (token && token != redir_token)
-	// free_token(token);
-	//free_token(file);
+		node->left = parsing_no_check(token, data);
 	return (node);
 }
 
-/* parsing */
-t_node	*parsing(t_token *token, t_exec_data *data)
+/* parsing sans verif de syntax */
+t_node	*parsing_no_check(t_token *token, t_exec_data *data)
 {
 	t_token	*logical_token;
 
 	if (!token)
-		return (NULL);
-	if (check_syntax(token, data) == -1)
 		return (NULL);
 	logical_token = search_logical(token);
 	if (logical_token)
@@ -102,4 +117,14 @@ t_node	*parsing(t_token *token, t_exec_data *data)
 			return (parsing_or(token, logical_token, data));
 	}
 	return (parsing_pipe_prio(token, data));
+}
+
+/* parsing avec verif de syntax */
+t_node	*parsing(t_token *token, t_exec_data *data)
+{
+	if (!token)
+		return (NULL);
+	if (check_syntax(token, data) == -1)
+		return (NULL);
+	return (parsing_no_check(token, data));
 }

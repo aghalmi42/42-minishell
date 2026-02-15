@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+         #
+#    By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/03 18:20:38 by aghalmi           #+#    #+#              #
-#    Updated: 2026/02/12 05:18:00 by amoderan         ###   ########.fr        #
+#    Updated: 2026/02/15 14:27:32 by aghalmi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,10 +19,13 @@ SRCS = srcs/main.c \
 	   srcs/lexical_analyzer/lexical_analyzer_redir.c \
 	   srcs/lexical_analyzer/lexical_analyzer_quote.c \
 	   srcs/lexical_analyzer/lexical_analyzer_logical.c \
+	   srcs/lexical_analyzer/lexical_analyzer_parenthese.c \
 	   srcs/parsing/parsing.c \
 	   srcs/parsing/parsing_utils.c \
 	   srcs/parsing/parsing_utils_2.c \
 	   srcs/parsing/check_syntax.c \
+	   srcs/parsing/parsing_parenthese.c \
+	   srcs/parsing/check_syntax_parenthese.c \
 	   srcs/path_finding/path_finding.c \
 	   srcs/path_finding/path_finding2.c \
 	   srcs/path_finding/path_finding_utils.c \
@@ -35,6 +38,7 @@ SRCS = srcs/main.c \
 	   srcs/exec/exec_redir.c \
 	   srcs/exec/exec_or_and.c \
 	   srcs/exec/exec_utils.c \
+	   srcs/exec/exec_subshell.c \
 	   srcs/set/set_envp.c \
 	   srcs/signals/signals.c \
 	   srcs/parsing/check_syntax_logical.c \
@@ -54,7 +58,6 @@ SRCS = srcs/main.c \
 	   srcs/builtin/builtin_exit.c \
 	   srcs/gnl/get_next_line_bonus.c \
 	   srcs/gnl/get_next_line_utils_bonus.c \
-	   srcs/garbage_collector/garbage_collector.c
 
 OBJS = $(SRCS:.c=.o)
 

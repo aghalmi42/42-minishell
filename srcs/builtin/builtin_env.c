@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/05 06:11:35 by alex              #+#    #+#             */
-/*   Updated: 2026/02/09 07:40:29 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/15 18:05:42 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ void	print_export(t_exec_data *data)
 {
 	t_list	*copy;
 	t_list	*curr;
+	t_list *tmp;
 	t_env	*e;
 
 	copy = NULL;
@@ -88,6 +89,12 @@ void	print_export(t_exec_data *data)
 		e = curr->content;
 		printf("export %s=\"%s\"\n",e->key, e->value);
 		curr = curr->next;
+	}
+	while(copy)
+	{
+		tmp = copy->next;
+		free(copy);
+		copy = tmp;
 	}
 }
 

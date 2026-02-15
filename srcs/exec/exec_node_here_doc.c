@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_node_here_doc.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 06:21:04 by alex              #+#    #+#             */
-/*   Updated: 2026/02/02 07:09:08 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/15 18:14:12 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,18 @@ t_here_doc_fd	*here_doc_new(int	content)
 	new->fd_read = content;
 	new->next = NULL;
 	return (new);
+}
+
+/* libere tt les lst de herdoc */
+void	free_here_doc_list(t_here_doc_fd *head)
+{
+	t_here_doc_fd	*tmp;
+
+	while (head)
+	{
+		tmp = head->next;
+		close(head->fd_read);
+		free(head);
+		head = tmp;
+	}
 }

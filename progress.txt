@@ -8,22 +8,10 @@ parsing en creant notre ast
 gestion des erreur quote redirection pipe et parsing good
 variable dexpansion
 gerer environnement
-
-====================================================================
-reste a faire :
-
 executer les cmd simple les pipe redirection etc
 faire les builtins
 faire les signaux
 faire bonus
 faire msg derreur parszing
 
-
-peut etre ajouter : 
-
-touch
-mkdir
-tree 
-clear
-cat
-grep
+====================================================================

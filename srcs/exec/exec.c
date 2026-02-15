@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 22:20:26 by alex              #+#    #+#             */
-/*   Updated: 2026/02/12 05:27:31 by amoderan         ###   ########.fr       */
+/*   Updated: 2026/02/15 14:27:52 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	exec_main(t_node *ast, t_exec_data *data)
 		exec_or(ast, data);
 	else if (ast->type == NODE_PIPE)
 		exec_pipe(ast, data);
+	else if (ast->type == NODE_SUBSHELL)
+		exec_subshell(ast, data);
 	else
 		exec_redir_and_cmd(ast, data);
 }

@@ -6,7 +6,7 @@
 /*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/14 16:28:35 by aghalmi          ###   ########.fr       */
+/*   Updated: 2026/02/15 19:05:44 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ typedef enum e_token_type
 	TOKEN_HEREDOC,
 	TOKEN_AND,
 	TOKEN_OR,
+	TOKEN_LEFT_PAREN,
+	TOKEN_RIGHT_PAREN,
 }					t_token_type;
 
 /* structure de token en liste chaineer*/
@@ -67,6 +69,7 @@ typedef enum e_node_type
 	NODE_PIPE,
 	NODE_AND,
 	NODE_OR,
+	NODE_SUBSHELL,
 }					t_node_type;
 
 /* struct des noeud de notre ast */
@@ -119,10 +122,10 @@ int					manage_redirection(char *line, int *i, t_token **up);
 int					manage_quote(char *line, int *i, char *word, int *j);
 int					manage_double_quote(char *line, int *i, char *word, int *j);
 int					manage_logical(char *line, int *i, t_token **up);
+int  				manage_parenthese(char *line, int *i, t_token **up);
 int					delimiter(char c);
 int					construct_word(char *line, int *i, char *word, int *j);
 int					extract_word(char *line, int *i, t_token **up);
-void 				fusion_all_word(t_token **head);
 t_token				*lexical_analyzer(char *line);
 
 /* fonction de parsing */
@@ -133,13 +136,18 @@ char				**token_tab_av(t_token *token);
 void				print_ast(t_node *node, int tmp);
 t_token				*search_pipe(t_token *token);
 t_token				*search_redir(t_token *token);
+t_token 			*search_parenthese(t_token *token);
 void 				print_syntax_error(char *token, t_exec_data *data);
 void				print_redir_error(t_token_type type, t_exec_data *data);
 int					check_pipe_syntax(t_token *token, t_exec_data *data);
 int					check_redir_syntax(t_token *token, t_exec_data *data);
+t_token 			*find_match_right_paren(t_token *token);
+t_token				*copy_token_enter(t_token *start, t_token *end);
+int					check_content_enter_paren(t_token *left_paren, t_exec_data *data);
 int					logical_start(t_token *token, t_exec_data *data);
 int					check_logical_token(t_token *token, t_exec_data *data);
 int					check_syntax_logical(t_token *token, t_exec_data *data);
+int 				check_parenthese_syntax(t_token *token, t_exec_data *data);
 int					check_syntax(t_token *token, t_exec_data *data);
 t_token				*split_token(t_token *token, t_token *split);
 t_node				*parsing_cmd(t_token *token);
@@ -149,6 +157,8 @@ t_token 			*search_logical(t_token *token);
 t_node 				*parsing_pipe_prio(t_token *token, t_exec_data *data);
 t_node 				*parsing_and(t_token *token, t_token *and_token, t_exec_data *data);
 t_node 				*parsing_or(t_token *token, t_token *or_token, t_exec_data *data);
+t_node 				*parsing_subshell(t_token *token, t_exec_data *data);
+t_node				*parsing_no_check(t_token *token, t_exec_data *data);
 t_node				*parsing(t_token *token, t_exec_data *data);
 
 /* path_finding */
@@ -173,6 +183,7 @@ void				free_envp(t_exec_data *data);
 
 t_here_doc_fd		*here_doc_new(int	content);
 t_here_doc_fd		*here_doc_last(t_here_doc_fd *here_doc);
+void				free_here_doc_list(t_here_doc_fd *head);
 int					add_here_doc_fd(t_here_doc_fd **head, int fd);
 int					search_here_doc_to_execute(t_node *ast, t_exec_data *data);
 int					create_here_doc_to_execute(char *redir_file, t_exec_data *data);
@@ -195,6 +206,7 @@ void				exec_and(t_node *node, t_exec_data *data);
 void				exec_final(char *path_cmd, char **envp, t_node *node, t_exec_data *data);
 int 				builtin_parent(char *cmd);
 void				exec_redir_and_cmd(t_node *ast, t_exec_data *data);
+void 				exec_subshell(t_node *node, t_exec_data *data);
 int					is_a_directory(char *path);
 
 /* built-in */
@@ -271,10 +283,5 @@ void				print_export(t_exec_data *data);
 void				sort_env_selection(t_list *lst);
 int					compare_keys(t_env *e1, t_env *e2);
 int					check_new_unset(char *env);
-
-/* garbage collector */
-
-void				*gb_malloc(size_t size, t_list **head);
-void				gb_delete(t_list	**head);
 
 #endif

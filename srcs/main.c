@@ -49,15 +49,19 @@ int	main(int argc, char **argv, char **envp)
 					if (search_here_doc_to_execute(ast, &data) == -1)
 					{
 						free_ast(ast);
+						// free_token(token);
 						free(line);
 						continue ;
 					}
 					data.is_fork = 0;
-					token = NULL;
-					//print_ast(ast, 0);
 					exec_main(ast, &data);
 					free_ast(ast);
+					free_here_doc_list(data.head);
+					data.head = NULL;
+					// free_token(token);
 					ast = NULL;
+					token = NULL;
+					//print_ast(ast, 0);
 				}
 				else
 				{
