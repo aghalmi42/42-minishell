@@ -155,6 +155,12 @@ void	expand_token(t_token *token, t_exec_data *data)
 				}
 				else
 				{
+					if (a_quote && expand)
+					{
+       					tmp = ft_strjoin("\x02", expand);
+        				free(expand);
+        				expand = tmp;
+					}
 					free(current->value);
 					current->value = expand;
 				}

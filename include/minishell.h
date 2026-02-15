@@ -6,7 +6,7 @@
 /*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/15 19:05:44 by aghalmi          ###   ########.fr       */
+/*   Updated: 2026/02/15 23:00:12 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@
 # include <termios.h>
 # include <signal.h>
 # include <linux/limits.h>
+# include <dirent.h>
+# include <errno.h>
 
 /*typedef enum sert a faire une enumeration pour bien eclaircir le code
 avec des nom explicite c comme si on faisait un define
@@ -252,6 +254,13 @@ void				insert_split_token(t_token *current, char *expand);
 void				expand_word(t_token *token, t_exec_data *data);
 int					dollar_special(char *str, int *i);
 void				case_expand(char *str, char *result, int *var, t_exec_data *data);
+int 				have_wildcard(char *str);
+int 				match_pattern(char *pattern, char *str);
+void 				split_path_pattern(char *input, char **dir_path, char **pattern);
+int 				count_match(char *pattern);
+char 				**get_match(char *pattern);
+void 				sort_match(char **match);
+char 				**expand_wildcard(char **av);
 char				*expand_value(char *str, t_exec_data *data);
 
 /* fonction builtin */

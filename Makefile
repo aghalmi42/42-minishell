@@ -6,7 +6,7 @@
 #    By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/03 18:20:38 by aghalmi           #+#    #+#              #
-#    Updated: 2026/02/15 14:27:32 by aghalmi          ###   ########.fr        #
+#    Updated: 2026/02/15 22:15:05 by aghalmi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,6 +48,7 @@ SRCS = srcs/main.c \
 	   srcs/expansion/expansion_utils.c \
 	   srcs/expansion/expansion_variable.c \
 	   srcs/expansion/expansion_special.c \
+	   srcs/expansion/expansion_wildcard.c \
 	   srcs/builtin/builtin_pwd.c \
 	   srcs/builtin/builtin.c \
 	   srcs/builtin/builtin_echo.c \

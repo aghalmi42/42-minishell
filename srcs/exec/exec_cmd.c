@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exec_cmd.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/29 08:46:26 by alex              #+#    #+#             */
-/*   Updated: 2026/02/12 05:33:04 by amoderan         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
@@ -16,13 +5,20 @@ void	exec_cmd(t_node *node, t_exec_data *data)
 {
 	char	*path_cmd;
 	char	**envp;
-
+	char **expand_av;
+	
 	if (!node->av || !node->av[0] || node->av[0][0] == '\0')
 	{
 		data->status = 0;
 		if (data->is_fork)
 			exit(0);
 		return ;
+	}
+	expand_av = expand_wildcard(node->av);
+	if (expand_av)
+	{
+		free_split(node->av);
+		node->av = expand_av;
 	}
 	if(is_a_built_in(node->av[0]))
 	{
