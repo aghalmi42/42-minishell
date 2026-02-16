@@ -44,7 +44,11 @@ void	execute_command(char *path_cmd, t_node *node, t_exec_data *data)
 		free(path_cmd);
 		data->status = 1;
 		if (data->is_fork)
+		{
+			free_envp(data);
+			free_ast(node);
 			exit(1);
+		}
 		return ;
 	}
 	if (execve(path_cmd, node->av, envp) == -1)
@@ -65,7 +69,11 @@ void	exec_cmd(t_node *node, t_exec_data *data)
 	{
 		data->status = 0;
 		if (data->is_fork)
+		{
+			free_envp(data);
+			free_ast(node);
 			exit(0);
+		}
 		return ;
 	}
 	expand_av = expand_wildcard(node->av);

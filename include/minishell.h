@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/16 05:06:26 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/16 05:12:21 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,7 +217,7 @@ void	handle_directory_error(char *path, t_node *node, t_exec_data *data);
 void	execute_command(char *path_cmd, t_node *node, t_exec_data *data);
 void				exec_cmd(t_node *node, t_exec_data *data);
 void				exec_one_cmd_lst(t_node *node, t_exec_data *data);
-void	execute_in_child(char *path_cmd, t_node *node, char **envp);
+void	execute_in_child(char *path_cmd, t_node *node, char **envp, t_exec_data *data);
 void				exec_or(t_node *node, t_exec_data *data);
 void				exec_and(t_node *node, t_exec_data *data);
 void				exec_final(char *path_cmd, char **envp, t_node *node, t_exec_data *data);

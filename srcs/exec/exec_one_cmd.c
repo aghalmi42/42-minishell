@@ -20,7 +20,7 @@ void	exec_one_cmd(t_node *node, char **envp)
 	free(path_cmd);
 }
 
-void	execute_in_child(char *path_cmd, t_node *node, char **envp)
+void	execute_in_child(char *path_cmd, t_node *node, char **envp, t_exec_data *data)
 {
 	struct sigaction	sa_default;
 
@@ -32,6 +32,9 @@ void	execute_in_child(char *path_cmd, t_node *node, char **envp)
 	if (execve(path_cmd, node->av, envp) == -1)
 	{
 		perror("execve fail");
+		free_ast(node);
+		free_envp(data);
+		free_split(envp);
 		exit(126);
 	}
 }
@@ -55,7 +58,7 @@ void	exec_one_cmd_lst(t_node *node, t_exec_data *data)
 		return (free(path_cmd));
 	pid = fork();
 	if (pid == 0)
-		execute_in_child(path_cmd, node, envp);
+		execute_in_child(path_cmd, node, envp, data);
 	waitpid(pid, &data->status, 0);
 	free(path_cmd);
 	free_split(envp);
