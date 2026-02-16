@@ -48,7 +48,7 @@ void	process_export_arg(t_exec_data *data, char *arg)
 {
 	t_env	*new_key;
 
-	new_key = split_env_line(arg);
+	new_key = split_env_line(arg, &data->gc_head);
 	if (!new_key)
 		return ;
 	if (!check_new_key(new_key))

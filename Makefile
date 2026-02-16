@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+         #
+#    By: alex <alex@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/03 18:20:38 by aghalmi           #+#    #+#              #
-#    Updated: 2026/02/16 00:35:47 by aghalmi          ###   ########.fr        #
+#    Updated: 2026/02/16 06:39:29 by alex             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,6 +70,8 @@ SRCS = srcs/main.c \
 	   srcs/builtin/builtin_exit.c \
 	   srcs/gnl/get_next_line_bonus.c \
 	   srcs/gnl/get_next_line_utils_bonus.c \
+	   srcs/garbage_collector/garbage_collector.c \
+	   srcs/garbage_collector/garbage_collector_utils.c \
 
 OBJS = $(SRCS:.c=.o)
 

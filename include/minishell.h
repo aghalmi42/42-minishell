@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/16 05:12:21 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/16 09:05:28 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ typedef struct s_node
 typedef struct s_exec_data
 {
 	t_list					*envp;
-	t_list					**gc_head;
+	t_list					*gc_head;
 	int						status;
 	struct s_here_doc_fd	*head;
 	int						is_fork;
@@ -182,8 +182,8 @@ char				*path_to_find_lst(char *cmd, t_exec_data *data);
 
 /* set l'environnement en liste chainées */
 
-t_list				*envp_to_lst(char **envp);
-t_env				*split_env_line(char *str);
+t_list				*envp_to_lst(char **envp, t_list **gc_head);
+t_env				*split_env_line(char *str, t_list **gc_head);
 void				del_env(void	*content);
 void				free_envp(t_exec_data *data);
 
@@ -338,5 +338,19 @@ int	process_heredocs(t_node *ast, t_exec_data *data, char *line);
 void	execute_ast(t_node *ast, t_exec_data *data);
 void	process_line(char *line, t_exec_data *data);
 void	init_exec_data(t_exec_data *data, char **envp);
+
+/* garbage_collector */
+
+void			gc_delete(t_list	**head);
+void			*gc_malloc(size_t size, t_list **head);
+void			gc_free_one(t_list **head, void *ptr);
+void			gc_lstadd_back(t_list **lst, t_list *new);
+void			gc_lstadd_front(t_list **lst, t_list *new);
+t_list			*gc_lstnew(void *content);
+char			**gc_split(char const *s, char c, t_list **gc_head);
+char			*gc_strdup(const char *s, t_list **gc_head);
+char			*gc_strjoin(char const *s1, char const *s2, t_list **gc_head);
+char			*gc_substr(char const *s, unsigned int start, size_t len, t_list **gc_head);
+char			*gc_strtrim(char const *s1, char const *set, t_list **gc_head);
 
 #endif

@@ -54,27 +54,30 @@ void	process_line(char *line, t_exec_data *data)
 {
 	t_token	*token;
 	t_node	*ast;
+	(void) ast;
+	(void) data;
 
 	if (isatty(STDIN_FILENO))
 		add_history(line);
 	token = lexical_analyzer(line);
 	if (!token)
 		return ;
-	expand_token(token, data);
-	ast = parsing(token, data);
-	if (ast)
-	{
-		if (process_heredocs(ast, data, line))
-			execute_ast(ast, data);
-	}
+	// expand_token(token, data);
+	// ast = parsing(token, data);
+	// if (ast)
+	// {
+	// 	if (process_heredocs(ast, data, line))
+	// 		execute_ast(ast, data);
+	// }
 	//free_token(token);
 	token = NULL;
 }
 
 void	init_exec_data(t_exec_data *data, char **envp)
 {
-	data->envp = envp_to_lst(envp);
+	data->gc_head = NULL;
+	data->envp = envp_to_lst(envp, &data->gc_head);
 	data->status = 0;
 	data->head = NULL;
-	data->gc_head = NULL;
+
 }

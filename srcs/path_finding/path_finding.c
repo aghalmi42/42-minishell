@@ -68,3 +68,74 @@ char	*search_possible_path(char **possible_paths, char *cmd)
 	}
 	return (NULL);
 }
+
+
+/* garbage */
+
+char	*join_possible_path(char *cmd, char *folder, t_list **gc_head)
+{
+	char	*tmp;
+	char	*path;
+
+	tmp = gc_strjoin(folder, "/", gc_head);
+	if (!tmp)
+		return (NULL);
+	path = gc_strjoin(tmp, cmd, gc_head);
+	if (!path)
+		return (NULL);
+	gc_free_one(gc_head, tmp);
+	return (path);
+}
+
+char	*it_contain_a_slash(char *cmd, t_list **gc_head)
+{
+	if (!access(cmd, F_OK))
+		return (gc_strdup(cmd, gc_head));
+	return (perror("Command not found"), NULL);
+}
+
+char	*path_to_find(char *cmd, char **envp, t_list **gc_head)
+{
+	char	**possible_paths;
+	char	*possible_path;
+	int		i;
+	int		nb_env;
+
+	i = 0;
+	if (!cmd)
+		return (perror("Command not found"), NULL);
+	if (ft_strchr(cmd, '/'))
+		return (it_contain_a_slash(cmd, gc_head));
+	while (envp && envp[i] && ft_strncmp(envp[i], "PATH=", 5) != 0)
+		i++;
+	nb_env = count_env(envp);
+	if (i == nb_env)
+		return (perror("No such file or directory"), NULL);
+	possible_paths = ft_split(envp[i] + 5, ':');
+	if (!possible_paths)
+		return (gc_delete(gc_head), perror("No such file or directory"), NULL);
+	possible_path = search_possible_path(possible_paths, cmd);
+	if (!possible_path)
+		return (free_split(possible_paths), perror("Command not found"), NULL);
+	free_split(possible_paths);
+	return (possible_path);
+}
+
+char	*search_possible_path(char **possible_paths, char *cmd, t_list **gc_head)
+{
+	int		i;
+	char	*possible_path;
+
+	i = 0;
+	while (possible_paths[i])
+	{
+		possible_path = join_possible_path(cmd, possible_paths[i]);
+		if (!possible_path)
+			return (NULL);
+		if (!access(possible_path, F_OK))
+			return (possible_path);
+		free(possible_path);
+		i++;
+	}
+	return (NULL);
+}

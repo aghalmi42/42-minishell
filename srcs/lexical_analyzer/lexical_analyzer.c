@@ -58,15 +58,15 @@ int	extract_word(char *line, int *i, t_token **up)
 int	process_token(char *line, int *i, t_token **up)
 {
 	if (manage_parenthese(line, i, up))
-	return (1);
+		return (1);
 	if (manage_logical(line, i, up))
-	return (1);
+		return (1);
 	if (manage_pipe(line, i, up))
-	return (1);
+		return (1);
 	if (manage_redirection(line, i, up))
-	return (1);
+		return (1);
 	if (extract_word(line, i, up) == -1)
-	return (-1);
+		return (-1);
 	return (0);
 }
 
