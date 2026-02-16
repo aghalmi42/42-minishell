@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/16 00:50:11 by aghalmi          ###   ########.fr       */
+/*   Updated: 2026/02/16 05:06:26 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # define _POSIX_C_SOURCE 200809L
 
+#include <limits.h>
 # include <fcntl.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -193,8 +194,8 @@ t_here_doc_fd		*here_doc_last(t_here_doc_fd *here_doc);
 void				free_here_doc_list(t_here_doc_fd *head);
 int					add_here_doc_fd(t_here_doc_fd **head, int fd);
 int					search_here_doc_to_execute(t_node *ast, t_exec_data *data);
-int	handle_heredoc_child(char *redir_file, int pipe_fd[2], t_exec_data *data);
-int					create_here_doc_to_execute(char *redir_file, t_exec_data *data);
+int	handle_heredoc_child(char *redir_file, int pipe_fd[2], t_exec_data *data, t_node *node);
+int					create_here_doc_to_execute(char *redir_file, t_exec_data *data, t_node *node);
 void				loop_here_doc(char	*limiter, int fd);
 
 /* exec */
@@ -314,7 +315,7 @@ int	handle_unset_error(char *key);
 void	remove_env_key(t_exec_data *data, char *key);
 void				builtin_unset(t_exec_data *data, t_node *node);
 int	is_valid_number(char *str);
-void exit_with_error(t_exec_data *data, char *msg, int code);
+void				exit_msg_error(t_exec_data *data, char *cmd, t_node *node);
 void				builtin_exit(t_exec_data *data, t_node *node);
 void				builtin_cd(t_exec_data *data, t_node *node);
 char 				*search_cd_path(t_exec_data *data, t_node *node);
@@ -328,6 +329,8 @@ void				print_export(t_exec_data *data);
 void				sort_env_selection(t_list *lst);
 int					compare_keys(t_env *e1, t_env *e2);
 int					check_new_unset(char *env);
+long long			ft_atoll(const char *str, int *error);
+void				exit_with_one_arg(t_node *node, t_exec_data *data, long long exit_code);
 
 /* MAIN */
 char	*read_input_line(void);

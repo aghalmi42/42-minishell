@@ -1,0 +1,11 @@
+	   srcs/expansion/expansion.c \
+	   srcs/expansion/expansion_utils.c \
+	   srcs/expansion/expansion_utils_2.c \
+	   srcs/expansion/expansion_utils_3.c \
+	   srcs/expansion/expansion_utils_4.c \
+	   srcs/expansion/expansion_variable.c \
+	   srcs/expansion/expansion_special.c \
+	   srcs/expansion/expansion_wildcard.c \
+	   srcs/expansion/expansion_wildcard_utils.c \
+	   srcs/expansion/expansion_wildcard_utils_2.c \
+	   srcs/expansion/expansion_wildcard_utils_3.c \

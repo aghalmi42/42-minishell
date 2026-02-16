@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/16 01:52:04 by alex              #+#    #+#             */
+/*   Updated: 2026/02/16 01:52:04 by alex             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../include/minishell.h"
 
@@ -56,8 +67,8 @@ void	process_line(char *line, t_exec_data *data)
 		if (process_heredocs(ast, data, line))
 			execute_ast(ast, data);
 	}
-	else
-		free_token(token);
+	//free_token(token);
+	token = NULL;
 }
 
 void	init_exec_data(t_exec_data *data, char **envp)

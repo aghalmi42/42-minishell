@@ -10,23 +10,25 @@ int	search_here_doc_to_execute(t_node *ast, t_exec_data *data)
 		return (-1);
 	if (ast->type == NODE_REDIR && ast->redir_type == TOKEN_HEREDOC)
 	{
-		if (create_here_doc_to_execute(ast->redir_file, data) == -1)
+		if (create_here_doc_to_execute(ast->redir_file, data, ast) == -1)
 			return (-1);
 	}
 	return (search_here_doc_to_execute(ast->right, data));
 }
 
-int	handle_heredoc_child(char *redir_file, int pipe_fd[2], t_exec_data *data)
+int	handle_heredoc_child(char *redir_file, int pipe_fd[2], t_exec_data *data, t_node *node)
 {
 	set_signal_actions_default();
 	close(pipe_fd[0]);
 	loop_here_doc(redir_file, pipe_fd[1]);
 	close(pipe_fd[1]);
 	data->status = 0;
+	free_envp(data);
+	free_ast(node);
 	exit(0);
 }
 
-int	create_here_doc_to_execute(char *redir_file, t_exec_data *data)
+int	create_here_doc_to_execute(char *redir_file, t_exec_data *data, t_node *node)
 {
 	int		pipe_fd[2];
 	pid_t	pid;
@@ -38,7 +40,7 @@ int	create_here_doc_to_execute(char *redir_file, t_exec_data *data)
 	if (pid < 0)
 		return (close(pipe_fd[1]), close(pipe_fd[0]), -1);
 	if (pid == 0)
-		handle_heredoc_child(redir_file, pipe_fd, data);
+		handle_heredoc_child(redir_file, pipe_fd, data, node);
 	close(pipe_fd[1]);
 	waitpid(pid, &data->status, 0);
 	set_signal_actions();
