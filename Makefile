@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: alex <alex@student.42.fr>                  +#+  +:+       +#+         #
+#    By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/03 18:20:38 by aghalmi           #+#    #+#              #
-#    Updated: 2026/02/16 06:39:29 by alex             ###   ########.fr        #
+#    Updated: 2026/02/17 05:50:56 by amoderan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,9 @@ SRCS = srcs/main.c \
 	   srcs/parsing/check_syntax.c \
 	   srcs/parsing/parsing_parenthese.c \
 	   srcs/parsing/check_syntax_parenthese.c \
+	   srcs/parsing/check_syntax_logical.c \
+	   srcs/parsing/check_syntax_main.c \
+	   srcs/parsing/parsing_logical.c \
 	   srcs/path_finding/path_finding.c \
 	   srcs/path_finding/path_finding2.c \
 	   srcs/path_finding/path_finding_utils.c \
@@ -43,9 +46,6 @@ SRCS = srcs/main.c \
 	   srcs/exec/exec_subshell.c \
 	   srcs/set/set_envp.c \
 	   srcs/signals/signals.c \
-	   srcs/parsing/check_syntax_logical.c \
-	   srcs/parsing/check_syntax_main.c \
-	   srcs/parsing/parsing_logical.c \
 	   srcs/expansion/expansion.c \
 	   srcs/expansion/expansion_utils.c \
 	   srcs/expansion/expansion_utils_2.c \

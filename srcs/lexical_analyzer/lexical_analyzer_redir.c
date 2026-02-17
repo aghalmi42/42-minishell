@@ -2,7 +2,7 @@
 #include "../../include/minishell.h"
 
 /* on gere les heredoc et input redir */
-int	manage_input_redirection(char *line, int *i, t_token **up)
+int	manage_input_redirection(char *line, int *i, t_token **up, t_list **gc_head)
 {
 	t_token	*token;
 
@@ -10,12 +10,16 @@ int	manage_input_redirection(char *line, int *i, t_token **up)
 		return (0);
 	if (line[*i + 1] == '<')
 	{
-		token = new_token(TOKEN_HEREDOC, NULL);
+		token = new_token(TOKEN_HEREDOC, NULL, gc_head);
+		if (!token)
+			return (0);
 		(*i) += 2;
 	}
 	else
 	{
-		token = new_token(TOKEN_REDIR_IN, NULL);
+		token = new_token(TOKEN_REDIR_IN, NULL, gc_head);
+		if (!token)
+			return (0);
 		(*i)++;
 	}
 	add_token(up, token);
@@ -23,7 +27,7 @@ int	manage_input_redirection(char *line, int *i, t_token **up)
 }
 
 /* on gere les append et output redir */
-int	manage_output_redirection(char *line, int *i, t_token **up)
+int	manage_output_redirection(char *line, int *i, t_token **up, t_list **gc_head)
 {
 	t_token	*token;
 
@@ -31,12 +35,16 @@ int	manage_output_redirection(char *line, int *i, t_token **up)
 		return (0);
 	if (line[*i + 1] == '>')
 	{
-		token = new_token(TOKEN_APPEND, NULL);
+		token = new_token(TOKEN_APPEND, NULL, gc_head);
+		if (!token)
+			return (0);
 		(*i) += 2;
 	}
 	else
 	{
-		token = new_token(TOKEN_REDIR_OUT, NULL);
+		token = new_token(TOKEN_REDIR_OUT, NULL, gc_head);
+		if (!token)
+			return (0);
 		(*i)++;
 	}
 	add_token(up, token);
@@ -44,11 +52,11 @@ int	manage_output_redirection(char *line, int *i, t_token **up)
 }
 
 /* orchestre toute les redirection */
-int	manage_redirection(char *line, int *i, t_token **up)
+int	manage_redirection(char *line, int *i, t_token **up, t_list **gc_head)
 {
-	if (manage_input_redirection(line, i, up))
+	if (manage_input_redirection(line, i, up, gc_head))
 		return (1);
-	if (manage_output_redirection(line, i, up))
+	if (manage_output_redirection(line, i, up, gc_head))
 		return (1);
 	return (0);
 }

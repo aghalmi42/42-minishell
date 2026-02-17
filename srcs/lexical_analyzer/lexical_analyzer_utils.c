@@ -2,16 +2,20 @@
 #include "../../include/minishell.h"
 
 /* ici jai cree un token quon va stocker en allouant de la memoire */
-t_token	*new_token(t_token_type type, char *value)
+t_token	*new_token(t_token_type type, char *value, t_list **gc_head)
 {
 	t_token	*token;
 
-	token = malloc(sizeof(t_token));
+	token = gc_malloc(sizeof(t_token), gc_head);
 	if (!token)
 		return (NULL);
 	token->type = type;
 	if (value != NULL)
-		token->value = ft_strdup(value);
+	{
+		token->value = gc_strdup(value, gc_head);
+		if (!token->value)
+			return (NULL);
+	}
 	else
 		token->value = NULL;
 	token->next = NULL;

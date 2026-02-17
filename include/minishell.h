@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/16 09:05:28 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/17 06:18:18 by amoderan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,29 +113,29 @@ typedef struct s_here_doc_fd
 }					t_here_doc_fd;
 
 /* fonction du lexical analyzer */
-t_token				*new_token(t_token_type type, char *value);
+t_token				*new_token(t_token_type type, char *value, t_list **gc_head);
 void				add_token(t_token **up, t_token *new);
 void				free_token(t_token *token);
 void				skip_all_space(char *line, int *i);
-int					manage_pipe(char *line, int *i, t_token **up);
-int					manage_input_redirection(char *line, int *i, t_token **up);
-int					manage_output_redirection(char *line, int *i, t_token **up);
-int					manage_redirection(char *line, int *i, t_token **up);
+int					manage_pipe(char *line, int *i, t_token **up, t_list **gc_head);
+int					manage_input_redirection(char *line, int *i, t_token **up, t_list **gc_head);
+int					manage_output_redirection(char *line, int *i, t_token **up, t_list **gc_head);
+int					manage_redirection(char *line, int *i, t_token **up, t_list **gc_head);
 int					manage_quote(char *line, int *i, char *word, int *j);
 int					manage_double_quote(char *line, int *i, char *word, int *j);
-int					manage_logical(char *line, int *i, t_token **up);
-int  				manage_parenthese(char *line, int *i, t_token **up);
+int					manage_logical(char *line, int *i, t_token **up, t_list **gc_head);
+int  				manage_parenthese(char *line, int *i, t_token **up, t_list **gc_head);
 int					delimiter(char c);
 int					construct_word(char *line, int *i, char *word, int *j);
-int					extract_word(char *line, int *i, t_token **up);
-int	process_token(char *line, int *i, t_token **up);
-t_token				*lexical_analyzer(char *line);
+int					extract_word(char *line, int *i, t_token **up, t_list **gc_head);
+int					process_token(char *line, int *i, t_token **up, t_list **gc_head);
+t_token				*lexical_analyzer(char *line, t_list **gc_head);
 
 /* fonction de parsing */
-t_node				*new_node(t_node_type type);
+t_node				*new_node(t_node_type type, t_list **gc_head);
 void				free_ast(t_node *node);
 int					count_av(t_token *token);
-char				**token_tab_av(t_token *token);
+char				**token_tab_av(t_token *token, t_list **gc_head);
 t_token				*search_pipe(t_token *token);
 t_token				*search_redir(t_token *token);
 t_token 			*search_parenthese(t_token *token);
@@ -144,7 +144,7 @@ void				print_redir_error(t_token_type type, t_exec_data *data);
 int					check_pipe_syntax(t_token *token, t_exec_data *data);
 int					check_redir_syntax(t_token *token, t_exec_data *data);
 t_token 			*find_match_right_paren(t_token *token);
-t_token				*copy_token_enter(t_token *start, t_token *end);
+t_token				*copy_token_enter(t_token *start, t_token *end, t_list **gc_head);
 int					check_content_enter_paren(t_token *left_paren, t_exec_data *data);
 int					logical_start(t_token *token, t_exec_data *data);
 int					check_logical_token(t_token *token, t_exec_data *data);
@@ -153,8 +153,8 @@ int	handle_close_paren(int count, int content, t_exec_data *data);
 int	process_paren_token(t_token *current, int *count, t_exec_data *data);
 int 				check_parenthese_syntax(t_token *token, t_exec_data *data);
 int					check_syntax(t_token *token, t_exec_data *data);
-t_token				*split_token(t_token *token, t_token *split);
-t_node				*parsing_cmd(t_token *token);
+t_token				*split_token(t_token *token, t_token *split, t_list **gc_head);
+t_node				*parsing_cmd(t_token *token, t_list **gc_head);
 t_node				*parsing_pipe(t_token *token, t_token *pipe_token, t_exec_data *data);
 t_node				*parsing_redir(t_token *token, t_token *redir_token, t_exec_data *data);
 t_token 			*search_logical(t_token *token);

@@ -2,11 +2,11 @@
 #include "../../include/minishell.h"
 
 /* pour cree un nv noeud */
-t_node	*new_node(t_node_type type)
+t_node	*new_node(t_node_type type, t_list **gc_head)
 {
 	t_node	*node;
 
-	node = malloc(sizeof(t_node));
+	node = gc_malloc(sizeof(t_node), gc_head);
 	if (!node)
 		return (NULL);
 	node->type = type;
@@ -58,7 +58,7 @@ int	count_av(t_token *token)
 }
 
 /* convert token en tableau de av */
-char	**token_tab_av(t_token *token)
+char	**token_tab_av(t_token *token, t_list **gc_head)
 {
 	char	**av;
 	int		i;
@@ -66,14 +66,16 @@ char	**token_tab_av(t_token *token)
 
 	i = 0;
 	count = count_av(token);
-	av = malloc(sizeof(char *) * (count + 1));
+	av = gc_malloc(sizeof(char *) * (count + 1), gc_head);
 	if (!av)
 		return (NULL);
 	while (token && token->type == TOKEN_WORD)
 	{
 		if (token->value && token->value[0] != '\0')
 		{
-			av[i] = ft_strdup(token->value);
+			av[i] = gc_strdup(token->value, gc_head);
+			if (!av[i])
+				return (NULL);
 			i++;
 		}
 		token = token->next;
@@ -83,7 +85,7 @@ char	**token_tab_av(t_token *token)
 }
 
 /* split la lst de token au bon endroit */
-t_token	*split_token(t_token *token, t_token *split)
+t_token	*split_token(t_token *token, t_token *split, t_list **gc_head)
 {
 	t_token	*current;
 	t_token *next;
@@ -97,7 +99,7 @@ t_token	*split_token(t_token *token, t_token *split)
 		current->next = NULL;
 	next = split->next;
 	if (split->value)
-		free(split->value);
-	free(split);
+		gc_free_one(gc_head, split->value);//free(split->value);
+	gc_free_one(gc_head, split);//free(split);
 	return (next);
 }

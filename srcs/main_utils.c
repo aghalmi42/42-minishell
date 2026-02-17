@@ -59,7 +59,7 @@ void	process_line(char *line, t_exec_data *data)
 
 	if (isatty(STDIN_FILENO))
 		add_history(line);
-	token = lexical_analyzer(line);
+	token = lexical_analyzer(line, &data->gc_head);
 	if (!token)
 		return ;
 	// expand_token(token, data);

@@ -34,7 +34,7 @@ t_token *find_match_right_paren(t_token *token)
 }
 
 /* copie les token entre les 2 paren dasns uun new lst */
-t_token	*copy_token_enter(t_token *start, t_token *end)
+t_token	*copy_token_enter(t_token *start, t_token *end, t_list **gc_head)
 {
 	t_token	*new_head;
 	t_token	*new_current;
@@ -46,7 +46,7 @@ t_token	*copy_token_enter(t_token *start, t_token *end)
 	current = start;
 	while (current && current != end)
 	{
-		copy = new_token(current->type, current->value);
+		copy = new_token(current->type, current->value, gc_head);
 		if (!copy)
 			return (NULL);
 		if (!new_head)
@@ -73,8 +73,8 @@ t_node *parsing_subshell(t_token *token, t_exec_data *data)
     right_paren = find_match_right_paren(left_paren);
     if (!right_paren)
         return (NULL);
-    in_token = copy_token_enter(left_paren->next, right_paren);
-    node = new_node(NODE_SUBSHELL);
+    in_token = copy_token_enter(left_paren->next, right_paren, &data->gc_head);
+    node = new_node(NODE_SUBSHELL, &data->gc_head);
     if (!node)
         return (NULL);
     node->left = parsing_no_check(in_token, data);

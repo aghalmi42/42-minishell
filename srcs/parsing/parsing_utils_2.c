@@ -30,15 +30,15 @@ t_token	*search_redir(t_token *token)
 }
 
 /* parsing juste pour une cmd simple --> des token word */
-t_node	*parsing_cmd(t_token *token)
+t_node	*parsing_cmd(t_token *token, t_list **gc_head)
 {
 	t_node	*node;
 
-	node = new_node(NODE_CMD);
+	node = new_node(NODE_CMD, gc_head);
 	if (!node)
 		return (NULL);
-	node->av = token_tab_av(token);
-	free_token(token);
+	node->av = token_tab_av(token, gc_head);
+	gc_free_one(gc_head, token);//free_token(token);
 	return (node);
 }
 
@@ -48,10 +48,10 @@ t_node	*parsing_pipe(t_token *token, t_token *pipe_token, t_exec_data *data)
 	t_node	*node;
 	t_token	*right_token;
 
-	node = new_node(NODE_PIPE);
+	node = new_node(NODE_PIPE, &data->gc_head);
 	if (!node)
 		return (NULL);
-	right_token = split_token(token, pipe_token);
+	right_token = split_token(token, pipe_token, &data->gc_head);
 	node->left = parsing_pipe_prio(token, data);
 	node->right = parsing_pipe_prio(right_token, data);
 	return (node);

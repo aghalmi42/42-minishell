@@ -31,7 +31,7 @@ t_node	*parsing_pipe_prio(t_token *token, t_exec_data *data)
 	redir_token = search_redir(token);
 	if (redir_token)
 		return (parsing_redir(token, redir_token, data));
-	return (parsing_cmd(token));
+	return (parsing_cmd(token, &data->gc_head));
 }
 
 /* parsing pouur les && */
@@ -40,10 +40,10 @@ t_node	*parsing_and(t_token *token, t_token *and_token, t_exec_data *data)
 	t_node *node;
 	t_token *right_token;
 
-	node = new_node(NODE_AND);
+	node = new_node(NODE_AND, &data->gc_head);
 	if (!node)
 		return (NULL);
-	right_token = split_token(token, and_token);
+	right_token = split_token(token, and_token, &data->gc_head);
 	node->left = parsing_pipe_prio(token, data);
 	node->right = parsing_no_check(right_token, data);
 	// free_token(token);
@@ -57,10 +57,10 @@ t_node	*parsing_or(t_token *token, t_token *or_token, t_exec_data *data)
 	t_node *node;
 	t_token *right_token;
 
-	node = new_node(NODE_OR);
+	node = new_node(NODE_OR, &data->gc_head);
 	if (!node)
 		return (NULL);
-	right_token = split_token(token, or_token);
+	right_token = split_token(token, or_token, &data->gc_head);
 	node->left = parsing_pipe_prio(token, data);
 	node->right = parsing_no_check(right_token, data);
 	// free_token(token);

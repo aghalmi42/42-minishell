@@ -2,20 +2,24 @@
 #include "../../include/minishell.h"
 
 /* gere les && et les || */
-int manage_logical(char *line, int *i, t_token **up)
+int manage_logical(char *line, int *i, t_token **up, t_list **gc_head)
 {
     t_token *token;
 
     if (line[*i] == '&' && line[*i + 1] == '&')
     {
-        token = new_token(TOKEN_AND, NULL);
+        token = new_token(TOKEN_AND, NULL, gc_head);
+        if (!token)
+            return (0);
         add_token(up, token);
         (*i) += 2;
         return (1);
     }
     if (line[*i] == '|' && line[*i + 1] == '|')
     {
-        token = new_token(TOKEN_OR, NULL);
+        token = new_token(TOKEN_OR, NULL, gc_head);
+		if (!token)
+			return (0);
         add_token(up, token);
         (*i) += 2;
         return (1);
