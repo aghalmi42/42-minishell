@@ -1,7 +1,7 @@
 
 #include "../../include/minishell.h"
 
-void	process_words(t_token *current, char *expand, int word_count)
+void	process_words(t_token *current, char *expand, int word_count, t_list **gc_head)
 {
 	t_token	*last;
 	char	*word;
@@ -13,32 +13,32 @@ void	process_words(t_token *current, char *expand, int word_count)
 	last = current;
 	while (i < word_count)
 	{
-		word = extract_next_word(expand, &pos);
+		word = extract_next_word(expand, &pos, gc_head);
 		if (!word)
 			break ;
 		if (i == 0)
 		{
-			free(current->value);
+			gc_free_one(gc_head, current->value);//free(current->value);
 			current->value = word;
 		}
 		else
-			add_word_token(&last, word);
+			add_word_token(&last, word, gc_head);
 		i++;
 	}
 }
 
-void	insert_split_token(t_token *current, char *expand)
+void	insert_split_token(t_token *current, char *expand, t_list **gc_head)
 {
 	int	word_count;
 
 	word_count = count_split_word(expand);
 	if (word_count == 0)
 	{
-		free(current->value);
-		current->value = ft_strdup("");
+		gc_free_one(gc_head, current->value);//free(current->value);
+		current->value = gc_strdup("", gc_head);
 		return ;
 	}
-	process_words(current, expand, word_count);
+	process_words(current, expand, word_count, gc_head);
 }
 
 int	dollar_special(char *str, int *i)
@@ -88,11 +88,11 @@ void	case_expand(char *str, char *result, int *var, t_exec_data *data)
 			handle_quotes(str, var);
 		else if (to_expand(str, var[0], var[2]))
 			var[1] += manage_variable(str, &var[0], result + var[1],
-					data->envp);
+					data->envp, &data->gc_head);
 		else if (str[var[0]] == '$' && str[var[0] + 1] == '?')
 			var[1] += manage_exit_code(&var[0], result + var[1], data);
 		else if (str[var[0]] == '$' && str[var[0] + 1] == '$')
-			var[1] += manage_pid(&var[0], result + var[1]);
+			var[1] += manage_pid(&var[0], result + var[1], &data->gc_head);
 		else if (str[var[0]] == '$' && var[2] != 1)
 		{
 			if (dollar_special(str, &var[0]))

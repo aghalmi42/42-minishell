@@ -1,7 +1,7 @@
 
 #include "../../include/minishell.h"
 
-int	count_expanded_size(char **av)
+int	count_expanded_size(char **av, t_list **gc_head)
 {
 	char	**match;
 	int		i;
@@ -14,7 +14,7 @@ int	count_expanded_size(char **av)
 	{
 		if (have_wildcard(av[i]))
 		{
-			match = get_match(av[i]);
+			match = get_match(av[i], gc_head);
 			if (match)
 			{
 				j = 0;
@@ -33,7 +33,7 @@ int	count_expanded_size(char **av)
 	return (total);
 }
 
-void	add_matches_to_result(char **result, int *k, char **match)
+void	add_matches_to_result(char **result, int *k, char **match, t_list **gc_head)
 {
 	int	j;
 
@@ -41,14 +41,14 @@ void	add_matches_to_result(char **result, int *k, char **match)
 	j = 0;
 	while (match[j])
 	{
-		result[(*k)++] = ft_strdup(match[j]);
-		free(match[j]);
+		result[(*k)++] = gc_strdup(match[j], gc_head);
+		gc_free_one(gc_head, match[j]);//free(match[j]);
 		j++;
 	}
-	free(match);
+	gc_free_one(gc_head, match);//free(match);
 }
 
-void	fill_result(char **result, char **av)
+void	fill_result(char **result, char **av, t_list **gc_head)
 {
 	char	**match;
 	int		i;
@@ -60,30 +60,40 @@ void	fill_result(char **result, char **av)
 	{
 		if (have_wildcard(av[i]))
 		{
-			match = get_match(av[i]);
+			match = get_match(av[i], gc_head);
 			if (match)
-				add_matches_to_result(result, &k, match);
+				add_matches_to_result(result, &k, match, gc_head);
 			else
-				result[k++] = ft_strdup(av[i]);
+			{
+				result[k++] = gc_strdup(av[i], gc_head);
+				if (!result[k])
+					return ;
+			}
+
 		}
 		else
-			result[k++] = ft_strdup(av[i]);
+		{
+			result[k++] = gc_strdup(av[i], gc_head);
+			if (!result[k])
+				return ;
+		}
+
 		i++;
 	}
 	result[k] = NULL;
 }
 
-char	**expand_wildcard(char **av)
+char	**expand_wildcard(char **av, t_list **gc_head)
 {
 	char	**result;
 	int		total;
 
 	if (!av)
 		return (NULL);
-	total = count_expanded_size(av);
-	result = malloc(sizeof(char *) * (total + 1));
+	total = count_expanded_size(av, gc_head);
+	result = gc_malloc(sizeof(char *) * (total + 1), gc_head);
 	if (!result)
 		return (NULL);
-	fill_result(result, av);
+	fill_result(result, av, gc_head);
 	return (result);
 }

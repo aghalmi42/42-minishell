@@ -25,7 +25,7 @@ char	*expand_value(char *str, t_exec_data *data)
 	char	*result;
 	int		var[3];
 
-	result = malloc(10000);
+	result = gc_malloc(10000, &data->gc_head);
 	if (!result)
 		return (NULL);
 	var[0] = 0;

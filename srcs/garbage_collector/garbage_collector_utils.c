@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   garbage_collector_utils.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 06:34:40 by alex              #+#    #+#             */
-/*   Updated: 2026/02/16 08:32:33 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/17 08:15:39 by amoderan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,5 +207,28 @@ char	*gc_strtrim(char const *s1, char const *set, t_list **gc_head)
 	if (!result)
 		return (NULL);
 	ft_strlcpy(result, s1 + start, end - start + 1);
+	return (result);
+}
+
+char	*gc_itoa(int n, t_list **gc_head)
+{
+	char	*result;
+	int		len;
+
+	len = len_number(n);
+	result = gc_malloc(sizeof(char) * (len + 1), gc_head);
+	if (!result)
+		return (NULL);
+	result[len] = '\0';
+	if (n < 0)
+		result[0] = '-';
+	else if (n == 0)
+		result[0] = '0';
+	while (n != 0)
+	{
+		len--;
+		result[len] = value_negatif(n % 10) + '0';
+		n = n / 10;
+	}
 	return (result);
 }

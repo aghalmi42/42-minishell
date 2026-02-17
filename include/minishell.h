@@ -6,7 +6,7 @@
 /*   By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/17 06:18:18 by amoderan         ###   ########.fr       */
+/*   Updated: 2026/02/17 09:34:44 by amoderan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,47 +246,47 @@ void				set_signal_actions_default(void);
 /* fonction expansion */
 int					single_quote(char *str);
 int					dollar(char *str);
-char				*remove_quote(char *str);
+char				*remove_quote(char *str, t_list **gc_head);
 void				copy_char(char *str, int *i, char *result, int *j);
 int					to_expand(char *str, int i, int in_quote);
 char				*find_env_value(char *var_name, t_list *envp);
-char				*extract_var_name(char *str, int *i);
+char				*extract_var_name(char *str, int *i, t_list **gc_head);
 int					copy_to_result(char *src, char *result);
 int					manage_variable(char *str, int *i, char *result,
-						t_list *envp);
+						t_list *envp, t_list **gc_head);
 void				manage_exp_quote(char c, int *in_quote, int *i);
 int					manage_exit_code(int *i, char *result, t_exec_data *data);
-int					manage_pid(int *i, char *result);
+int					manage_pid(int *i, char *result, t_list **gc_head);
 void				expand_token(t_token *token, t_exec_data *data);
 int					original_quote(char *str);
 int					count_split_word(char *str);
-char				*extract_next_word(char *str, int *pos);
-void				add_word_token(t_token **last, char *word);
-void				insert_split_token(t_token *current, char *expand);
+char				*extract_next_word(char *str, int *pos, t_list **gc_head);
+void				add_word_token(t_token **last, char *word, t_list **gc_head);
+void				insert_split_token(t_token *current, char *expand, t_list **gc_head);
 void				expand_word(t_token *token, t_exec_data *data);
 int					dollar_special(char *str, int *i);
 void				case_expand(char *str, char *result, int *var, t_exec_data *data);
 int 				have_wildcard(char *str);
 int 				match_pattern(char *pattern, char *str);
-void 				split_path_pattern(char *input, char **dir_path, char **pattern);
+int					split_path_pattern(char *input, char **dir_path, char **pattern, t_list **gc_head);
 void	free_path_pattern(char *dir_path, char *pattern);
-char	*build_full_path(char *dir_path, char *name);
+char	*build_full_path(char *dir_path, char *name, t_list **gc_head);
 void	free_match_array(char **match, int i);
-char	**init_match(char *input, char **dir_path, char **pattern);
-int	process_entry(struct dirent *enter, char **match, int *i, char *dir_path);
-int	fill_matches(DIR *dir, char **match, char *dir_path, char *pattern);
-int 				count_match(char *pattern);
-char 				**get_match(char *pattern);
+char	**init_match(char *input, char **dir_path, char **pattern, t_list **gc_head);
+int	process_entry(struct dirent *enter, char **match, int *i, char *dir_path, t_list **gc_head);
+int	fill_matches(DIR *dir, char **match, char *dir_path, char *pattern, t_list **gc_head);
+int 				count_match(char *pattern, t_list **gc_head);
+char 				**get_match(char *pattern, t_list **gc_head);
 void 				sort_match(char **match);
-int	count_expanded_size(char **av);
-void	add_matches_to_result(char **result, int *k, char **match);
-void	fill_result(char **result, char **av);
-char 				**expand_wildcard(char **av);
-void	process_words(t_token *current, char *expand, int word_count);
+int	count_expanded_size(char **av, t_list **gc_head);
+void	add_matches_to_result(char **result, int *k, char **match, t_list **gc_head);
+void	fill_result(char **result, char **av, t_list **gc_head);
+char 				**expand_wildcard(char **av, t_list **gc_head);
+void	process_words(t_token *current, char *expand, int word_count, t_list **gc_head);
 void	handle_quotes(char *str, int *var);
-char	*handle_heredoc_expand(char *value, int *a_quote);
+char	*handle_heredoc_expand(char *value, int *a_quote, t_list **gc_head);
 char	*handle_normal_expand(char *value, int *a_quote, t_exec_data *data);
-void	process_expand(t_token *current, char *expand, int a_quote);
+void	process_expand(t_token *current, char *expand, int a_quote, t_list **gc_head);
 void	process_word_token(t_token *current, t_token *prev, t_exec_data *data);
 char				*expand_value(char *str, t_exec_data *data);
 
@@ -352,5 +352,6 @@ char			*gc_strdup(const char *s, t_list **gc_head);
 char			*gc_strjoin(char const *s1, char const *s2, t_list **gc_head);
 char			*gc_substr(char const *s, unsigned int start, size_t len, t_list **gc_head);
 char			*gc_strtrim(char const *s1, char const *set, t_list **gc_head);
+char			*gc_itoa(int n, t_list **gc_head);
 
 #endif

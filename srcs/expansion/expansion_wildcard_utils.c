@@ -41,25 +41,34 @@ int match_pattern(char *pattern, char *str)
 }
 
 /* extrait le chemin et le patterm duune string comme srcs *.c pour nouus */
-void split_path_pattern(char *input, char **dir_path, char **pattern)
+int split_path_pattern(char *input, char **dir_path, char **pattern, t_list **gc_head)
 {
     char *last_slash;
     
     last_slash = ft_strrchr(input, '/');
     if (last_slash)
     {
-        *dir_path = ft_substr(input, 0, last_slash - input);
-        *pattern = ft_strdup(last_slash + 1);
+        *dir_path = gc_substr(input, 0, last_slash - input, gc_head);
+        if (!(*dir_path))
+            return (0);
+        *pattern = gc_strdup(last_slash + 1, gc_head);
+        if (!(*pattern))
+            return (0);
     }
     else
     {
-        *dir_path = ft_strdup(".");
-        *pattern = ft_strdup(input);
+        *dir_path = gc_strdup(".", gc_head);
+        if (!(*dir_path))
+            return (0);
+        *pattern = gc_strdup(input, gc_head);
+        if (!(*pattern))
+            return (0);
     }
+    return (1);
 }
 
 /* compte le nbr de fichier qui match le patternn */
-int	count_match(char *input)
+int	count_match(char *input, t_list **gc_head)
 {
 	DIR				*dir;
 	struct dirent	*enter;
@@ -67,10 +76,11 @@ int	count_match(char *input)
 	char			*dir_path;
 	char			*pattern;
 
-	split_path_pattern(input, &dir_path, &pattern);
+	if (!split_path_pattern(input, &dir_path, &pattern, gc_head))
+        return (0);
 	dir = opendir(dir_path);
 	if (!dir)
-		return (free_path_pattern(dir_path, pattern), 0);
+		return (gc_free_one(gc_head, dir_path),gc_free_one(gc_head, pattern), 0);//free_path_pattern(dir_path, pattern)
 	count = 0;
 	enter = readdir(dir);
 	while (enter)

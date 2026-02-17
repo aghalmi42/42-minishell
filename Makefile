@@ -6,7 +6,7 @@
 #    By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/03 18:20:38 by aghalmi           #+#    #+#              #
-#    Updated: 2026/02/17 05:50:56 by amoderan         ###   ########.fr        #
+#    Updated: 2026/02/17 07:55:05 by amoderan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,17 @@ SRCS = srcs/main.c \
 	   srcs/parsing/check_syntax_logical.c \
 	   srcs/parsing/check_syntax_main.c \
 	   srcs/parsing/parsing_logical.c \
+	   srcs/expansion/expansion.c \
+	   srcs/expansion/expansion_utils.c \
+	   srcs/expansion/expansion_utils_2.c \
+	   srcs/expansion/expansion_utils_3.c \
+	   srcs/expansion/expansion_utils_4.c \
+	   srcs/expansion/expansion_variable.c \
+	   srcs/expansion/expansion_special.c \
+	   srcs/expansion/expansion_wildcard.c \
+	   srcs/expansion/expansion_wildcard_utils.c \
+	   srcs/expansion/expansion_wildcard_utils_2.c \
+	   srcs/expansion/expansion_wildcard_utils_3.c \
 	   srcs/path_finding/path_finding.c \
 	   srcs/path_finding/path_finding2.c \
 	   srcs/path_finding/path_finding_utils.c \
@@ -46,17 +57,6 @@ SRCS = srcs/main.c \
 	   srcs/exec/exec_subshell.c \
 	   srcs/set/set_envp.c \
 	   srcs/signals/signals.c \
-	   srcs/expansion/expansion.c \
-	   srcs/expansion/expansion_utils.c \
-	   srcs/expansion/expansion_utils_2.c \
-	   srcs/expansion/expansion_utils_3.c \
-	   srcs/expansion/expansion_utils_4.c \
-	   srcs/expansion/expansion_variable.c \
-	   srcs/expansion/expansion_special.c \
-	   srcs/expansion/expansion_wildcard.c \
-	   srcs/expansion/expansion_wildcard_utils.c \
-	   srcs/expansion/expansion_wildcard_utils_2.c \
-	   srcs/expansion/expansion_wildcard_utils_3.c \
 	   srcs/builtin/builtin_pwd.c \
 	   srcs/builtin/builtin.c \
 	   srcs/builtin/builtin_echo.c \
