@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+         #
+#    By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/03 18:20:38 by aghalmi           #+#    #+#              #
-#    Updated: 2026/02/17 07:55:05 by amoderan         ###   ########.fr        #
+#    Updated: 2026/02/18 17:41:33 by aghalmi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,8 +47,10 @@ SRCS = srcs/main.c \
 	   srcs/exec/exec_one_cmd.c \
 	   srcs/exec/exec_cmd.c \
 	   srcs/exec/exec_cmd_utils.c \
+	   srcs/exec/exec_cmd_utils_2.c \
 	   srcs/exec/exec.c \
 	   srcs/exec/exec_handle_here_doc.c \
+	   srcs/exec/exec_handle_here_doc_utils.c \
 	   srcs/exec/exec_node_here_doc.c \
 	   srcs/exec/exec_pipe.c \
 	   srcs/exec/exec_redir.c \
@@ -57,6 +59,7 @@ SRCS = srcs/main.c \
 	   srcs/exec/exec_subshell.c \
 	   srcs/set/set_envp.c \
 	   srcs/signals/signals.c \
+	   srcs/signals/signals_utils.c \
 	   srcs/builtin/builtin_pwd.c \
 	   srcs/builtin/builtin.c \
 	   srcs/builtin/builtin_echo.c \
@@ -68,10 +71,13 @@ SRCS = srcs/main.c \
 	   srcs/builtin/builtin_export_utils.c \
 	   srcs/builtin/builtin_unset.c \
 	   srcs/builtin/builtin_exit.c \
+	   srcs/builtin/builtin_exit_utils.c \
 	   srcs/gnl/get_next_line_bonus.c \
 	   srcs/gnl/get_next_line_utils_bonus.c \
 	   srcs/garbage_collector/garbage_collector.c \
 	   srcs/garbage_collector/garbage_collector_utils.c \
+	   srcs/garbage_collector/garbage_collector.utils2.c \
+	   srcs/garbage_collector/garbage_collector.utils3.c 
 
 OBJS = $(SRCS:.c=.o)
 

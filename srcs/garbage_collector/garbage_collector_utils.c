@@ -3,45 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   garbage_collector_utils.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 06:34:40 by alex              #+#    #+#             */
-/*   Updated: 2026/02/17 08:15:39 by amoderan         ###   ########.fr       */
+/*   Updated: 2026/02/18 17:32:30 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-void	gc_lstadd_back(t_list **lst, t_list *new)
-{
-	t_list	*last;
-
-	if (*lst == NULL)
-		*lst = new;
-	else
-	{
-		last = ft_lstlast(*lst);
-		last->next = new;
-	}
-}
-
-void	gc_lstadd_front(t_list **lst, t_list *new)
-{
-	new->next = *lst;
-	*lst = new;
-}
-
-t_list	*gc_lstnew(void *content)
-{
-	t_list	*new;
-
-	new = malloc(sizeof(t_list));
-	if (!new)
-		return (NULL);
-	new->content = content;
-	new->next = NULL;
-	return (new);
-}
 
 /* split */
 
@@ -65,20 +34,6 @@ static int	count_words(char const *s, char c)
 	}
 	return (count);
 }
-
-
-// static void	gb_free_split(char **split)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (split[i])
-// 	{
-// 		free(split[i]);
-// 		i++;
-// 	}
-// 	free(split);
-// }
 
 static int	split_words(char **result, char const *s, char c, t_list **gc_head)
 {
@@ -119,50 +74,6 @@ char	**gc_split(char const *s, char c, t_list **gc_head)
 	return (result);
 }
 
-char	*gc_strdup(const char *s, t_list **gc_head)
-{
-	size_t	i;
-	char	*dest;
-
-	i = 0;
-	dest = gc_malloc(sizeof(char) * (ft_strlen(s) + 1), gc_head);
-	if (!dest)
-		return (NULL);
-	while (s[i])
-	{
-		dest[i] = s[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
-}
-
-char	*gc_strjoin(char const *s1, char const *s2, t_list **gc_head)
-{
-	size_t	i;
-	size_t	j;
-	char	*tabi;
-
-	i = 0;
-	j = 0;
-	tabi = gc_malloc(sizeof(char) * ft_strlen(s1) + ft_strlen(s2) + 1, gc_head);
-	if (!tabi)
-		return (NULL);
-	while (s1[i])
-	{
-		tabi[i] = s1[i];
-		i++;
-	}
-	while (s2[j])
-	{
-		tabi[i] = s2[j];
-		i++;
-		j++;
-	}
-	tabi[i] = '\0';
-	return (tabi);
-}
-
 char	*gc_substr(char const *s, unsigned int start, size_t len, t_list **gc_head)
 {
 	size_t	i;
@@ -187,48 +98,4 @@ char	*gc_substr(char const *s, unsigned int start, size_t len, t_list **gc_head)
 	}
 	str[i] = '\0';
 	return (str);
-}
-
-char	*gc_strtrim(char const *s1, char const *set, t_list **gc_head)
-{
-	size_t	start;
-	size_t	end;
-	char	*result;
-
-	if (!s1 || !set)
-		return (NULL);
-	start = 0;
-	end = ft_strlen(s1);
-	while (s1[start] && ft_strchr(set, s1[start]))
-		start++;
-	while (end > start && ft_strchr(set, s1[end - 1]))
-		end--;
-	result = gc_malloc(sizeof(char) * (end - start + 1), gc_head);
-	if (!result)
-		return (NULL);
-	ft_strlcpy(result, s1 + start, end - start + 1);
-	return (result);
-}
-
-char	*gc_itoa(int n, t_list **gc_head)
-{
-	char	*result;
-	int		len;
-
-	len = len_number(n);
-	result = gc_malloc(sizeof(char) * (len + 1), gc_head);
-	if (!result)
-		return (NULL);
-	result[len] = '\0';
-	if (n < 0)
-		result[0] = '-';
-	else if (n == 0)
-		result[0] = '0';
-	while (n != 0)
-	{
-		len--;
-		result[len] = value_negatif(n % 10) + '0';
-		n = n / 10;
-	}
-	return (result);
 }

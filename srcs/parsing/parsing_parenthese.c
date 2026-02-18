@@ -78,9 +78,6 @@ t_node *parsing_subshell(t_token *token, t_exec_data *data)
     if (!node)
         return (NULL);
     node->left = parsing_no_check(in_token, data);
-    // if (right_paren->next)
-    //     node->right = parsing_no_check(right_paren->next, data);
-    // else
     node->right = NULL;
     return (node);
 }

@@ -11,7 +11,7 @@ int	manage_exit_code(int *i, char *result, t_exec_data *data)
 	if (!exit)
 		return (0);
 	count = copy_to_result(exit, result);
-	gc_free_one(&data->gc_head_cmd, exit);//free(exit);
+	gc_free_one(&data->gc_head_cmd, exit);
 	(*i) += 2;
 	return (count);
 }

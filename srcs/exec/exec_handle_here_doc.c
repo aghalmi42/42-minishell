@@ -9,40 +9,10 @@ int	handle_heredoc_child(char *redir_file, int pipe_fd[2], t_exec_data *data, t_
 	loop_here_doc(redir_file, pipe_fd[1], data);
 	close(pipe_fd[1]);
 	data->status = 0;
-	// free_envp(data);
-	// free_ast(node);
 	gc_delete(&data->gc_head_cmd);
 	gc_delete(&data->gc_head_env);
 	exit(0);
 }
-
-// int	create_here_doc_to_execute(char *redir_file, t_exec_data *data, t_node *node)
-// {
-// 	int		pipe_fd[2];
-// 	pid_t	pid;
-
-// 	if (pipe(pipe_fd) == -1)
-// 		return (-1);
-// 	signal(SIGINT, SIG_IGN);
-// 	pid = fork();
-// 	if (pid < 0)
-// 		return (close(pipe_fd[1]), close(pipe_fd[0]), -1);
-// 	if (pid == 0)
-// 		handle_heredoc_child(redir_file, pipe_fd, data, node);
-// 	close(pipe_fd[1]);
-// 	signal(SIGINT, SIG_IGN);
-// 	waitpid(pid, &data->status, 0);
-// 	set_signal_actions();
-// 	if (WIFSIGNALED(data->status))
-// 	{
-// 		close(pipe_fd[0]);
-// 		data->status = 130;
-// 		return (-1);
-// 	}
-// 	return (add_here_doc_fd(&data->head, pipe_fd[0], name,  &data->gc_head_cmd));
-// }
-
-
 
 /* On parcours l'ast pour savoir quel noeud est un here_doc */
 int	search_here_doc_to_execute(t_node *ast, t_exec_data *data, int *i)
@@ -59,74 +29,6 @@ int	search_here_doc_to_execute(t_node *ast, t_exec_data *data, int *i)
 	return (search_here_doc_to_execute(ast->right, data, i));
 }
 
-/* fonction pour lire chaque ligne du here_doc jusqu'à avoir le limiter */
-void	loop_here_doc(char	*limiter, int fd, t_exec_data *data)
-{
-	char	*line;
-
-	while (1)
-	{
-		line = readline("heredoc>");
-		if (s_status == SIGINT)
-		{
-			rl_event_hook = NULL;
-			close(fd);
-			ft_putendl_fd("minishell: warning: here-document delimited by end-of-file", 2);
-			clear_all_heredocs(data);
-			gc_delete(&data->gc_head_cmd);
-			gc_delete(&data->gc_head_env);
-			exit(130);
-		}
-		if (!line)
-			break ;
-		if (ft_strncmp(line, limiter, ft_strlen(limiter) + 1) == 0)
-		{
-			free(line);
-			break;
-		}
-		ft_putendl_fd(line, fd);
-		free(line);
-	}
-	close(fd);
-}
-
-int	create_here_doc_file(char *limiter, t_exec_data *data, int index)
-{
-	char	*name;
-	int		fd;
-	pid_t	pid;
-
-	name = gc_strjoin("/tmp/.ms_hd_", gc_itoa(index, &data->gc_head_cmd), &data->gc_head_cmd);
-	if(!name)
-		return (-1);
-	pid = fork();
-	if (pid == 0)
-	{
-		set_signal_actions_here_doc();
-		fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (fd < 0)
-		{
-			clear_all_heredocs(data);
-			gc_delete(&data->gc_head_cmd);
-			gc_delete(&data->gc_head_env);
-			exit(1);
-		}
-		loop_here_doc(limiter, fd, data);
-		//close(fd);
-		clear_all_heredocs(data);
-		gc_delete(&data->gc_head_cmd);
-		gc_delete(&data->gc_head_env);
-		exit(0);
-	}
-	signal(SIGINT, SIG_IGN);
-	waitpid(pid, &data->status, 0);
-	set_signal_actions();
-	if (WIFEXITED(data->status) && WEXITSTATUS(data->status) == 130)
-		return (data->status = 130, -1);
-	fd = open(name, O_RDONLY);
-	return (add_here_doc_fd(&data->head, fd, name, &data->gc_head_cmd));
-}
-
 void	clear_all_heredocs(t_exec_data *data)
 {
 	t_here_doc_fd *curr;
@@ -141,4 +43,49 @@ void	clear_all_heredocs(t_exec_data *data)
 		curr = curr->next;
 	}
 	data->head = NULL;
+}
+
+void	exec_heredoc_child(char *name, char *limiter, t_exec_data *data)
+{
+	int	fd;
+
+	set_signal_actions_here_doc();
+	fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd < 0)
+	{
+		clear_all_heredocs(data);
+		gc_delete(&data->gc_head_cmd);
+		gc_delete(&data->gc_head_env);
+		exit(1);
+	}
+	loop_here_doc(limiter, fd, data);
+	clear_all_heredocs(data);
+	gc_delete(&data->gc_head_cmd);
+	gc_delete(&data->gc_head_env);
+	exit(0);
+}
+
+int	create_here_doc_file(char *limiter, t_exec_data *data, int index)
+{
+	char	*name;
+	int		fd;
+	pid_t	pid;
+
+	name = gc_strjoin("/tmp/.ms_hd_",
+			gc_itoa(index, &data->gc_head_cmd), &data->gc_head_cmd);
+	if (!name)
+		return (-1);
+	pid = fork();
+	if (pid == 0)
+		exec_heredoc_child(name, limiter, data);
+	signal(SIGINT, SIG_IGN);
+	waitpid(pid, &data->status, 0);
+	set_signal_actions();
+	if (WIFEXITED(data->status) && WEXITSTATUS(data->status) == 130)
+	{
+		data->status = 130;
+		return (-1);
+	}
+	fd = open(name, O_RDONLY);
+	return (add_here_doc_fd(&data->head, fd, name, &data->gc_head_cmd));
 }

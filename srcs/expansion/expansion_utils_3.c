@@ -18,7 +18,7 @@ void	process_words(t_token *current, char *expand, int word_count, t_list **gc_h
 			break ;
 		if (i == 0)
 		{
-			gc_free_one(gc_head_cmd, current->value);//free(current->value);
+			gc_free_one(gc_head_cmd, current->value);
 			current->value = word;
 		}
 		else
@@ -34,7 +34,7 @@ void	insert_split_token(t_token *current, char *expand, t_list **gc_head_cmd)
 	word_count = count_split_word(expand);
 	if (word_count == 0)
 	{
-		gc_free_one(gc_head_cmd, current->value);//free(current->value);
+		gc_free_one(gc_head_cmd, current->value);
 		current->value = gc_strdup("", gc_head_cmd);
 		return ;
 	}

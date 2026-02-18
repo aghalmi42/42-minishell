@@ -41,17 +41,17 @@ void	process_expand(t_token *current, char *expand, int a_quote, t_list **gc_hea
 	if (!a_quote && expand)
 	{
 		insert_split_token(current, expand, gc_head_cmd);
-		gc_free_one(gc_head_cmd, expand);//free(expand);
+		gc_free_one(gc_head_cmd, expand);
 	}
 	else
 	{
 		if (a_quote && expand)
 		{
 			tmp = gc_strjoin("\x02", expand, gc_head_cmd);
-			gc_free_one(gc_head_cmd, expand);//free(expand);
+			gc_free_one(gc_head_cmd, expand);
 			expand = tmp;
 		}
-		gc_free_one(gc_head_cmd, current->value);//free(current->value);
+		gc_free_one(gc_head_cmd, current->value);
 		current->value = expand;
 	}
 }
@@ -64,7 +64,7 @@ void	process_word_token(t_token *current, t_token *prev, t_exec_data *data)
 	if (prev && prev->type == TOKEN_HEREDOC)
 	{
 		expand = handle_heredoc_expand(current->value, &a_quote, &data->gc_head_cmd);
-		gc_free_one(&data->gc_head_cmd, current->value); //free(current->value);
+		gc_free_one(&data->gc_head_cmd, current->value);
 		current->value = expand;
 	}
 	else

@@ -1,27 +1,6 @@
 
 #include "../../include/minishell.h"
 
-// void	exec_one_cmd(t_node *node, char **envp, t_list **gc_head_cmd)
-// {
-// 	char	*path_cmd;
-
-// 	path_cmd = path_to_find(node->av[0], envp, gc_head_cmd);
-// 	if (!path_cmd)
-// 		return ;
-// 	if (fork() == 0)
-// 	{
-// 		if (execve(path_cmd, node->av, envp) == - 1)
-// 		{
-// 			perror("execve fail");
-// 			gc_delete(gc_head_cmd);
-// 			gc_delete(&data->gc_head_env);
-// 			exit(126);
-// 		}
-// 	}
-// 	wait(NULL);
-// 	//free(path_cmd);
-// }
-
 void	execute_in_child(char *path_cmd, t_node *node, char **envp, t_exec_data *data)
 {
 	struct sigaction	sa_default;
@@ -34,9 +13,6 @@ void	execute_in_child(char *path_cmd, t_node *node, char **envp, t_exec_data *da
 	if (execve(path_cmd, node->av, envp) == -1)
 	{
 		perror("execve fail");
-		// free_ast(node);
-		// free_envp(data);
-		// free_split(envp);
 		gc_delete(&data->gc_head_env);
 		gc_delete(&data->gc_head_cmd);
 		exit(126);

@@ -46,8 +46,6 @@ t_node	*parsing_and(t_token *token, t_token *and_token, t_exec_data *data)
 	right_token = split_token(token, and_token);
 	node->left = parsing_pipe_prio(token, data);
 	node->right = parsing_no_check(right_token, data);
-	// free_token(token);
-	// free_token(right_token);
 	return (node);
 }
 
@@ -63,7 +61,5 @@ t_node	*parsing_or(t_token *token, t_token *or_token, t_exec_data *data)
 	right_token = split_token(token, or_token);
 	node->left = parsing_pipe_prio(token, data);
 	node->right = parsing_no_check(right_token, data);
-	// free_token(token);
-	// free_token(right_token);
 	return (node);
 }

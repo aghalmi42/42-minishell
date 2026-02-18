@@ -24,16 +24,10 @@ void	handle_redir_error(t_node *node, t_exec_data *data, t_here_doc_fd *tmp)
 	data->status = 1;
 	if (data->is_fork)
 	{
-		// free_ast(node);
-		// free_envp(data);
-		// if (tmp)
-		// 	free(tmp);
 		gc_delete(&data->gc_head_cmd);
 		gc_delete(&data->gc_head_env);
 		exit(1);
 	}
-	// if (tmp)
-	// 	free(tmp);
 }
 
 void	exec_redirection(t_node *node, t_exec_data *data)

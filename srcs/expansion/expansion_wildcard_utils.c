@@ -93,3 +93,20 @@ int	count_match(char *input, t_list **gc_head_cmd)
 	free_path_pattern(dir_path, pattern);
 	return (count);
 }
+
+int	process_wildcard_count(char *arg, t_list **gc_head_cmd)
+{
+	char	**match;
+	int		count;
+
+	match = get_match(arg, gc_head_cmd);
+	if (match)
+	{
+		count = 0;
+		while (match[count])
+			free(match[count++]);
+		free(match);
+		return (count);
+	}
+	return (1);
+}

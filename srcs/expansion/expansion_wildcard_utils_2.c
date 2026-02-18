@@ -16,7 +16,7 @@ char	*build_full_path(char *dir_path, char *name, t_list **gc_head_cmd)
 		return (gc_strdup(name, gc_head_cmd));
 	full_path = gc_strjoin(dir_path, "/", gc_head_cmd);
 	result = gc_strjoin(full_path, name, gc_head_cmd);
-	gc_free_one(gc_head_cmd, full_path);//free(full_path);
+	gc_free_one(gc_head_cmd, full_path);
 	return (result);
 }
 

@@ -74,7 +74,7 @@ void	add_word_token(t_token **last, char *word, t_list **gc_head_cmd)
 		(*last)->next = new_tok;
 		*last = new_tok;
 	}
-	gc_free_one(gc_head_cmd, word);//free(word);
+	gc_free_one(gc_head_cmd, word);
 }
 
 /* verifie si mot a $ et mettre variable remplacer et supp quote */
@@ -85,11 +85,11 @@ void	expand_word(t_token *token, t_exec_data *data)
 	if (single_quote(token->value))
 	{
 		value = remove_quote(token->value, &data->gc_head_cmd);
-		gc_free_one(&data->gc_head_cmd, token->value);//free(token->value);
+		gc_free_one(&data->gc_head_cmd, token->value);
 		token->value = value;
 		return ;
 	}
 	value = expand_value(token->value, data);
-	gc_free_one(&data->gc_head_cmd, token->value);//free(token->value);
+	gc_free_one(&data->gc_head_cmd, token->value);
 	token->value = value;
 }

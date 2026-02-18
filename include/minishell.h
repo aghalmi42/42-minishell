@@ -6,7 +6,7 @@
 /*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/18 14:30:19 by aghalmi          ###   ########.fr       */
+/*   Updated: 2026/02/18 18:03:27 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,10 +235,15 @@ void	handle_subshell_status(int status, t_exec_data *data);
 void	exec_subshell_child(t_node *node, t_exec_data *data);
 void 				exec_subshell(t_node *node, t_exec_data *data);
 int					is_a_directory(char *path);
+void	exec_cmd(t_node *node, t_exec_data *data);
 int	get_redir_fd(t_node *node, t_exec_data *data, t_here_doc_fd **tmp);
 void	handle_redir_error(t_node *node, t_exec_data *data, t_here_doc_fd *tmp);
 void				exec_redirection(t_node *node, t_exec_data *data);
 int					open_redir_file(t_node *node);
+void	exec_heredoc_child(char *name, char *limiter, t_exec_data *data);
+char	*get_next_line_hd(int fd, t_exec_data *data);
+void	run_external_cmd(t_node *node, t_exec_data *data);
+void	clean_args_markers(char **av);
 
 /* signals */
 
@@ -299,6 +304,8 @@ char	*handle_normal_expand(char *value, int *a_quote, t_exec_data *data);
 void	process_expand(t_token *current, char *expand, int a_quote, t_list **gc_head);
 void	process_word_token(t_token *current, t_token *prev, t_exec_data *data);
 char				*expand_value(char *str, t_exec_data *data);
+int	process_wildcard_match(char *arg, char **result, int *k, t_list **gc_head_cmd);
+int	process_wildcard_count(char *arg, t_list **gc_head_cmd);
 
 /* fonction builtin */
 
@@ -326,6 +333,7 @@ void	remove_env_key(t_exec_data *data, char *key);
 void				builtin_unset(t_exec_data *data, t_node *node);
 int	is_valid_number(char *str);
 void				exit_msg_error(t_exec_data *data, char *cmd, t_node *node);
+void	final_exit(t_exec_data *data, int cpt, long long exit_code);
 void				builtin_exit(t_exec_data *data, t_node *node);
 void				builtin_cd(t_exec_data *data, t_node *node);
 char 				*search_cd_path(t_exec_data *data, t_node *node);

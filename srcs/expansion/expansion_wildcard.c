@@ -3,29 +3,15 @@
 
 int	count_expanded_size(char **av, t_list **gc_head_cmd)
 {
-	char	**match;
-	int		i;
-	int		j;
-	int		total;
+	int	total;
+	int	i;
 
 	total = 0;
 	i = 0;
 	while (av[i])
 	{
 		if (have_wildcard(av[i]))
-		{
-			match = get_match(av[i], gc_head_cmd);
-			if (match)
-			{
-				j = 0;
-				while (match[j])
-					free(match[j++]);
-				free(match);
-				total += j;
-			}
-			else
-				total++;
-		}
+			total += process_wildcard_count(av[i], gc_head_cmd);
 		else
 			total++;
 		i++;
@@ -42,42 +28,43 @@ void	add_matches_to_result(char **result, int *k, char **match, t_list **gc_head
 	while (match[j])
 	{
 		result[(*k)++] = gc_strdup(match[j], gc_head_cmd);
-		gc_free_one(gc_head_cmd, match[j]);//free(match[j]);
+		gc_free_one(gc_head_cmd, match[j]);
 		j++;
 	}
-	gc_free_one(gc_head_cmd, match);//free(match);
+	gc_free_one(gc_head_cmd, match);
+}
+
+int	process_wildcard_match(char *arg, char **result, int *k, t_list **gc_head_cmd)
+{
+	char	**match;
+
+	match = get_match(arg, gc_head_cmd);
+	if (match)
+	{
+		add_matches_to_result(result, k, match, gc_head_cmd);
+		return (1);
+	}
+	return (0);
 }
 
 void	fill_result(char **result, char **av, t_list **gc_head_cmd)
 {
-	char	**match;
-	int		i;
-	int		k;
+	int	i;
+	int	k;
 
 	i = 0;
 	k = 0;
 	while (av[i])
 	{
-		if (have_wildcard(av[i]))
+		if (have_wildcard(av[i])
+			&& process_wildcard_match(av[i], result, &k, gc_head_cmd))
 		{
-			match = get_match(av[i], gc_head_cmd);
-			if (match)
-				add_matches_to_result(result, &k, match, gc_head_cmd);
-			else
-			{
-				result[k++] = gc_strdup(av[i], gc_head_cmd);
-				if (!result[k - 1])
-					return ;
-			}
-
+			i++;
+			continue ;
 		}
-		else
-		{
-			result[k++] = gc_strdup(av[i], gc_head_cmd);
-			if (!result[k - 1])
-				return ;
-		}
-
+		result[k++] = gc_strdup(av[i], gc_head_cmd);
+		if (!result[k - 1])
+			return ;
 		i++;
 	}
 	result[k] = NULL;
