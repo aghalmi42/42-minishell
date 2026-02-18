@@ -5,7 +5,12 @@ void	handle_builtin(t_node *node, t_exec_data *data)
 {
 	exec_built_in(node->av[0], data, node);
 	if (data->is_fork)
+	{
+		gc_delete(&data->gc_head_cmd);
+		gc_delete(&data->gc_head_env);
 		exit(data->status);
+	}
+		
 }
 
 void	handle_path_error(t_node *node, t_exec_data *data)
