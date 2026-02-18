@@ -83,5 +83,5 @@ void	exec_redir_and_cmd(t_node *ast, t_exec_data *data)
 	waitpid(pid, &status, 0);
 	handle_exec_status(status, data);
 	set_signal_actions();
-	// clear_all_heredocs(data);
+	clear_all_heredocs(data);
 }

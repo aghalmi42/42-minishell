@@ -50,8 +50,8 @@ void	exec_redirection(t_node *node, t_exec_data *data)
 	else
 		dup2(fd, STDOUT_FILENO);
 	close(fd);
-	// if (tmp)
-	// 	tmp->fd_read = -1;
+	if (tmp)
+		tmp->fd_read = -1;
 	if (node->left)
 		exec_main(node->left, data);
 	else

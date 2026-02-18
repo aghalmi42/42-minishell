@@ -84,7 +84,7 @@ void	case_expand(char *str, char *result, int *var, t_exec_data *data)
 {
 	while (str[var[0]])
 	{
-		if ((str[var[0]] == '\'' || str[var[0]] == '"'))
+		if ((str[var[0]] == '\'' && var[2] != 2) || (str[var[0]] == '"' && var[2] != 1))
 			handle_quotes(str, var);
 		else if (to_expand(str, var[0], var[2]))
 			var[1] += manage_variable(str, &var[0], result + var[1],
