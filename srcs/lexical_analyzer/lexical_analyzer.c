@@ -39,13 +39,13 @@ int	extract_word(char *line, int *i, t_token **up, t_list **gc_head)
 	t_token	*token;
 
 	j = 0;
-	word = gc_malloc(1000, gc_head);
+	word = malloc(1000);
 	if (!word)
 		return (-1);
 	result = construct_word(line, i, word, &j);
 	if (result == -1)
 	{
-		gc_free_one(gc_head, word);
+		free(word);
 		return (-1);
 	}
 	word[j] = '\0';
@@ -53,8 +53,7 @@ int	extract_word(char *line, int *i, t_token **up, t_list **gc_head)
 	if (!token)
 		return (-1);
 	add_token(up, token);
-	//free(word);
-	gc_free_one(gc_head, word);
+	free(word);
 	return (0);
 }
 
@@ -89,12 +88,7 @@ t_token	*lexical_analyzer(char *line, t_list **gc_head)
 			break ;
 		result = process_token(line, &i, &up, gc_head);
 		if (result == -1)
-		{
-			//free_token(up);
 			return (gc_delete(gc_head), NULL);
-		}
-		if (result == 0)
-			return (NULL);
 	}
 	return (up);
 }

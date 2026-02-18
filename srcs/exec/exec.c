@@ -47,8 +47,9 @@ void	exec_in_child(t_node *ast, t_exec_data *data)
 		exec_redirection(ast, data);
 	else if (ast->type == NODE_CMD)
 		exec_cmd(ast, data);
-	free_envp(data);
-	free_ast(ast);
+	// free_envp(data);
+	// free_ast(ast);
+	gc_delete(&data->gc_head_cmd);
 	exit(data->status);
 }
 

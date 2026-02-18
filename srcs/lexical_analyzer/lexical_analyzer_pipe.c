@@ -10,7 +10,7 @@ int	manage_pipe(char *line, int *i, t_token **up, t_list **gc_head)
 	{
 		token = new_token(TOKEN_PIPE, NULL, gc_head);
 		if (!token)
-			return (0);
+			return (-1);
 		add_token(up, token);
 		(*i)++;
 		return (1);

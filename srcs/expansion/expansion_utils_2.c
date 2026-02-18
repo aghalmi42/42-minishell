@@ -41,7 +41,7 @@ int	count_split_word(char *str)
 	return (count);
 }
 
-char	*extract_next_word(char *str, int *pos, t_list **gc_head)
+char	*extract_next_word(char *str, int *pos, t_list **gc_head_cmd)
 {
 	int		start;
 	int		len;
@@ -55,7 +55,7 @@ char	*extract_next_word(char *str, int *pos, t_list **gc_head)
 	while (str[*pos] && str[*pos] != ' ' && str[*pos] != '\t' && str[*pos] != '\n')
 		(*pos)++;
 	len = *pos - start;
-	word = gc_malloc(len + 1, gc_head);
+	word = gc_malloc(len + 1, gc_head_cmd);
 	if (!word)
 		return (NULL);
 	ft_memcpy(word, str + start, len);
@@ -63,18 +63,18 @@ char	*extract_next_word(char *str, int *pos, t_list **gc_head)
 	return (word);
 }
 
-void	add_word_token(t_token **last, char *word, t_list **gc_head)
+void	add_word_token(t_token **last, char *word, t_list **gc_head_cmd)
 {
 	t_token	*new_tok;
 
-	new_tok = new_token(TOKEN_WORD, word, gc_head);
+	new_tok = new_token(TOKEN_WORD, word, gc_head_cmd);
 	if (new_tok)
 	{
 		new_tok->next = (*last)->next;
 		(*last)->next = new_tok;
 		*last = new_tok;
 	}
-	gc_free_one(gc_head, word);//free(word);
+	gc_free_one(gc_head_cmd, word);//free(word);
 }
 
 /* verifie si mot a $ et mettre variable remplacer et supp quote */
@@ -84,12 +84,12 @@ void	expand_word(t_token *token, t_exec_data *data)
 
 	if (single_quote(token->value))
 	{
-		value = remove_quote(token->value, &data->gc_head);
-		gc_free_one(&data->gc_head, token->value);//free(token->value);
+		value = remove_quote(token->value, &data->gc_head_cmd);
+		gc_free_one(&data->gc_head_cmd, token->value);//free(token->value);
 		token->value = value;
 		return ;
 	}
 	value = expand_value(token->value, data);
-	free(token->value);
+	gc_free_one(&data->gc_head_cmd, token->value);//free(token->value);
 	token->value = value;
 }

@@ -9,8 +9,9 @@ void	exec_pipe_left(t_node *node, int pipe_fd[2], t_exec_data *data)
 	dup2(pipe_fd[1], STDOUT_FILENO);
 	close(pipe_fd[1]);
 	exec_main(node->left, data);
-	free_envp(data);
-	free_ast(node);
+	// free_envp(data);
+	// free_ast(node);
+	gc_delete(&data->gc_head_cmd);
 	exit(data->status);
 }
 
@@ -22,8 +23,9 @@ void	exec_pipe_right(t_node *node, int pipe_fd[2], t_exec_data *data)
 	dup2(pipe_fd[0], STDIN_FILENO);
 	close(pipe_fd[0]);
 	exec_main(node->right, data);
-	free_envp(data);
-	free_ast(node);
+	// free_envp(data);
+	// free_ast(node);
+	gc_delete(&data->gc_head_cmd);
 	exit(data->status);
 }
 

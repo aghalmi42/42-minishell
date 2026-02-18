@@ -32,7 +32,7 @@ int	dollar(char *str)
 }
 
 /* pour supp quote */
-char	*remove_quote(char *str, t_list **gc_head)
+char	*remove_quote(char *str, t_list **gc_head_cmd)
 {
 	char	*result;
 	int len;
@@ -42,14 +42,14 @@ char	*remove_quote(char *str, t_list **gc_head)
 	len = ft_strlen(str);
 	if (len >= 2 && ((str[0] == '\'' && str[len - 1] == '\'') || (str[0] == '"' && str[len - 1] == '"')))
 	{
-		result = gc_malloc(len - 1, gc_head);
+		result = gc_malloc(len - 1, gc_head_cmd);
 		if (!result)
 			return (NULL);
 		ft_memcpy(result, str + 1, len - 2);
 		result[len - 2] = '\0';
 		return (result);
 	}
-	return (gc_strdup(str, gc_head));
+	return (gc_strdup(str, gc_head_cmd));
 }
 
 /* copie un caractere normal */

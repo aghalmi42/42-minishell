@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/17 09:34:44 by amoderan         ###   ########.fr       */
+/*   Updated: 2026/02/18 11:06:52 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,8 @@ typedef struct s_node
 typedef struct s_exec_data
 {
 	t_list					*envp;
-	t_list					*gc_head;
+	t_list					*gc_head_env;
+	t_list					*gc_head_cmd;
 	int						status;
 	struct s_here_doc_fd	*head;
 	int						is_fork;
@@ -108,6 +109,7 @@ typedef struct s_env
 typedef struct s_here_doc_fd
 {
 	int						fd_read;
+	char					*file_name;
 	struct s_here_doc_fd	*next;
 
 }					t_here_doc_fd;
@@ -153,7 +155,7 @@ int	handle_close_paren(int count, int content, t_exec_data *data);
 int	process_paren_token(t_token *current, int *count, t_exec_data *data);
 int 				check_parenthese_syntax(t_token *token, t_exec_data *data);
 int					check_syntax(t_token *token, t_exec_data *data);
-t_token				*split_token(t_token *token, t_token *split, t_list **gc_head);
+t_token				*split_token(t_token *token, t_token *split);
 t_node				*parsing_cmd(t_token *token, t_list **gc_head);
 t_node				*parsing_pipe(t_token *token, t_token *pipe_token, t_exec_data *data);
 t_node				*parsing_redir(t_token *token, t_token *redir_token, t_exec_data *data);
@@ -162,7 +164,7 @@ t_node 				*parsing_pipe_prio(t_token *token, t_exec_data *data);
 t_node 				*parsing_and(t_token *token, t_token *and_token, t_exec_data *data);
 t_node 				*parsing_or(t_token *token, t_token *or_token, t_exec_data *data);
 t_node 				*parsing_subshell(t_token *token, t_exec_data *data);
-void	process_redir_file(t_node *node, t_token *right_token, t_token **file);
+void	process_redir_file(t_node *node, t_token *right_token, t_token **file, t_list **gc_head);
 t_node	*create_redir_node(t_token *redir_token, t_token *right_token, t_token *left_token, t_exec_data *data);
 t_node	*handle_redir_at_start(t_token *redir_token, t_exec_data *data);
 t_node	*parsing_redir(t_token *token, t_token *redir_token, t_exec_data *data);
@@ -170,13 +172,13 @@ t_node				*parsing_no_check(t_token *token, t_exec_data *data);
 t_node				*parsing(t_token *token, t_exec_data *data);
 
 /* path_finding */
-char				*path_to_find(char *cmd, char **envp);
+char				*path_to_find(char *cmd, char **envp, t_list **gc_head);
 char				*join_possible_path(char *cmd, char *folder);
 void				free_split(char **split);
 int					count_env(char **envp);
 int					countain_a_slash(char *str);
-char				*it_contain_a_slash(char *cmd);
-char				*search_possible_path(char **possible_paths, char *cmd);
+char				*it_contain_a_slash(char *cmd, t_list **gc_head);
+char				*search_possible_path(char **possible_paths, char *cmd, t_list **gc_head);
 char				**search_path(t_list *envp);
 char				*path_to_find_lst(char *cmd, t_exec_data *data);
 
@@ -189,22 +191,24 @@ void				free_envp(t_exec_data *data);
 
 /* node fd des here_doc , pretraitement des here_doc pour l'exec */
 
-t_here_doc_fd		*here_doc_new(int	content);
+t_here_doc_fd		*here_doc_new(int	content, t_list **gc_head, char *name);
 t_here_doc_fd		*here_doc_last(t_here_doc_fd *here_doc);
 void				free_here_doc_list(t_here_doc_fd *head);
-int					add_here_doc_fd(t_here_doc_fd **head, int fd);
-int					search_here_doc_to_execute(t_node *ast, t_exec_data *data);
+int					add_here_doc_fd(t_here_doc_fd **head, int fd,char *name, t_list **gc_head);
+int					search_here_doc_to_execute(t_node *ast, t_exec_data *data, int *i);
 int	handle_heredoc_child(char *redir_file, int pipe_fd[2], t_exec_data *data, t_node *node);
 int					create_here_doc_to_execute(char *redir_file, t_exec_data *data, t_node *node);
-void				loop_here_doc(char	*limiter, int fd);
+int					create_here_doc_file(char *limiter, t_exec_data *data, int index);
+void				loop_here_doc(char	*limiter, int fd, t_exec_data *data);
+void				clear_all_heredocs(t_exec_data *data);
 
 /* exec */
 
-void				exec_one_cmd(t_node *node, char **envp);
+void				exec_one_cmd(t_node *node, char **envp, t_list **gc_head);
 void				exec_main(t_node *ast, t_exec_data *data);
 int					is_a_built_in(char *cmd);
 void				exec_built_in(char *cmd, t_exec_data *data, t_node *node);
-char				**getenv_to_str(t_list *envp);
+char				**getenv_to_str(t_list *envp, t_list **gc_head);
 char				*envp_value(t_env *content);
 int					envp_count(t_list *envp);
 void	exec_pipe_left(t_node *node, int pipe_fd[2], t_exec_data *data);
@@ -241,7 +245,11 @@ int					open_redir_file(t_node *node);
 extern volatile		sig_atomic_t s_status;
 void				set_signal_actions(void);
 void				handle_sigint(int	signal);
+void				handle_sigint_here_doc(int	signal);
 void				set_signal_actions_default(void);
+void				set_signal_actions_here_doc(void);
+int					check_readline_sigint(void);
+
 
 /* fonction expansion */
 int					single_quote(char *str);
@@ -333,25 +341,26 @@ long long			ft_atoll(const char *str, int *error);
 void				exit_with_one_arg(t_node *node, t_exec_data *data, long long exit_code);
 
 /* MAIN */
-char	*read_input_line(void);
-int	process_heredocs(t_node *ast, t_exec_data *data, char *line);
-void	execute_ast(t_node *ast, t_exec_data *data);
-void	process_line(char *line, t_exec_data *data);
-void	init_exec_data(t_exec_data *data, char **envp);
+char				*read_input_line(void);
+int					process_heredocs(t_node *ast, t_exec_data *data);
+void				execute_ast(t_node *ast, t_exec_data *data);
+void				process_line(char *line, t_exec_data *data);
+void				init_exec_data(t_exec_data *data, char **envp);
 
 /* garbage_collector */
 
-void			gc_delete(t_list	**head);
-void			*gc_malloc(size_t size, t_list **head);
-void			gc_free_one(t_list **head, void *ptr);
-void			gc_lstadd_back(t_list **lst, t_list *new);
-void			gc_lstadd_front(t_list **lst, t_list *new);
-t_list			*gc_lstnew(void *content);
-char			**gc_split(char const *s, char c, t_list **gc_head);
-char			*gc_strdup(const char *s, t_list **gc_head);
-char			*gc_strjoin(char const *s1, char const *s2, t_list **gc_head);
-char			*gc_substr(char const *s, unsigned int start, size_t len, t_list **gc_head);
-char			*gc_strtrim(char const *s1, char const *set, t_list **gc_head);
-char			*gc_itoa(int n, t_list **gc_head);
+void				gc_delete(t_list	**head);
+void				*gc_malloc(size_t size, t_list **head);
+void				gc_free_one(t_list **head, void *ptr);
+void				gc_add_back(t_list **gc_head, void *ptr);
+void				gc_lstadd_back(t_list **lst, t_list *new);
+void				gc_lstadd_front(t_list **lst, t_list *new);
+t_list				*gc_lstnew(void *content);
+char				**gc_split(char const *s, char c, t_list **gc_head);
+char				*gc_strdup(const char *s, t_list **gc_head);
+char				*gc_strjoin(char const *s1, char const *s2, t_list **gc_head);
+char				*gc_substr(char const *s, unsigned int start, size_t len, t_list **gc_head);
+char				*gc_strtrim(char const *s1, char const *set, t_list **gc_head);
+char				*gc_itoa(int n, t_list **gc_head);
 
 #endif

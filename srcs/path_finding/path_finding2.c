@@ -9,11 +9,11 @@ char	*path_to_find_lst(char *cmd, t_exec_data *data)
 	if (!cmd)
 		return (perror("Command not found"), NULL);
 	if (ft_strchr(cmd, '/'))
-		return (it_contain_a_slash(cmd));
+		return (it_contain_a_slash(cmd, &data->gc_head_cmd));
 	possible_paths = search_path(data->envp);
 	if (!possible_paths)
 		return (perror("No such file or directory"), NULL);
-	possible_path = search_possible_path(possible_paths, cmd);
+	possible_path = search_possible_path(possible_paths, cmd, &data->gc_head_cmd);
 	if (!possible_path)
 		return (free_split(possible_paths), ft_putstr_fd("minishell: command not found: ", 2),ft_putendl_fd(cmd, 2), NULL);
 	free_split(possible_paths);

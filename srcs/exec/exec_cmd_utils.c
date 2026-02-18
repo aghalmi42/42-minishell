@@ -40,7 +40,7 @@ int	is_a_built_in(char *cmd)
 	return (0);
 }
 
-char	**getenv_to_str(t_list *envp)
+char	**getenv_to_str(t_list *envp, t_list **gc_head_cmd)
 {
 	char	**env;
 	int		i;
@@ -50,16 +50,19 @@ char	**getenv_to_str(t_list *envp)
 	env = malloc(sizeof (char *) * (i + 1));
 	if (!env)
 		return (NULL);
+	gc_add_back(gc_head_cmd, env);
 	j = 0;
 	while (j != i)
 	{
 		env[j] = envp_value(envp->content);
 		if (!env[j])
-			return (free_split(env), NULL);
+			return (NULL);
+		gc_add_back(gc_head_cmd, env[j]);
 		j++;
 		envp = envp->next;
 	}
 	env[j] = NULL;
+	i = 0;
 	return (env);
 }
 

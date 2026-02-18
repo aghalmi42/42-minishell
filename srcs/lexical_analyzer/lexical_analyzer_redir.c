@@ -12,14 +12,14 @@ int	manage_input_redirection(char *line, int *i, t_token **up, t_list **gc_head)
 	{
 		token = new_token(TOKEN_HEREDOC, NULL, gc_head);
 		if (!token)
-			return (0);
+			return (-1);
 		(*i) += 2;
 	}
 	else
 	{
 		token = new_token(TOKEN_REDIR_IN, NULL, gc_head);
 		if (!token)
-			return (0);
+			return (-1);
 		(*i)++;
 	}
 	add_token(up, token);
@@ -37,14 +37,14 @@ int	manage_output_redirection(char *line, int *i, t_token **up, t_list **gc_head
 	{
 		token = new_token(TOKEN_APPEND, NULL, gc_head);
 		if (!token)
-			return (0);
+			return (-1);
 		(*i) += 2;
 	}
 	else
 	{
 		token = new_token(TOKEN_REDIR_OUT, NULL, gc_head);
 		if (!token)
-			return (0);
+			return (-1);
 		(*i)++;
 	}
 	add_token(up, token);

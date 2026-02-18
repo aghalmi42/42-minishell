@@ -30,12 +30,17 @@ char	*read_input_line(void)
 	return (line);
 }
 
-int	process_heredocs(t_node *ast, t_exec_data *data, char *line)
+int	process_heredocs(t_node *ast, t_exec_data *data)
 {
-	if (search_here_doc_to_execute(ast, data) == -1)
+	int	index;
+
+	index = 0;
+	if (search_here_doc_to_execute(ast, data, &index) == -1)
 	{
-		free_ast(ast);
-		free(line);
+		//free_ast(ast);
+		//free(line);
+		clear_all_heredocs(data);
+		gc_delete(&data->gc_head_cmd);
 		return (0);
 	}
 	return (1);
@@ -45,8 +50,8 @@ void	execute_ast(t_node *ast, t_exec_data *data)
 {
 	data->is_fork = 0;
 	exec_main(ast, data);
-	free_ast(ast);
-	free_here_doc_list(data->head);
+	//free_ast(ast);
+	//free_here_doc_list(data->head);
 	data->head = NULL;
 }
 
@@ -59,25 +64,27 @@ void	process_line(char *line, t_exec_data *data)
 
 	if (isatty(STDIN_FILENO))
 		add_history(line);
-	token = lexical_analyzer(line, &data->gc_head);
+	token = lexical_analyzer(line, &data->gc_head_cmd);
 	if (!token)
 		return ;
-	// expand_token(token, data);
-	// ast = parsing(token, data);
-	// if (ast)
-	// {
-	// 	if (process_heredocs(ast, data, line))
-	// 		execute_ast(ast, data);
-	// }
+	expand_token(token, data);
+	ast = parsing(token, data);
+	if (ast)
+	{
+		if (process_heredocs(ast, data))
+			printf("good here_doc\n");
+			//execute_ast(ast, data);
+	}
 	//free_token(token);
-	token = NULL;
+	//token = NULL;
+	//gc_delete(&data->gc_head);
 }
 
 void	init_exec_data(t_exec_data *data, char **envp)
 {
-	data->gc_head = NULL;
-	data->envp = envp_to_lst(envp, &data->gc_head);
+	data->gc_head_env= NULL;
+	data->gc_head_cmd = NULL;
+	data->envp = envp_to_lst(envp, &data->gc_head_env);
 	data->status = 0;
 	data->head = NULL;
-
 }

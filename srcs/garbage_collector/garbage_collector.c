@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 05:34:52 by alex              #+#    #+#             */
-/*   Updated: 2026/02/16 09:04:59 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/18 02:54:26 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,31 @@ void	gc_free_one(t_list **head, void *ptr)
 		prev = curr;
 		curr = curr->next;
 	}
+}
+
+
+void	gc_add_back(t_list **gc_head, void *ptr)
+{
+	t_list	*new_node;
+	t_list	*last;
+
+	if (!ptr)
+		return ;
+	new_node = malloc(sizeof(t_list));
+	if (!new_node)
+	{
+		free(ptr);
+		return ;
+	}
+	new_node->content = ptr;
+	new_node->next = NULL;
+	if (!*gc_head)
+	{
+		*gc_head = new_node;
+		return ;
+	}
+	last = *gc_head;
+	while (last->next)
+		last = last->next;
+	last->next = new_node;
 }

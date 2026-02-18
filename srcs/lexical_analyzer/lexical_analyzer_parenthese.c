@@ -10,7 +10,7 @@ int  manage_parenthese(char *line, int *i, t_token **up, t_list **gc_head)
 	{
 		token = new_token(TOKEN_LEFT_PAREN, NULL, gc_head);
 		if (!token)
-			return (0);
+			return (-1);
 		add_token(up, token);
 		(*i)++;
 		return (1);
@@ -19,7 +19,7 @@ int  manage_parenthese(char *line, int *i, t_token **up, t_list **gc_head)
 	{
 		token = new_token(TOKEN_RIGHT_PAREN, NULL, gc_head);
 		if (!token)
-			return (0);
+			return (-1);
 		add_token(up, token);
 		(*i)++;
 		return (1);

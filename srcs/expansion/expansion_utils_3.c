@@ -1,7 +1,7 @@
 
 #include "../../include/minishell.h"
 
-void	process_words(t_token *current, char *expand, int word_count, t_list **gc_head)
+void	process_words(t_token *current, char *expand, int word_count, t_list **gc_head_cmd)
 {
 	t_token	*last;
 	char	*word;
@@ -13,32 +13,32 @@ void	process_words(t_token *current, char *expand, int word_count, t_list **gc_h
 	last = current;
 	while (i < word_count)
 	{
-		word = extract_next_word(expand, &pos, gc_head);
+		word = extract_next_word(expand, &pos, gc_head_cmd);
 		if (!word)
 			break ;
 		if (i == 0)
 		{
-			gc_free_one(gc_head, current->value);//free(current->value);
+			gc_free_one(gc_head_cmd, current->value);//free(current->value);
 			current->value = word;
 		}
 		else
-			add_word_token(&last, word, gc_head);
+			add_word_token(&last, word, gc_head_cmd);
 		i++;
 	}
 }
 
-void	insert_split_token(t_token *current, char *expand, t_list **gc_head)
+void	insert_split_token(t_token *current, char *expand, t_list **gc_head_cmd)
 {
 	int	word_count;
 
 	word_count = count_split_word(expand);
 	if (word_count == 0)
 	{
-		gc_free_one(gc_head, current->value);//free(current->value);
-		current->value = gc_strdup("", gc_head);
+		gc_free_one(gc_head_cmd, current->value);//free(current->value);
+		current->value = gc_strdup("", gc_head_cmd);
 		return ;
 	}
-	process_words(current, expand, word_count, gc_head);
+	process_words(current, expand, word_count, gc_head_cmd);
 }
 
 int	dollar_special(char *str, int *i)
@@ -88,11 +88,11 @@ void	case_expand(char *str, char *result, int *var, t_exec_data *data)
 			handle_quotes(str, var);
 		else if (to_expand(str, var[0], var[2]))
 			var[1] += manage_variable(str, &var[0], result + var[1],
-					data->envp, &data->gc_head);
+					data->envp, &data->gc_head_cmd);
 		else if (str[var[0]] == '$' && str[var[0] + 1] == '?')
 			var[1] += manage_exit_code(&var[0], result + var[1], data);
 		else if (str[var[0]] == '$' && str[var[0] + 1] == '$')
-			var[1] += manage_pid(&var[0], result + var[1], &data->gc_head);
+			var[1] += manage_pid(&var[0], result + var[1], &data->gc_head_cmd);
 		else if (str[var[0]] == '$' && var[2] != 1)
 		{
 			if (dollar_special(str, &var[0]))

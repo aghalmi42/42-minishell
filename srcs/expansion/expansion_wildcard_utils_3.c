@@ -1,7 +1,7 @@
 
 #include "../../include/minishell.h"
 
-int	fill_matches(DIR *dir, char **match, char *dir_path, char *pattern, t_list **gc_head)
+int	fill_matches(DIR *dir, char **match, char *dir_path, char *pattern, t_list **gc_head_cmd)
 {
 	struct dirent	*enter;
 	int				i;
@@ -11,7 +11,7 @@ int	fill_matches(DIR *dir, char **match, char *dir_path, char *pattern, t_list *
 	while (enter)
 	{
 		if (enter->d_name[0] != '.' && match_pattern(pattern, enter->d_name))
-			if (!process_entry(enter, match, &i, dir_path, gc_head))
+			if (!process_entry(enter, match, &i, dir_path, gc_head_cmd))
 				return (-1);
 		enter = readdir(dir);
 	}
@@ -19,20 +19,20 @@ int	fill_matches(DIR *dir, char **match, char *dir_path, char *pattern, t_list *
 	return (0);
 }
 
-char	**get_match(char *input, t_list **gc_head)
+char	**get_match(char *input, t_list **gc_head_cmd)
 {
 	DIR		*dir;
 	char	**match;
 	char	*dir_path;
 	char	*pattern;
 
-	match = init_match(input, &dir_path, &pattern, gc_head);
+	match = init_match(input, &dir_path, &pattern, gc_head_cmd);
 	if (!match)
 		return (NULL);
 	dir = opendir(dir_path);
 	if (!dir)
-		return (gc_free_one(gc_head, dir_path),gc_free_one(gc_head, pattern), gc_free_one(gc_head, match),free(match), free_path_pattern(dir_path, pattern), NULL);
-	if (fill_matches(dir, match, dir_path, pattern, gc_head) == -1)
+		return (gc_free_one(gc_head_cmd, dir_path),gc_free_one(gc_head_cmd, pattern), gc_free_one(gc_head_cmd, match),free(match), NULL);//free_path_pattern(dir_path, pattern)
+	if (fill_matches(dir, match, dir_path, pattern, gc_head_cmd) == -1)
 		return (free_match_array(match, 0), closedir(dir),
 			free_path_pattern(dir_path, pattern), NULL);
 	closedir(dir);

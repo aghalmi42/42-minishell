@@ -14,8 +14,9 @@ void	exec_subshell_child(t_node *node, t_exec_data *data)
 	set_signal_actions_default();
 	data->is_fork = 1;
 	exec_main(node->left, data);
-	free_ast(node);
-	free_envp(data);
+	// free_ast(node);
+	// free_envp(data);
+	gc_delete(&data->gc_head_cmd);
 	exit(data->status);
 }
 

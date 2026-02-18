@@ -1,11 +1,11 @@
 
 #include "../../include/minishell.h"
 
-void	exec_one_cmd(t_node *node, char **envp)
+void	exec_one_cmd(t_node *node, char **envp, t_list **gc_head_cmd)
 {
 	char	*path_cmd;
 
-	path_cmd = path_to_find(node->av[0], envp);
+	path_cmd = path_to_find(node->av[0], envp, gc_head_cmd);
 	if (!path_cmd)
 		return ;
 	if (fork() == 0)
@@ -13,6 +13,7 @@ void	exec_one_cmd(t_node *node, char **envp)
 		if (execve(path_cmd, node->av, envp) == - 1)
 		{
 			perror("execve fail");
+			gc_delete(gc_head_cmd);
 			exit(126);
 		}
 	}
@@ -32,9 +33,10 @@ void	execute_in_child(char *path_cmd, t_node *node, char **envp, t_exec_data *da
 	if (execve(path_cmd, node->av, envp) == -1)
 	{
 		perror("execve fail");
-		free_ast(node);
-		free_envp(data);
-		free_split(envp);
+		// free_ast(node);
+		// free_envp(data);
+		// free_split(envp);
+		gc_delete(&data->gc_head_cmd);
 		exit(126);
 	}
 }
@@ -53,14 +55,14 @@ void	exec_one_cmd_lst(t_node *node, t_exec_data *data)
 		data->status = 127;
 		return ;
 	}
-	envp = getenv_to_str(data->envp);
+	envp = getenv_to_str(data->envp, &data->gc_head_cmd);
 	if (!envp)
-		return (free(path_cmd));
+		return (gc_free_one(&data->gc_head_cmd, path_cmd));
 	pid = fork();
 	if (pid == 0)
 		execute_in_child(path_cmd, node, envp, data);
 	waitpid(pid, &data->status, 0);
-	free(path_cmd);
-	free_split(envp);
+	gc_free_one(&data->gc_head_cmd, path_cmd);//free(path_cmd);
+	//free_split(envp);
 	set_signal_actions();
 }

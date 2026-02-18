@@ -19,13 +19,15 @@ int	get_redir_fd(t_node *node, t_exec_data *data, t_here_doc_fd **tmp)
 
 void	handle_redir_error(t_node *node, t_exec_data *data, t_here_doc_fd *tmp)
 {
+	(void) node;
 	data->status = 1;
 	if (data->is_fork)
 	{
-		free_ast(node);
-		free_envp(data);
-		if (tmp)
-			free(tmp);
+		// free_ast(node);
+		// free_envp(data);
+		// if (tmp)
+		// 	free(tmp);
+		gc_delete(&data->gc_head_cmd);
 		exit(1);
 	}
 	if (tmp)
