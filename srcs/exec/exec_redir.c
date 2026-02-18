@@ -51,7 +51,7 @@ void	exec_redirection(t_node *node, t_exec_data *data)
 		dup2(fd, STDOUT_FILENO);
 	close(fd);
 	// if (tmp)
-	// 	free(tmp);
+	// 	tmp->fd_read = -1;
 	if (node->left)
 		exec_main(node->left, data);
 	else

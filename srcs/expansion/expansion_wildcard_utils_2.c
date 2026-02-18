@@ -32,12 +32,12 @@ char	**init_match(char *input, char **dir_path, char **pattern, t_list **gc_head
 	char	**match;
 	int		count;
 
-	if (split_path_pattern(input, dir_path, pattern, gc_head_cmd))
+	if (!split_path_pattern(input, dir_path, pattern, gc_head_cmd))
 		return (NULL);
 	count = count_match(input, gc_head_cmd);
 	if (count == 0)
 		return (gc_free_one(gc_head_cmd, dir_path),gc_free_one(gc_head_cmd, pattern), NULL);//free_path_pattern(*dir_path, *pattern)
-	match = malloc(sizeof(char *) * (count + 1));
+	match = gc_malloc(sizeof(char *) * (count + 1), gc_head_cmd);
 	if (!match)
 		return (free_path_pattern(*dir_path, *pattern), NULL);
 	return (match);

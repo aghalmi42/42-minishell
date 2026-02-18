@@ -26,8 +26,7 @@ void	remove_env_key(t_exec_data *data, char *key)
 				data->envp = curr->next;
 			else
 				prev->next = curr->next;
-			ft_lstdelone(curr, del_env);
-			break ;
+			return ;
 		}
 		prev = curr;
 		curr = curr->next;

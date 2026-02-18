@@ -21,12 +21,13 @@ int	is_valid_number(char *str)
 
 void exit_msg_error(t_exec_data *data, char *cmd, t_node *node)
 {
+	(void)node;
 	ft_putstr_fd("minishell: exit: ", 2);
 	ft_putstr_fd(cmd, 2);
 	ft_putendl_fd("argument numeric is required", 2);
 	data->status = 2;
-	free_envp(data);
-	free_ast(node);
+	gc_delete(&data->gc_head_cmd);
+	gc_delete(&data->gc_head_env);
 	exit(data->status);
 }
 
@@ -55,15 +56,16 @@ void	builtin_exit(t_exec_data *data, t_node *node)
 		return ;
 	}
 	data->status = exit_code;
-	free_envp(data);
-	free_ast(node);
+	gc_delete(&data->gc_head_cmd);
+	gc_delete(&data->gc_head_env);
 	exit(exit_code % 256);
 }
 
 void	exit_with_one_arg(t_node *node, t_exec_data *data, long long exit_code)
 {
-	free_envp(data);
-	free_ast(node);
+	(void)node;
+	gc_delete(&data->gc_head_cmd);
+	gc_delete(&data->gc_head_env);
 	exit(exit_code);
 }
 

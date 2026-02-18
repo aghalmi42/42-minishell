@@ -14,9 +14,6 @@ void	builtin_cd(t_exec_data *data, t_node *node)
 		return ;
 	}
 	if (!path[0])
-	{
-		free(path);
 		return ;
-	}
 	execute_cd(path, data);
 }

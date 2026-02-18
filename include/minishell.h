@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/18 12:57:41 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/18 14:30:19 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -307,8 +307,8 @@ int					n_option(char *av);
 void				builtin_echo(char **av,t_exec_data *data);
 int	handle_cd_error(char *path, t_exec_data *data, char *msg);
 int	execute_cd(char *path, t_exec_data *data);
-void	update_pwd(t_env *e, char *new_p);
-void	update_oldpwd(t_env *e, char *old_path);
+void	update_pwd(t_env *e, char *new_p, t_exec_data *data);
+void	update_oldpwd(t_env *e, char *old_path, t_exec_data *data);
 void	update_env_vars(t_exec_data *data, char *new_p, char *old_path);
 void	change_env_directory(char *new_path, t_exec_data *data);
 int					builtin(char *cmd);

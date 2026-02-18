@@ -15,10 +15,9 @@ int change_directory(char *path)
 
 int	handle_cd_error(char *path, t_exec_data *data, char *msg)
 {
+	(void)path;
 	if (msg)
 		ft_putendl_fd(msg, 2);
-	if (path)
-		free(path);
 	data->status = 1;
 	return (1);
 }
@@ -28,26 +27,29 @@ int	execute_cd(char *path, t_exec_data *data)
 	char	new_path[PATH_MAX];
 
 	if (change_directory(path))
-		return (handle_cd_error(path, data, NULL));
+	{
+		data->status = 1;
+		return (1);
+	}
 	if (getcwd(new_path, sizeof(new_path)) == NULL)
 	{
 		perror("getcwd");
-		return (handle_cd_error(path, data, NULL));
+		data->status = 1;
+		return (1);
 	}
 	change_env_directory(new_path, data);
-	free(path);
 	data->status = 0;
 	return (0);
 }
 
-void	update_pwd(t_env *e, char *new_p)
+void	update_pwd(t_env *e, char *new_p, t_exec_data *data)
 {
-	free(e->value);
+	gc_free_one(&data->gc_head_env, e->value);
 	e->value = new_p;
 }
 
-void	update_oldpwd(t_env *e, char *old_path)
+void	update_oldpwd(t_env *e, char *old_path, t_exec_data *data)
 {
-	free(e->value);
+	gc_free_one(&data->gc_head_env, e->value);
 	e->value = old_path;
 }
