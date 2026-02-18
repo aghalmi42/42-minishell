@@ -20,6 +20,7 @@ int	get_redir_fd(t_node *node, t_exec_data *data, t_here_doc_fd **tmp)
 void	handle_redir_error(t_node *node, t_exec_data *data, t_here_doc_fd *tmp)
 {
 	(void) node;
+	(void) tmp;
 	data->status = 1;
 	if (data->is_fork)
 	{
@@ -28,10 +29,11 @@ void	handle_redir_error(t_node *node, t_exec_data *data, t_here_doc_fd *tmp)
 		// if (tmp)
 		// 	free(tmp);
 		gc_delete(&data->gc_head_cmd);
+		gc_delete(&data->gc_head_env);
 		exit(1);
 	}
-	if (tmp)
-		free(tmp);
+	// if (tmp)
+	// 	free(tmp);
 }
 
 void	exec_redirection(t_node *node, t_exec_data *data)
@@ -48,8 +50,8 @@ void	exec_redirection(t_node *node, t_exec_data *data)
 	else
 		dup2(fd, STDOUT_FILENO);
 	close(fd);
-	if (tmp)
-		free(tmp);
+	// if (tmp)
+	// 	free(tmp);
 	if (node->left)
 		exec_main(node->left, data);
 	else

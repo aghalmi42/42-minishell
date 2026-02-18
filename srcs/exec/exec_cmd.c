@@ -17,6 +17,7 @@ void	handle_path_error(t_node *node, t_exec_data *data)
 		// free_ast(node);
 		// free_envp(data);
 		gc_delete(&data->gc_head_cmd);
+		gc_delete(&data->gc_head_env);
 		exit(127);
 	}
 }
@@ -34,6 +35,7 @@ void	handle_directory_error(char *path, t_node *node, t_exec_data *data)
 		// free_envp(data);
 		// free(path);
 		gc_delete(&data->gc_head_cmd);
+		gc_delete(&data->gc_head_env);
 		exit(126);
 	}
 }
@@ -53,6 +55,7 @@ void	execute_command(char *path_cmd, t_node *node, t_exec_data *data)
 			// free_envp(data);
 			// free_ast(node);
 			gc_delete(&data->gc_head_cmd);
+			gc_delete(&data->gc_head_env);
 			exit(1);
 		}
 		return ;
@@ -64,6 +67,7 @@ void	execute_command(char *path_cmd, t_node *node, t_exec_data *data)
 		// free(path_cmd);
 		// free_split(envp);
 		gc_delete(&data->gc_head_cmd);
+		gc_delete(&data->gc_head_env);
 		exit(126);
 	}
 }
@@ -81,6 +85,7 @@ void	exec_cmd(t_node *node, t_exec_data *data)
 			// free_envp(data);
 			// free_ast(node);
 			gc_delete(&data->gc_head_cmd);
+			gc_delete(&data->gc_head_env);
 			exit(0);
 		}
 		return ;
@@ -88,10 +93,10 @@ void	exec_cmd(t_node *node, t_exec_data *data)
 	expand_av = expand_wildcard(node->av, &data->gc_head_cmd);
 	if (expand_av)
 	{
-		free_split(node->av);
+		//free_split(node->av);
+		//printf("1\n");
 		node->av = expand_av;
 	}
-	
 	if (is_a_built_in(node->av[0]))
 		return (handle_builtin(node, data));
 	

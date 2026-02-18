@@ -11,12 +11,13 @@ void	handle_subshell_status(int status, t_exec_data *data)
 
 void	exec_subshell_child(t_node *node, t_exec_data *data)
 {
-	set_signal_actions_default();
+	set_signal_actions_fork();
 	data->is_fork = 1;
 	exec_main(node->left, data);
 	// free_ast(node);
 	// free_envp(data);
 	gc_delete(&data->gc_head_cmd);
+	gc_delete(&data->gc_head_env);
 	exit(data->status);
 }
 
@@ -35,6 +36,8 @@ void	exec_subshell(t_node *node, t_exec_data *data)
 		return ((void)(perror("fork"), data->status = 1));
 	if (pid == 0)
 		exec_subshell_child(node, data);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	waitpid(pid, &status, 0);
 	handle_subshell_status(status, data);
 	set_signal_actions();

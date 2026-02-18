@@ -41,7 +41,7 @@ int	handle_cmd_validation(t_node *ast, t_exec_data *data)
 
 void	exec_in_child(t_node *ast, t_exec_data *data)
 {
-	set_signal_actions_default();
+	set_signal_actions_fork();
 	data->is_fork = 1;
 	if (ast->type == NODE_REDIR)
 		exec_redirection(ast, data);
@@ -50,6 +50,7 @@ void	exec_in_child(t_node *ast, t_exec_data *data)
 	// free_envp(data);
 	// free_ast(ast);
 	gc_delete(&data->gc_head_cmd);
+	gc_delete(&data->gc_head_env);
 	exit(data->status);
 }
 
@@ -77,6 +78,8 @@ void	exec_redir_and_cmd(t_node *ast, t_exec_data *data)
 	}
 	if (pid == 0)
 		exec_in_child(ast, data);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	waitpid(pid, &status, 0);
 	handle_exec_status(status, data);
 	set_signal_actions();

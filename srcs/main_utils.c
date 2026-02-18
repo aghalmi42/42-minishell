@@ -72,8 +72,7 @@ void	process_line(char *line, t_exec_data *data)
 	if (ast)
 	{
 		if (process_heredocs(ast, data))
-			printf("good here_doc\n");
-			//execute_ast(ast, data);
+			execute_ast(ast, data);
 	}
 	//free_token(token);
 	//token = NULL;

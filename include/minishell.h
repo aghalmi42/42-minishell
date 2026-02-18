@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/18 11:06:52 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/18 12:57:41 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,6 +249,8 @@ void				handle_sigint_here_doc(int	signal);
 void				set_signal_actions_default(void);
 void				set_signal_actions_here_doc(void);
 int					check_readline_sigint(void);
+void				handle_sigint_fork(int	signal);
+void				set_signal_actions_fork(void);
 
 
 /* fonction expansion */
