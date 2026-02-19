@@ -74,12 +74,21 @@ void	print_export(t_exec_data *data)
 	t_list	*copy;
 	t_list	*curr;
 	t_env	*e;
+	t_list	*tmp;
 
 	copy = NULL;
 	curr = data->envp;
 	while (curr)
 	{
-		ft_lstadd_back(&copy, ft_lstnew(curr->content));
+		tmp = gc_malloc(sizeof(t_list), &data->gc_head_cmd);
+		if (!tmp)
+			exit(1);
+		// content = dup_env(curr->content, data);
+		// if (!tmp->content)
+		// 	exit (1);
+		tmp->content = curr->content;
+		tmp->next = NULL;
+		ft_lstadd_back(&copy, tmp);
 		curr = curr->next;
 	}
 	sort_env_selection(copy);
@@ -90,5 +99,24 @@ void	print_export(t_exec_data *data)
 		printf("export %s=\"%s\"\n", e->key, e->value);
 		curr = curr->next;
 	}
-	free_copy_list(copy);
+	//free_copy_list(copy);
+}
+
+t_env	*dup_env(t_env *content, t_exec_data *data)
+{
+	t_env	*dup;
+	char	*key;
+	char	*value;
+
+	dup = gc_malloc(sizeof(t_env), &data->gc_head_cmd);
+	if (!dup)
+		return (NULL);
+	key = gc_strdup(content->key, &data->gc_head_cmd);
+	if (!key)
+		return (NULL);
+	value = gc_strdup(content->value, &data->gc_head_cmd);
+		return (NULL);
+	dup->key = key;
+	dup->value = value;
+	return (dup);
 }

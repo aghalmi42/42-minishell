@@ -44,12 +44,14 @@ int	execute_cd(char *path, t_exec_data *data)
 
 void	update_pwd(t_env *e, char *new_p, t_exec_data *data)
 {
-	gc_free_one(&data->gc_head_env, e->value);
+	(void) data;
+	//gc_free_one(&data->gc_head_env, e->value);
 	e->value = new_p;
 }
 
 void	update_oldpwd(t_env *e, char *old_path, t_exec_data *data)
 {
-	gc_free_one(&data->gc_head_env, e->value);
+	(void) data;
+	//gc_free_one(&data->gc_head_env, e->value);
 	e->value = old_path;
 }

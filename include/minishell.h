@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/18 18:03:27 by aghalmi          ###   ########.fr       */
+/*   Updated: 2026/02/19 03:16:16 by amoderan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -349,7 +349,7 @@ int					compare_keys(t_env *e1, t_env *e2);
 int					check_new_unset(char *env);
 long long			ft_atoll(const char *str, int *error);
 void				exit_with_one_arg(t_node *node, t_exec_data *data, long long exit_code);
-
+t_env				*dup_env(t_env *content, t_exec_data *data);
 /* MAIN */
 char				*read_input_line(void);
 int					process_heredocs(t_node *ast, t_exec_data *data);

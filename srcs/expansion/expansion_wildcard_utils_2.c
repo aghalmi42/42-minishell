@@ -39,7 +39,7 @@ char	**init_match(char *input, char **dir_path, char **pattern, t_list **gc_head
 		return (gc_free_one(gc_head_cmd, dir_path),gc_free_one(gc_head_cmd, pattern), NULL);//free_path_pattern(*dir_path, *pattern)
 	match = gc_malloc(sizeof(char *) * (count + 1), gc_head_cmd);
 	if (!match)
-		return (free_path_pattern(*dir_path, *pattern), NULL);
+		return (NULL);//free_path_pattern(*dir_path, *pattern),
 	return (match);
 }
 

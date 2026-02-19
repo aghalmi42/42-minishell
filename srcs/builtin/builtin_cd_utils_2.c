@@ -50,7 +50,7 @@ char	*search_env_value(t_exec_data *data, char *search)
 	{
 		env = cur->content;
 		if (!ft_strncmp(env->key, search, ft_strlen(search) + 1))
-			return (gc_strdup(env->value, &data->gc_head_cmd));
+			return (gc_strdup(env->value, &data->gc_head_env));
 		cur = cur->next;
 	}
 	return (NULL);

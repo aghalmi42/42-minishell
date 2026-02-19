@@ -33,10 +33,9 @@ char	**get_match(char *input, t_list **gc_head_cmd)
 	if (!dir)
 		return (gc_free_one(gc_head_cmd, dir_path),gc_free_one(gc_head_cmd, pattern), gc_free_one(gc_head_cmd, match),free(match), NULL);//free_path_pattern(dir_path, pattern)
 	if (fill_matches(dir, match, dir_path, pattern, gc_head_cmd) == -1)
-		return (free_match_array(match, 0), closedir(dir),
-			free_path_pattern(dir_path, pattern), NULL);
+		return (free_match_array(match, 0), closedir(dir), NULL);//free_path_pattern(dir_path, pattern)
 	closedir(dir);
-	free_path_pattern(dir_path, pattern);
+	//free_path_pattern(dir_path, pattern);
 	return (match);
 }
 
