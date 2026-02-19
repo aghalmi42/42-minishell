@@ -8,9 +8,11 @@ int	get_redir_fd(t_node *node, t_exec_data *data, t_here_doc_fd **tmp)
 	*tmp = NULL;
 	if (node->redir_type == TOKEN_HEREDOC)
 	{
-		fd = data->head->fd_read;
+		if (!data->current_hd)
+			return (-1);
+		fd = data->current_hd->fd_read;
 		*tmp = data->head;
-		data->head = data->head->next;
+		data->current_hd = data->current_hd->next;
 	}
 	else
 		fd = open_redir_file(node);

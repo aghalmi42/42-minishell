@@ -49,6 +49,7 @@ int	process_heredocs(t_node *ast, t_exec_data *data)
 void	execute_ast(t_node *ast, t_exec_data *data)
 {
 	data->is_fork = 0;
+	data->current_hd = data->head;
 	exec_main(ast, data);
 	//free_ast(ast);
 	//free_here_doc_list(data->head);

@@ -6,7 +6,7 @@
 /*   By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/19 03:16:16 by amoderan         ###   ########.fr       */
+/*   Updated: 2026/02/19 04:47:04 by amoderan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ typedef struct s_exec_data
 	t_list					*gc_head_cmd;
 	int						status;
 	struct s_here_doc_fd	*head;
+	struct s_here_doc_fd	*current_hd;
 	int						is_fork;
 }					t_exec_data;
 
