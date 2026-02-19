@@ -60,8 +60,8 @@ void	exec_pipe(t_node *node, t_exec_data *data)
 		exec_pipe_right(node, pipe_fd, data);
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	// signal(SIGINT, SIG_DFL);
+	// signal(SIGQUIT, SIG_DFL);
 	waitpid(pid_left, NULL, 0);
 	waitpid(pid_right, &status, 0);
 	handle_pipe_status(status, data);
