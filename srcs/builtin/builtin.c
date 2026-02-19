@@ -1,6 +1,35 @@
 
 #include "../../include/minishell.h"
 
+void	print_export(t_exec_data *data)
+{
+	t_list	*copy;
+	t_list	*curr;
+	t_env	*e;
+	t_list	*tmp;
+
+	copy = NULL;
+	curr = data->envp;
+	while (curr)
+	{
+		tmp = gc_malloc(sizeof(t_list), &data->gc_head_cmd);
+		if (!tmp)
+			exit(1);
+		tmp->content = curr->content;
+		tmp->next = NULL;
+		ft_lstadd_back(&copy, tmp);
+		curr = curr->next;
+	}
+	sort_env_selection(copy);
+	curr = copy;
+	while (curr)
+	{
+		e = curr->content;
+		printf("export %s=\"%s\"\n", e->key, e->value);
+		curr = curr->next;
+	}
+}
+
 /* on verif si la cmd est builtin*/
 int builtin(char *cmd)
 {

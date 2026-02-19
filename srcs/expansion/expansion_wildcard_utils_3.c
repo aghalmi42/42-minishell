@@ -31,11 +31,10 @@ char	**get_match(char *input, t_list **gc_head_cmd)
 		return (NULL);
 	dir = opendir(dir_path);
 	if (!dir)
-		return (gc_free_one(gc_head_cmd, dir_path),gc_free_one(gc_head_cmd, pattern), gc_free_one(gc_head_cmd, match),free(match), NULL);//free_path_pattern(dir_path, pattern)
+		return (gc_free_one(gc_head_cmd, dir_path),gc_free_one(gc_head_cmd, pattern), gc_free_one(gc_head_cmd, match),free(match), NULL);
 	if (fill_matches(dir, match, dir_path, pattern, gc_head_cmd) == -1)
-		return (free_match_array(match, 0), closedir(dir), NULL);//free_path_pattern(dir_path, pattern)
+		return (free_match_array(match, 0), closedir(dir), NULL);
 	closedir(dir);
-	//free_path_pattern(dir_path, pattern);
 	return (match);
 }
 

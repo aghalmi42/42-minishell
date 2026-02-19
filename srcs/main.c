@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/16 01:51:52 by alex              #+#    #+#             */
-/*   Updated: 2026/02/18 17:37:57 by aghalmi          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../include/minishell.h"
 
@@ -36,6 +25,6 @@ int	main(int argc, char **argv, char **envp)
 		clear_all_heredocs(&data);
 		gc_delete(&data.gc_head_cmd);
 	}
-	gc_delete(&data.gc_head_env);//free_envp(&data);
+	gc_delete(&data.gc_head_env);
 	return (data.status);
 }

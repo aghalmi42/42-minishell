@@ -80,7 +80,7 @@ int	count_match(char *input, t_list **gc_head_cmd)
         return (0);
 	dir = opendir(dir_path);
 	if (!dir)
-		return (gc_free_one(gc_head_cmd, dir_path),gc_free_one(gc_head_cmd, pattern), 0);//free_path_pattern(dir_path, pattern)
+		return (gc_free_one(gc_head_cmd, dir_path),gc_free_one(gc_head_cmd, pattern), 0);
 	count = 0;
 	enter = readdir(dir);
 	while (enter)
@@ -90,7 +90,6 @@ int	count_match(char *input, t_list **gc_head_cmd)
 		enter = readdir(dir);
 	}
 	closedir(dir);
-	//free_path_pattern(dir_path, pattern);
 	return (count);
 }
 
@@ -103,9 +102,6 @@ int	process_wildcard_count(char *arg, t_list **gc_head_cmd)
 	if (match)
 	{
 		count = 0;
-		// while (match[count])
-		// 	free(match[count++]);
-		// free(match);
         while(match[count])
             count++;
 		return (count);

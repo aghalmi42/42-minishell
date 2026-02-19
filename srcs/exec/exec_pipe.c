@@ -51,6 +51,7 @@ void	exec_pipe(t_node *node, t_exec_data *data)
 	if (pipe(pipe_fd) == -1)
 		return ;
 	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	pid_left = fork();
 	if (pid_left == 0)
 		exec_pipe_left(node, pipe_fd, data);

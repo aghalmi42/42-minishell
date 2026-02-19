@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main_utils.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/16 01:52:04 by alex              #+#    #+#             */
-/*   Updated: 2026/02/16 01:52:04 by alex             ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../include/minishell.h"
 
@@ -37,8 +26,6 @@ int	process_heredocs(t_node *ast, t_exec_data *data)
 	index = 0;
 	if (search_here_doc_to_execute(ast, data, &index) == -1)
 	{
-		//free_ast(ast);
-		//free(line);
 		clear_all_heredocs(data);
 		gc_delete(&data->gc_head_cmd);
 		return (0);
@@ -51,8 +38,6 @@ void	execute_ast(t_node *ast, t_exec_data *data)
 	data->is_fork = 0;
 	data->current_hd = data->head;
 	exec_main(ast, data);
-	//free_ast(ast);
-	//free_here_doc_list(data->head);
 	data->head = NULL;
 }
 
@@ -75,9 +60,6 @@ void	process_line(char *line, t_exec_data *data)
 		if (process_heredocs(ast, data))
 			execute_ast(ast, data);
 	}
-	//free_token(token);
-	//token = NULL;
-	//gc_delete(&data->gc_head);
 }
 
 void	init_exec_data(t_exec_data *data, char **envp)
