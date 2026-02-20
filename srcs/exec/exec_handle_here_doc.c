@@ -36,7 +36,7 @@ void	clear_all_heredocs(t_exec_data *data)
 	curr = data->head;
 	while (curr)
 	{
-		if (curr->fd_read > 0)
+		if (curr->fd_read > 2)
 			close(curr->fd_read);
 		if (curr->file_name)
 			unlink(curr->file_name);

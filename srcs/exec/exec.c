@@ -78,8 +78,8 @@ void	exec_redir_and_cmd(t_node *ast, t_exec_data *data)
 		exec_in_child(ast, data);
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
+	clear_all_heredocs(data);
 	waitpid(pid, &status, 0);
 	handle_exec_status(status, data);
 	set_signal_actions();
-	//clear_all_heredocs(data);
 }

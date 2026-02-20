@@ -26,6 +26,7 @@ void exit_msg_error(t_exec_data *data, char *cmd, t_node *node)
 	ft_putstr_fd(cmd, 2);
 	ft_putendl_fd("argument numeric is required", 2);
 	data->status = 2;
+	clear_all_heredocs(data);
 	gc_delete(&data->gc_head_cmd);
 	gc_delete(&data->gc_head_env);
 	exit(data->status);
@@ -40,6 +41,7 @@ void	final_exit(t_exec_data *data, int cpt, long long exit_code)
 		return ;
 	}
 	data->status = exit_code % 256;
+	clear_all_heredocs(data);
 	gc_delete(&data->gc_head_cmd);
 	gc_delete(&data->gc_head_env);
 	exit(data->status);
@@ -48,6 +50,7 @@ void	final_exit(t_exec_data *data, int cpt, long long exit_code)
 void	exit_with_one_arg(t_node *node, t_exec_data *data, long long exit_code)
 {
 	(void)node;
+	clear_all_heredocs(data);
 	gc_delete(&data->gc_head_cmd);
 	gc_delete(&data->gc_head_env);
 	exit(exit_code);
