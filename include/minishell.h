@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/20 02:22:57 by alex             ###   ########.fr       */
+/*   Updated: 2026/02/20 05:09:24 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -351,6 +351,9 @@ int					check_new_unset(char *env);
 long long			ft_atoll(const char *str, int *error);
 void				exit_with_one_arg(t_node *node, t_exec_data *data, long long exit_code);
 t_env				*dup_env(t_env *content, t_exec_data *data);
+t_env				*split_env_line_export(char *str, t_list **gc_head);
+t_list				*envp_to_lst_export(char **envp, t_list **gc_head_env);
+char				*remove_quotes(char *str, t_list **gc_head_env);
 
 /* MAIN */
 char				*read_input_line(t_exec_data *data);

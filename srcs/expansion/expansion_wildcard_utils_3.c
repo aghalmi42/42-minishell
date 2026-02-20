@@ -41,26 +41,26 @@ char	**get_match(char *input, t_list **gc_head_cmd)
 /* trie les resu par ordre alpha */
 void sort_match(char **match)
 {
-    int i;
-    int j;
-    char *tmp;
-    
-    i = 0;
-    if (!match)
-        return ;
-    while (match[i])
-    {
-        j = i + 1;
-        while (match[j])
-        {
-            if (ft_strncmp(match[i], match[j], 1000) > 0)
-            {
-                tmp = match[i];
-                match[i] = match[j];
-                match[j] = tmp;
-            }
-            j++;
-        }
-        i++;
-    }
+	int i;
+	int j;
+	char *tmp;
+	
+	i = 0;
+	if (!match)
+		return ;
+	while (match[i])
+	{
+		j = i + 1;
+		while (match[j])
+		{
+			if (ft_strncmp(match[i], match[j], 1000) > 0)
+			{
+				tmp = match[i];
+				match[i] = match[j];
+				match[j] = tmp;
+			}
+			j++;
+		}
+		i++;
+	}
 }
