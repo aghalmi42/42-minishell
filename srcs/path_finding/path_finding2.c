@@ -12,7 +12,7 @@ char	*path_to_find_lst(char *cmd, t_exec_data *data)
 		return (it_contain_a_slash(cmd, &data->gc_head_cmd));
 	possible_paths = search_path(data->envp);
 	if (!possible_paths)
-		return (perror("No such file or directory"), NULL);
+		return (ft_putstr_fd("minishell: ", 2),ft_putstr_fd(cmd, 2), ft_putendl_fd(": No such file or directory", 2), NULL);
 	possible_path = search_possible_path(possible_paths, cmd, &data->gc_head_cmd);
 	if (!possible_path)
 		return (free_split(possible_paths), ft_putstr_fd("minishell: ", 2),ft_putstr_fd(cmd, 2), ft_putendl_fd(": command not found", 2), NULL);

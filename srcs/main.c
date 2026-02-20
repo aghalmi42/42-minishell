@@ -9,7 +9,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	(void)line;
 	init_exec_data(&data, envp);
-	if (!data.envp || argc != 1)
+	if (argc != 1)
 		return (0);
 	
 	while (1)

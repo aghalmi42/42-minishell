@@ -39,10 +39,10 @@ char	*path_to_find(char *cmd, char **envp, t_list **gc_head_cmd)
 		i++;
 	nb_env = count_env(envp);
 	if (i == nb_env)
-		return (perror("No such file or directory"), NULL);
+		return (ft_putstr_fd("minishell: ", 2),ft_putstr_fd(cmd, 2), ft_putendl_fd(": No such file or directory", 2), NULL);
 	possible_paths = ft_split(envp[i] + 5, ':');
 	if (!possible_paths)
-		return (gc_delete(gc_head_cmd), perror("No such file or directory"), NULL);
+		return (gc_delete(gc_head_cmd),ft_putstr_fd("minishell: ", 2),ft_putstr_fd(cmd, 2), ft_putendl_fd(": No such file or directory", 2), NULL);
 	possible_path = search_possible_path(possible_paths, cmd, gc_head_cmd);
 	if (!possible_path)
 		return (free_split(possible_paths), perror("Command not found"), NULL);
