@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 17:14:38 by aghalmi           #+#    #+#             */
-/*   Updated: 2026/02/19 04:47:04 by amoderan         ###   ########.fr       */
+/*   Updated: 2026/02/20 02:22:57 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -351,12 +351,14 @@ int					check_new_unset(char *env);
 long long			ft_atoll(const char *str, int *error);
 void				exit_with_one_arg(t_node *node, t_exec_data *data, long long exit_code);
 t_env				*dup_env(t_env *content, t_exec_data *data);
+
 /* MAIN */
-char				*read_input_line(void);
+char				*read_input_line(t_exec_data *data);
 int					process_heredocs(t_node *ast, t_exec_data *data);
 void				execute_ast(t_node *ast, t_exec_data *data);
 void				process_line(char *line, t_exec_data *data);
 void				init_exec_data(t_exec_data *data, char **envp);
+
 
 /* garbage_collector */
 

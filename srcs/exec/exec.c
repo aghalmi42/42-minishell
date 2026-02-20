@@ -76,8 +76,8 @@ void	exec_redir_and_cmd(t_node *ast, t_exec_data *data)
 	}
 	if (pid == 0)
 		exec_in_child(ast, data);
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	waitpid(pid, &status, 0);
 	handle_exec_status(status, data);
 	set_signal_actions();

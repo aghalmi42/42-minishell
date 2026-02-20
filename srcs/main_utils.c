@@ -1,13 +1,21 @@
 
 #include "../include/minishell.h"
 
-char	*read_input_line(void)
+char	*read_input_line(t_exec_data *data)
 {
 	char	*line;
 	char	*tmp;
 
 	if (isatty(STDIN_FILENO))
+	{
 		line = readline("minishell$ ");
+		if (s_status == SIGINT)
+		{
+			rl_event_hook = NULL;
+			data->status = 130;
+			s_status = 0;
+		}
+	}
 	else
 	{
 		tmp = get_next_line(STDIN_FILENO);

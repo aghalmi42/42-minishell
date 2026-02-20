@@ -8,10 +8,11 @@ void	set_signal_actions(void)
 	ft_memset(&sa, 0, sizeof(sa));
 	sigemptyset(&sa.sa_mask);
 	sa.sa_handler = handle_sigint;
-	sa.sa_flags = SA_RESTART;
+	sa.sa_flags = 0;
 	sigaction(SIGINT, &sa, NULL);
 	sa.sa_handler = SIG_IGN;
 	sigaction(SIGQUIT, &sa, NULL);
+	rl_event_hook = check_readline_sigint;
 }
 
 void	set_signal_actions_default(void)

@@ -3,8 +3,18 @@
 
 void	exec_pipe_left(t_node *node, int pipe_fd[2], t_exec_data *data)
 {
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	// signal(SIGINT, SIG_DFL);
+	// signal(SIGQUIT, SIG_DFL);
+	set_signal_actions_fork();
+	// if (s_status == SIGINT)
+	// {
+	// 	//close(fd);
+	// 	clear_all_heredocs(data);
+	// 	gc_delete(&data->gc_head_cmd);
+	// 	gc_delete(&data->gc_head_env);
+	// 	rl_clear_history();
+	// 	exit(130);
+	// }
 	data->is_fork = 1;
 	close(pipe_fd[0]);
 	dup2(pipe_fd[1], STDOUT_FILENO);
@@ -17,8 +27,18 @@ void	exec_pipe_left(t_node *node, int pipe_fd[2], t_exec_data *data)
 
 void	exec_pipe_right(t_node *node, int pipe_fd[2], t_exec_data *data)
 {
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	// signal(SIGINT, SIG_DFL);
+	// signal(SIGQUIT, SIG_DFL);
+	set_signal_actions_fork();
+	// if (s_status == SIGINT)
+	// {
+	// 	//close(fd);
+	// 	clear_all_heredocs(data);
+	// 	gc_delete(&data->gc_head_cmd);
+	// 	gc_delete(&data->gc_head_env);
+	// 	rl_clear_history();
+	// 	exit(130);
+	// }
 	close(pipe_fd[1]);
 	data->is_fork = 1;
 	dup2(pipe_fd[0], STDIN_FILENO);
@@ -50,8 +70,8 @@ void	exec_pipe(t_node *node, t_exec_data *data)
 
 	if (pipe(pipe_fd) == -1)
 		return ;
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
+	// signal(SIGINT, SIG_IGN);
+	// signal(SIGQUIT, SIG_IGN);
 	pid_left = fork();
 	if (pid_left == 0)
 		exec_pipe_left(node, pipe_fd, data);
@@ -60,8 +80,8 @@ void	exec_pipe(t_node *node, t_exec_data *data)
 		exec_pipe_right(node, pipe_fd, data);
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
-	// signal(SIGINT, SIG_DFL);
-	// signal(SIGQUIT, SIG_DFL);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	waitpid(pid_left, NULL, 0);
 	waitpid(pid_right, &status, 0);
 	handle_pipe_status(status, data);

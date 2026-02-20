@@ -20,7 +20,7 @@ char	*it_contain_a_slash(char *cmd, t_list **gc_head_cmd)
 {
 	if (!access(cmd, F_OK))
 		return (gc_strdup(cmd, gc_head_cmd));
-	return (perror("Command not found"), NULL);
+	return (ft_putstr_fd("minishell: ", 2),ft_putstr_fd(cmd, 2), ft_putendl_fd(": No such file or directory", 2), NULL);
 }
 
 char	*path_to_find(char *cmd, char **envp, t_list **gc_head_cmd)

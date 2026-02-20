@@ -11,10 +11,11 @@ int	main(int argc, char **argv, char **envp)
 	init_exec_data(&data, envp);
 	if (!data.envp || argc != 1)
 		return (0);
-	set_signal_actions();
+	
 	while (1)
 	{
-		line = read_input_line();
+		set_signal_actions();
+		line = read_input_line(&data);
 		if (!line)
 		{
 			printf("exit\n");
