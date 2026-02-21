@@ -1,17 +1,32 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexical_analyzer_utils.c                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/20 09:01:49 by aghalmi           #+#    #+#             */
+/*   Updated: 2026/02/20 09:01:50 by aghalmi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 /* ici jai cree un token quon va stocker en allouant de la memoire */
-t_token	*new_token(t_token_type type, char *value)
+t_token	*new_token(t_token_type type, char *value, t_list **gc_head)
 {
 	t_token	*token;
 
-	token = malloc(sizeof(t_token));
+	token = gc_malloc(sizeof(t_token), gc_head);
 	if (!token)
 		return (NULL);
 	token->type = type;
 	if (value != NULL)
-		token->value = ft_strdup(value);
+	{
+		token->value = gc_strdup(value, gc_head);
+		if (!token->value)
+			return (NULL);
+	}
 	else
 		token->value = NULL;
 	token->next = NULL;
@@ -31,21 +46,6 @@ void	add_token(t_token **up, t_token *new)
 		while (tmp->next != NULL)
 			tmp = tmp->next;
 		tmp->next = new;
-	}
-}
-
-/* pour voir si nos token sont bien cree grace au lexical analyzer
-fonction quon doit clean a la fin !!!!!1 */
-
-void	print_token(t_token *token)
-{
-	t_token	*current;
-
-	current = token;
-	while (current)
-	{
-		printf("type : %d ||| value %s\n", current->type, current->value);
-		current = current->next;
 	}
 }
 

@@ -1,0 +1,106 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_cmd_utils.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/20 08:33:26 by aghalmi           #+#    #+#             */
+/*   Updated: 2026/02/20 08:33:26 by aghalmi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../include/minishell.h"
+
+void	exec_built_in(char *cmd, t_exec_data *data, t_node *node)
+{
+	if (!ft_strncmp("env", cmd, 4))
+		return (builtin_env(data, node, 0));
+	else if (!ft_strncmp("export", cmd, 7))
+		return (builtin_export(data, node));
+	else if (!ft_strncmp("unset", cmd, 6))
+		return (builtin_unset(data, node));
+	else if (!ft_strncmp("exit", cmd, 5))
+		return (builtin_exit(data, node));
+	else if (!ft_strncmp("echo", cmd, 5))
+		return (builtin_echo(node->av, data));
+	else if (!ft_strncmp("cd", cmd, 3))
+		return (builtin_cd(data, node));
+	else if (!ft_strncmp("pwd", cmd, 4))
+		return (builtin_pwd(data, node));
+}
+
+int	is_a_built_in(char *cmd)
+{
+	if (!cmd)
+		return (0);
+	if (!ft_strncmp("echo", cmd, 5))
+		return (1);
+	else if (!ft_strncmp("cd", cmd, 3))
+		return (1);
+	else if (!ft_strncmp("pwd", cmd, 4))
+		return (1);
+	else if (!ft_strncmp("export", cmd, 7))
+		return (1);
+	else if (!ft_strncmp("unset", cmd, 6))
+		return (1);
+	else if (!ft_strncmp("env", cmd, 4))
+		return (1);
+	else if (!ft_strncmp("exit", cmd, 5))
+		return (1);
+	return (0);
+}
+
+char	**getenv_to_str(t_list *envp, t_list **gc_head_cmd)
+{
+	char	**env;
+	int		i;
+	int		j;
+
+	i = envp_count(envp);
+	env = malloc(sizeof (char *) * (i + 1));
+	if (!env)
+		return (NULL);
+	gc_add_back(gc_head_cmd, env);
+	j = 0;
+	while (j != i)
+	{
+		env[j] = envp_value(envp->content);
+		if (!env[j])
+			return (NULL);
+		gc_add_back(gc_head_cmd, env[j]);
+		j++;
+		envp = envp->next;
+	}
+	env[j] = NULL;
+	i = 0;
+	return (env);
+}
+
+char	*envp_value(t_env *content)
+{
+	char	*tmp;
+	char	*value;
+
+	tmp = ft_strjoin(content->key, "=");
+	if (!tmp)
+		return (NULL);
+	value = ft_strjoin(tmp, content->value);
+	if (!value)
+		return (free(tmp), NULL);
+	free(tmp);
+	return (value);
+}
+
+int	envp_count(t_list *envp)
+{
+	int	i;
+
+	i = 0;
+	while (envp)
+	{
+		envp = envp->next;
+		i++;
+	}
+	return (i);
+}

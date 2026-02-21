@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/05 06:11:35 by alex              #+#    #+#             */
-/*   Updated: 2026/02/09 07:40:29 by alex             ###   ########.fr       */
+/*   Created: 2026/02/20 08:18:53 by aghalmi           #+#    #+#             */
+/*   Updated: 2026/02/20 08:18:55 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	builtin_env(t_exec_data *data,t_node *node, int export)
+void	builtin_env(t_exec_data *data, t_node *node, int export)
 {
 	t_list	*dummy;
 	t_env	*e;
-	
+
 	dummy = data->envp;
 	if (node->av[1])
 	{
@@ -26,11 +26,13 @@ void	builtin_env(t_exec_data *data,t_node *node, int export)
 	if (export)
 		print_export(data);
 	else
-	while(dummy)
 	{
-		e = dummy->content;
-		printf("%s=%s\n",e->key, e->value);
-		dummy = dummy->next;
+		while (dummy)
+		{
+			e = dummy->content;
+			printf("%s=%s\n", e->key, e->value);
+			dummy = dummy->next;
+		}
 	}
 }
 
@@ -67,27 +69,33 @@ void	sort_env_selection(t_list *lst)
 	}
 }
 
-
-void	print_export(t_exec_data *data)
+void	free_copy_list(t_list *copy)
 {
-	t_list	*copy;
-	t_list	*curr;
-	t_env	*e;
+	t_list	*tmp;
 
-	copy = NULL;
-	curr = data->envp;
-	while (curr)
+	while (copy)
 	{
-		ft_lstadd_back(&copy, ft_lstnew(curr->content));
-		curr = curr->next;
-	}
-	sort_env_selection(copy);
-	curr = copy;
-	while (curr)
-	{
-		e = curr->content;
-		printf("export %s=\"%s\"\n",e->key, e->value);
-		curr = curr->next;
+		tmp = copy->next;
+		free(copy);
+		copy = tmp;
 	}
 }
 
+t_env	*dup_env(t_env *content, t_exec_data *data)
+{
+	t_env	*dup;
+	char	*key;
+	char	*value;
+
+	dup = gc_malloc(sizeof(t_env), &data->gc_head_cmd);
+	if (!dup)
+		return (NULL);
+	key = gc_strdup(content->key, &data->gc_head_cmd);
+	if (!key)
+		return (NULL);
+	value = gc_strdup(content->value, &data->gc_head_cmd);
+	return (NULL);
+	dup->key = key;
+	dup->value = value;
+	return (dup);
+}

@@ -3,32 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   exec_one_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/26 03:35:09 by alex              #+#    #+#             */
-/*   Updated: 2026/02/04 09:21:33 by amoderan         ###   ########.fr       */
+/*   Created: 2026/02/20 08:36:27 by aghalmi           #+#    #+#             */
+/*   Updated: 2026/02/20 08:36:37 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	exec_one_cmd(t_node *node, char **envp)
+void	execute_in_child(char *path_cmd, t_node *node, char **envp,
+			t_exec_data *data)
 {
-	char	*path_cmd;
+	struct sigaction	sa_default;
 
-	path_cmd = path_to_find(node->av[0], envp);
-	if (!path_cmd)
-		return ;
-	if (fork() == 0)
+	sa_default.sa_handler = SIG_DFL;
+	sigemptyset(&sa_default.sa_mask);
+	sa_default.sa_flags = 0;
+	sigaction(SIGINT, &sa_default, NULL);
+	sigaction(SIGQUIT, &sa_default, NULL);
+	if (execve(path_cmd, node->av, envp) == -1)
 	{
-		if (execve(path_cmd, node->av, envp) == - 1)
-		{
-			perror("execve fail");
-			exit(126);
-		}
+		perror("execve fail");
+		gc_delete(&data->gc_head_env);
+		gc_delete(&data->gc_head_cmd);
+		exit(126);
 	}
-	wait(NULL);
-	free(path_cmd);
 }
 
 void	exec_one_cmd_lst(t_node *node, t_exec_data *data)
@@ -36,35 +36,23 @@ void	exec_one_cmd_lst(t_node *node, t_exec_data *data)
 	char	*path_cmd;
 	char	**envp;
 	pid_t	pid;
-	struct sigaction	sa_default;
 
 	if (is_a_built_in(node->av[0]))
-	{
-		//data->status = exec_built_in(node->av[0], data);
 		return ;
-	}
 	path_cmd = path_to_find_lst(node->av[0], data);
 	if (!path_cmd)
 	{
 		data->status = 127;
 		return ;
 	}
-	envp = getenv_to_str(data->envp);
+	envp = getenv_to_str(data->envp, &data->gc_head_cmd);
 	if (!envp)
-		return (free(path_cmd));
+		return (gc_free_one(&data->gc_head_cmd, path_cmd));
 	pid = fork();
 	if (pid == 0)
-	{
-		sigaction(SIGINT, &sa_default, NULL);
-		sigaction(SIGQUIT, &sa_default, NULL);
-		if (execve(path_cmd, node->av, envp) == - 1)
-		{
-			perror("execve fail");
-			exit(126);
-		}
-	}
+		execute_in_child(path_cmd, node, envp, data);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	waitpid(pid, &data->status, 0);
-	free(path_cmd);
-	free_split(envp);
 	set_signal_actions();
 }

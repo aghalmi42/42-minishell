@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path_finding_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/26 02:38:35 by alex              #+#    #+#             */
-/*   Updated: 2026/02/02 01:46:55 by alex             ###   ########.fr       */
+/*   Created: 2026/02/20 09:12:22 by aghalmi           #+#    #+#             */
+/*   Updated: 2026/02/20 09:12:26 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	count_env_lst(t_list	*envp)
 	int		i;
 
 	i = 0;
-	while(envp)
+	while (envp)
 	{
 		envp = envp->next;
 		i++;

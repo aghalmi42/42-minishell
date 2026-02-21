@@ -1,14 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin_pwd.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/20 08:21:46 by aghalmi           #+#    #+#             */
+/*   Updated: 2026/02/20 08:21:46 by aghalmi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 /* affiche le reprtoire dans lequel nouus somme */
-void builtin_pwd(t_exec_data *data, t_node *node)
+void	builtin_pwd(t_exec_data *data, t_node *node)
 {
-	char cwd[PATH_MAX];
-	int i;
+	char	cwd[PATH_MAX];
+	int		i;
 
 	i = 0;
-	while(node->av && node->av[i])
+	while (node->av && node->av[i])
 	{
 		if (node->av[i][0] == '-')
 		{

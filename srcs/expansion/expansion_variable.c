@@ -1,11 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expansion_variable.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/20 08:55:31 by aghalmi           #+#    #+#             */
+/*   Updated: 2026/02/20 10:21:42 by aghalmi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 char	*find_env_value(char *var_name, t_list *envp)
 {
-	t_list *current;
+	t_list	*current;
 	t_env	*env;
-	int	len;
+	int		len;
 
 	if (!var_name || !envp)
 		return (NULL);
@@ -22,7 +33,7 @@ char	*find_env_value(char *var_name, t_list *envp)
 }
 
 /* extrait user */
-char	*extract_var_name(char *str, int *i)
+char	*extract_var_name(char *str, int *i, t_list **gc_head_cmd)
 {
 	char	*name;
 	int		j;
@@ -33,7 +44,7 @@ char	*extract_var_name(char *str, int *i)
 	start = *i;
 	while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_'))
 		(*i)++;
-	name = malloc(*i - start + 1);
+	name = gc_malloc(*i - start + 1, gc_head_cmd);
 	if (!name)
 		return (NULL);
 	while (start < *i)
@@ -63,18 +74,17 @@ int	copy_to_result(char *src, char *result)
 }
 
 /* gere lexpansion dune variable $USER et return nb char ajt*/
-int	manage_variable(char *str, int *i, char *result, t_list *envp)
+int	manage_variable(char *str, int *i, char *result, t_exec_data *data)
 {
 	char	*var_name;
 	char	*var_value;
 	int		count;
 
-	var_name = extract_var_name(str, i);
+	var_name = extract_var_name(str, i, &data->gc_head_cmd);
 	if (!var_name)
 		return (0);
-	var_value = find_env_value(var_name, envp);
+	var_value = find_env_value(var_name, data->envp);
 	count = copy_to_result(var_value, result);
-	free(var_name);
 	return (count);
 }
 

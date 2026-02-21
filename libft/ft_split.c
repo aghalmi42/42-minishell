@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 16:21:01 by aghalmi           #+#    #+#             */
-/*   Updated: 2025/11/12 13:35:52 by aghalmi          ###   ########.fr       */
+/*   Updated: 2026/02/16 08:28:10 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,30 +87,29 @@ char	**ft_split(char const *s, char c)
 		return (NULL);
 	return (result);
 }
-/*
-#include <stdio.h>
 
-int	main(void)
-{
-	char	**result;
-	int		i;
-	char	*str = "Salut  les   amis";
-	char	sep = ' ';
+// #include <stdio.h>
 
-	result = ft_split(str, sep);
-	if (!result)
-	{
-		printf("Erreur d'allocation\n");
-		return (1);
-	}
-	i = 0;
-	while (result[i])
-	{
-		printf("mot[%d] = \"%s\"\n", i, result[i]);
-		free(result[i]);
-		i++;
-	}
-	free(result);
-	return (0);
-}
-*/
+// int	main(void)
+// {
+// 	char	**result;
+// 	int		i;
+// 	char	*str = "Salut  les   amis";
+// 	char	sep = ' ';
+
+// 	result = ft_split(str, sep);
+// 	if (!result)
+// 	{
+// 		printf("Erreur d'allocation\n");
+// 		return (1);
+// 	}
+// 	i = 0;
+// 	while (result[i])
+// 	{
+// 		printf("mot[%d] = \"%s\"\n", i, result[i]);
+// 		free(result[i]);
+// 		i++;
+// 	}
+// 	free(result);
+// 	return (0);
+// }

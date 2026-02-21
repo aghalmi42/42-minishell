@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_syntax_logical.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/20 09:03:22 by aghalmi           #+#    #+#             */
+/*   Updated: 2026/02/20 09:03:22 by aghalmi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
@@ -23,7 +34,7 @@ int	check_logical_token(t_token *token, t_exec_data *data)
 		print_syntax_error("newline", data);
 		return (-1);
 	}
-	if (token->next->type == TOKEN_AND 
+	if (token->next->type == TOKEN_AND
 		|| token->next->type == TOKEN_OR
 		|| token->next->type == TOKEN_PIPE)
 	{

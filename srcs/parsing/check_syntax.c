@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_syntax.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/20 09:04:33 by aghalmi           #+#    #+#             */
+/*   Updated: 2026/02/20 09:04:38 by aghalmi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 /* affiche un msg derreuur de syntax */
-void print_syntax_error(char *token, t_exec_data *data)
+void	print_syntax_error(char *token, t_exec_data *data)
 {
 	ft_putstr_fd("mimishell : syntax error near unexpected token `", 2);
 	if (token)

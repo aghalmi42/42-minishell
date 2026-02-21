@@ -5,50 +5,41 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/29 07:24:39 by alex              #+#    #+#             */
-/*   Updated: 2026/02/14 20:39:45 by aghalmi          ###   ########.fr       */
+/*   Created: 2026/02/20 08:41:44 by aghalmi           #+#    #+#             */
+/*   Updated: 2026/02/20 08:41:45 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-/* permet de créer le pipe nécessaire si un node_pipe est rencontré */
-void	exec_pipe(t_node *node, t_exec_data *data)
+void	exec_pipe_left(t_node *node, int pipe_fd[2], t_exec_data *data)
 {
-	int	pipe_fd[2];
-	pid_t	pid_left;
-	pid_t	pid_right;
-	int		status;
-
-	if (pipe(pipe_fd) == -1)
-		return ;
-	signal(SIGINT, SIG_IGN);
-	pid_left = fork();
-	if (pid_left == 0)
-	{
-		set_signal_actions_default();
-		data->is_fork = 1;
-		close(pipe_fd[0]);
-		dup2(pipe_fd[1], STDOUT_FILENO);
-		close(pipe_fd[1]);
-		exec_main(node->left, data);
-		exit(data->status);
-	}
-	pid_right = fork();
-	if (pid_right == 0)
-	{
-		set_signal_actions_default();
-		close(pipe_fd[1]);
-		data->is_fork = 1;
-		dup2(pipe_fd[0], STDIN_FILENO);
-		close(pipe_fd[0]);
-		exec_main(node->right, data);
-		exit(data->status);
-	}
+	set_signal_actions_fork();
+	data->is_fork = 1;
 	close(pipe_fd[0]);
+	dup2(pipe_fd[1], STDOUT_FILENO);
 	close(pipe_fd[1]);
-	waitpid(pid_left, NULL, 0);
-	waitpid(pid_right, &status, 0);
+	exec_main(node->left, data);
+	gc_delete(&data->gc_head_cmd);
+	gc_delete(&data->gc_head_env);
+	exit(data->status);
+}
+
+void	exec_pipe_right(t_node *node, int pipe_fd[2], t_exec_data *data)
+{
+	set_signal_actions_fork();
+	close(pipe_fd[1]);
+	data->is_fork = 1;
+	dup2(pipe_fd[0], STDIN_FILENO);
+	close(pipe_fd[0]);
+	exec_main(node->right, data);
+	gc_delete(&data->gc_head_env);
+	gc_delete(&data->gc_head_cmd);
+	exit(data->status);
+}
+
+void	handle_pipe_status(int status, t_exec_data *data)
+{
 	if (WIFSIGNALED(status))
 	{
 		if (WTERMSIG(status) == SIGINT)
@@ -57,5 +48,29 @@ void	exec_pipe(t_node *node, t_exec_data *data)
 	}
 	else
 		data->status = WEXITSTATUS(status);
+}
+
+void	exec_pipe(t_node *node, t_exec_data *data)
+{
+	int		pipe_fd[2];
+	pid_t	pid_left;
+	pid_t	pid_right;
+	int		status;
+
+	if (pipe(pipe_fd) == -1)
+		return ;
+	pid_left = fork();
+	if (pid_left == 0)
+		exec_pipe_left(node, pipe_fd, data);
+	pid_right = fork();
+	if (pid_right == 0)
+		exec_pipe_right(node, pipe_fd, data);
+	close(pipe_fd[0]);
+	close(pipe_fd[1]);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	waitpid(pid_left, NULL, 0);
+	waitpid(pid_right, &status, 0);
+	handle_pipe_status(status, data);
 	set_signal_actions();
 }

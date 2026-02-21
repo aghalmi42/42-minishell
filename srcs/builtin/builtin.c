@@ -3,17 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/05 06:08:06 by alex              #+#    #+#             */
-/*   Updated: 2026/02/05 06:08:06 by alex             ###   ########.fr       */
+/*   Created: 2026/02/20 08:22:41 by aghalmi           #+#    #+#             */
+/*   Updated: 2026/02/20 08:22:41 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+void	print_export(t_exec_data *data)
+{
+	t_list	*copy;
+	t_list	*curr;
+	t_env	*e;
+	t_list	*tmp;
+
+	copy = NULL;
+	curr = data->envp;
+	while (curr)
+	{
+		tmp = gc_malloc(sizeof(t_list), &data->gc_head_cmd);
+		if (!tmp)
+			exit(1);
+		tmp->content = curr->content;
+		tmp->next = NULL;
+		ft_lstadd_back(&copy, tmp);
+		curr = curr->next;
+	}
+	sort_env_selection(copy);
+	curr = copy;
+	while (curr)
+	{
+		e = curr->content;
+		printf("export %s=\"%s\"\n", e->key, e->value);
+		curr = curr->next;
+	}
+}
+
 /* on verif si la cmd est builtin*/
-int builtin(char *cmd)
+int	builtin(char *cmd)
 {
 	if (!cmd)
 		return (0);
@@ -26,17 +55,17 @@ int builtin(char *cmd)
 	return (0);
 }
 
-/* on exec le builtin*/
-// int exec_builtin(char **av, char **env)
-// {
-// 	if (!av || !av[0])
-// 		return (1);
-// 	if (ft_strncmp(av[0], "pwd", 4) == 0 && av[0][3] == '\0')
-// 		return (builtin_pwd());
-// 	if (ft_strncmp(av[0], "echo", 5) == 0 && av[0][4] == '\0')
-// 		return (builtin_echo(av));
-// 	if (ft_strncmp(av[0], "cd", 3) == 0 && av[0][2] == '\0')
-// 		return (builtin_cd(av, env));
-// 	return (1);
-// }
-
+int	builtin_parent(char *cmd)
+{
+	if (!cmd)
+		return (0);
+	if (!ft_strncmp("cd", cmd, 3) && cmd[2] == '\0')
+		return (1);
+	if (!ft_strncmp("export", cmd, 7) && cmd[6] == '\0')
+		return (1);
+	if (!ft_strncmp("unset", cmd, 6) && cmd[5] == '\0')
+		return (1);
+	if (!ft_strncmp("exit", cmd, 5) && cmd[4] == '\0')
+		return (1);
+	return (0);
+}

@@ -1,12 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/20 09:09:01 by aghalmi           #+#    #+#             */
+/*   Updated: 2026/02/20 09:09:15 by aghalmi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 /* pour cree un nv noeud */
-t_node	*new_node(t_node_type type)
+t_node	*new_node(t_node_type type, t_list **gc_head_cmd)
 {
 	t_node	*node;
 
-	node = malloc(sizeof(t_node));
+	node = gc_malloc(sizeof(t_node), gc_head_cmd);
 	if (!node)
 		return (NULL);
 	node->type = type;
@@ -58,7 +69,7 @@ int	count_av(t_token *token)
 }
 
 /* convert token en tableau de av */
-char	**token_tab_av(t_token *token)
+char	**token_tab_av(t_token *token, t_list **gc_head_cmd)
 {
 	char	**av;
 	int		i;
@@ -66,14 +77,16 @@ char	**token_tab_av(t_token *token)
 
 	i = 0;
 	count = count_av(token);
-	av = malloc(sizeof(char *) * (count + 1));
+	av = gc_malloc(sizeof(char *) * (count + 1), gc_head_cmd);
 	if (!av)
 		return (NULL);
 	while (token && token->type == TOKEN_WORD)
 	{
 		if (token->value && token->value[0] != '\0')
 		{
-			av[i] = ft_strdup(token->value);
+			av[i] = gc_strdup(token->value, gc_head_cmd);
+			if (!av[i])
+				return (NULL);
 			i++;
 		}
 		token = token->next;
@@ -82,52 +95,19 @@ char	**token_tab_av(t_token *token)
 	return (av);
 }
 
-/* fonction quon va supp a la fin */
-void	print_ast(t_node *node, int tmp)
+/* split la lst de token au bon endroit */
+t_token	*split_token(t_token *token, t_token *split)
 {
-	int	i;
-	int	j;
+	t_token	*current;
+	t_token	*next;
 
-	j = 0;
-	if (!node)
-		return ;
-	while (j < tmp)
-	{
-		printf("  ");
-		j++;
-	}
-	if (node->type == NODE_CMD)
-	{
-		printf("CMD : ");
-		i = 0;
-		while (node->av && node->av[i])
-		{
-			printf("%s ", node->av[i]);
-			i++;
-		}
-		printf("\n");
-	}
-	else if (node->type == NODE_PIPE)
-	{
-		printf("PIPE\n");
-		print_ast(node->left, tmp + 1);
-		print_ast(node->right, tmp + 1);
-	}
-	else if (node->type == NODE_REDIR)
-	{
-		printf("REDIR %d --> %s\n", node->redir_type, node->redir_file);
-		print_ast(node->left, tmp + 1);
-	}
-	else if (node->type == NODE_AND)
-	{
-		printf("AND\n");
-		print_ast(node->left, tmp + 1);
-		print_ast(node->right, tmp + 1);
-	}
-	else if (node->type == NODE_OR)
-	{
-		printf("OR\n");
-		print_ast(node->left, tmp + 1);
-		print_ast(node->right, tmp + 1);
-	}
+	if (!token || !split)
+		return (NULL);
+	current = token;
+	while (current && current->next != split)
+		current = current->next;
+	if (current)
+		current->next = NULL;
+	next = split->next;
+	return (next);
 }

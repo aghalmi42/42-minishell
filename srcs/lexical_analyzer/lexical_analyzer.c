@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexical_analyzer.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/20 09:02:49 by aghalmi           #+#    #+#             */
+/*   Updated: 2026/02/20 09:02:50 by aghalmi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
@@ -31,7 +42,7 @@ int	construct_word(char *line, int *i, char *word, int *j)
 }
 
 /* extrait un  mot en gerant les quote et cree un token */
-int	extract_word(char *line, int *i, t_token **up)
+int	extract_word(char *line, int *i, t_token **up, t_list **gc_head)
 {
 	int		j;
 	int		result;
@@ -49,14 +60,31 @@ int	extract_word(char *line, int *i, t_token **up)
 		return (-1);
 	}
 	word[j] = '\0';
-	token = new_token(TOKEN_WORD, word);
+	token = new_token(TOKEN_WORD, word, gc_head);
+	if (!token)
+		return (-1);
 	add_token(up, token);
 	free(word);
 	return (0);
 }
 
+int	process_token(char *line, int *i, t_token **up, t_list **gc_head)
+{
+	if (manage_parenthese(line, i, up, gc_head))
+		return (1);
+	if (manage_logical(line, i, up, gc_head))
+		return (1);
+	if (manage_pipe(line, i, up, gc_head))
+		return (1);
+	if (manage_redirection(line, i, up, gc_head))
+		return (1);
+	if (extract_word(line, i, up, gc_head) == -1)
+		return (-1);
+	return (0);
+}
+
 /* fonction principal celle qui va tt orchestrer */
-t_token	*lexical_analyzer(char *line)
+t_token	*lexical_analyzer(char *line, t_list **gc_head)
 {
 	t_token	*up;
 	int		i;
@@ -69,18 +97,9 @@ t_token	*lexical_analyzer(char *line)
 		skip_all_space(line, &i);
 		if (line[i] == '\0')
 			break ;
-		if (manage_logical(line, &i, &up))
-			continue ;
-		if (manage_pipe(line, &i, &up))
-			continue ;
-		if (manage_redirection(line, &i, &up))
-			continue ;
-		result = extract_word(line, &i, &up);
+		result = process_token(line, &i, &up, gc_head);
 		if (result == -1)
-		{
-			free_token(up);
-			return (NULL);
-		}
+			return (gc_delete(gc_head), NULL);
 	}
 	return (up);
 }

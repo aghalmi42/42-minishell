@@ -3,58 +3,81 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: amoderan <amoderan@student.42.fr>          +#+  +:+       +#+         #
+#    By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/03 18:20:38 by aghalmi           #+#    #+#              #
-#    Updated: 2026/02/12 05:18:00 by amoderan         ###   ########.fr        #
+#    Updated: 2026/02/20 08:29:02 by aghalmi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
 SRCS = srcs/main.c \
+	   srcs/main_utils.c \
 	   srcs/lexical_analyzer/lexical_analyzer.c \
 	   srcs/lexical_analyzer/lexical_analyzer_utils.c \
 	   srcs/lexical_analyzer/lexical_analyzer_pipe.c \
 	   srcs/lexical_analyzer/lexical_analyzer_redir.c \
 	   srcs/lexical_analyzer/lexical_analyzer_quote.c \
 	   srcs/lexical_analyzer/lexical_analyzer_logical.c \
+	   srcs/lexical_analyzer/lexical_analyzer_parenthese.c \
 	   srcs/parsing/parsing.c \
 	   srcs/parsing/parsing_utils.c \
 	   srcs/parsing/parsing_utils_2.c \
 	   srcs/parsing/check_syntax.c \
-	   srcs/path_finding/path_finding.c \
-	   srcs/path_finding/path_finding2.c \
-	   srcs/path_finding/path_finding_utils.c \
-	   srcs/exec/exec_one_cmd.c \
-	   srcs/exec/exec_cmd.c \
-	   srcs/exec/exec.c \
-	   srcs/exec/exec_handle_here_doc.c \
-	   srcs/exec/exec_node_here_doc.c \
-	   srcs/exec/exec_pipe.c \
-	   srcs/exec/exec_redir.c \
-	   srcs/exec/exec_or_and.c \
-	   srcs/exec/exec_utils.c \
-	   srcs/set/set_envp.c \
-	   srcs/signals/signals.c \
+	   srcs/parsing/parsing_parenthese.c \
+	   srcs/parsing/check_syntax_parenthese.c \
 	   srcs/parsing/check_syntax_logical.c \
 	   srcs/parsing/check_syntax_main.c \
 	   srcs/parsing/parsing_logical.c \
 	   srcs/expansion/expansion.c \
 	   srcs/expansion/expansion_utils.c \
+	   srcs/expansion/expansion_utils_2.c \
+	   srcs/expansion/expansion_utils_3.c \
+	   srcs/expansion/expansion_utils_4.c \
 	   srcs/expansion/expansion_variable.c \
 	   srcs/expansion/expansion_special.c \
+	   srcs/expansion/expansion_wildcard.c \
+	   srcs/expansion/expansion_wildcard_utils.c \
+	   srcs/expansion/expansion_wildcard_utils_2.c \
+	   srcs/expansion/expansion_wildcard_utils_3.c \
+	   srcs/path_finding/path_finding.c \
+	   srcs/path_finding/path_finding2.c \
+	   srcs/path_finding/path_finding_utils.c \
+	   srcs/exec/exec_one_cmd.c \
+	   srcs/exec/exec_cmd.c \
+	   srcs/exec/exec_cmd_utils.c \
+	   srcs/exec/exec_cmd_utils_2.c \
+	   srcs/exec/exec.c \
+	   srcs/exec/exec_handle_here_doc.c \
+	   srcs/exec/exec_handle_here_doc_utils.c \
+	   srcs/exec/exec_node_here_doc.c \
+	   srcs/exec/exec_pipe.c \
+	   srcs/exec/exec_redir.c \
+	   srcs/exec/exec_or_and.c \
+	   srcs/exec/exec_utils.c \
+	   srcs/exec/exec_subshell.c \
+	   srcs/set/set_envp.c \
+	   srcs/signals/signals.c \
+	   srcs/signals/signals_utils.c \
 	   srcs/builtin/builtin_pwd.c \
 	   srcs/builtin/builtin.c \
 	   srcs/builtin/builtin_echo.c \
 	   srcs/builtin/builtin_cd.c \
+	   srcs/builtin/builtin_cd_utils.c \
+	   srcs/builtin/builtin_cd_utils_2.c \
 	   srcs/builtin/builtin_env.c \
 	   srcs/builtin/builtin_export.c \
+	   srcs/builtin/builtin_export_utils.c \
 	   srcs/builtin/builtin_unset.c \
 	   srcs/builtin/builtin_exit.c \
+	   srcs/builtin/builtin_exit_utils.c \
 	   srcs/gnl/get_next_line_bonus.c \
 	   srcs/gnl/get_next_line_utils_bonus.c \
-	   srcs/garbage_collector/garbage_collector.c
+	   srcs/garbage_collector/garbage_collector.c \
+	   srcs/garbage_collector/garbage_collector_utils.c \
+	   srcs/garbage_collector/garbage_collector_utils2.c \
+	   srcs/garbage_collector/garbage_collector_utils3.c 
 
 OBJS = $(SRCS:.c=.o)
 

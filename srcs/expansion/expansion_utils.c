@@ -1,15 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expansion_utils.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/20 08:53:34 by aghalmi           #+#    #+#             */
+/*   Updated: 2026/02/20 08:53:38 by aghalmi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 /* detecte si mot est dans une single quote */
 int	single_quote(char *str)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	if (!str || str[0] != '\'')
 		return (0);
-	while(str[i] && str[i] != '\'')
+	while (str[i] && str[i] != '\'')
 		i++;
 	if (str[i] == '\'' && str[i + 1] == '\0')
 		return (1);
@@ -32,24 +43,25 @@ int	dollar(char *str)
 }
 
 /* pour supp quote */
-char	*remove_quote(char *str)
+char	*remove_quote(char *str, t_list **gc_head_cmd)
 {
 	char	*result;
-	int len;
+	int		len;
 
 	if (!str)
 		return (NULL);
 	len = ft_strlen(str);
-	if (len >= 2 && ((str[0] == '\'' && str[len - 1] == '\'') || (str[0] == '"' && str[len - 1] == '"')))
+	if (len >= 2 && ((str[0] == '\'' && str[len - 1] == '\'') || (str[0] == '"'
+				&& str[len - 1] == '"')))
 	{
-		result = malloc(len - 1);
+		result = gc_malloc(len - 1, gc_head_cmd);
 		if (!result)
 			return (NULL);
 		ft_memcpy(result, str + 1, len - 2);
 		result[len - 2] = '\0';
 		return (result);
 	}
-	return (ft_strdup(str));
+	return (gc_strdup(str, gc_head_cmd));
 }
 
 /* copie un caractere normal */

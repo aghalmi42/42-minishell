@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aghalmi <aghalmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/05 06:12:33 by alex              #+#    #+#             */
-/*   Updated: 2026/02/09 08:01:40 by alex             ###   ########.fr       */
+/*   Created: 2026/02/20 08:21:28 by aghalmi           #+#    #+#             */
+/*   Updated: 2026/02/20 08:26:45 by aghalmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,8 @@
 
 void	builtin_export(t_exec_data *data, t_node *node)
 {
-	t_list	*head;
-	t_list	*new_env;
-	t_env	*new_key;
-	t_env	*search;
-	int		i;
+	int	i;
 
-	i = 1;
 	if (!node->av[1])
 		return (builtin_env(data, node, 1));
 	if (node->av[1][0] == '-' && node->av[1][1])
@@ -32,55 +27,63 @@ void	builtin_export(t_exec_data *data, t_node *node)
 		data->status = 1;
 		return ;
 	}
+	i = 1;
 	while (node->av[i])
 	{
-		head = data->envp;
-		new_key = split_env_line(node->av[i]);
-		//printf("%s ", new_key->value);
-		if (!new_key)
-			return ;
-		if (!check_new_key(new_key))
-		{
-			ft_putstr_fd("minishell: export: `", 2);
-			ft_putstr_fd(new_key->key, 2);
-			ft_putendl_fd("`: not a valid identifier", 2);
-			free(new_key->key);
-			free(new_key->value);
-			free(new_key);
-			i++;
-			continue ;
-		}
-		while(head)
-		{
-			search = head->content;
-			if (!ft_strncmp(new_key->key, search->key, ft_strlen(new_key->key) + 1))
-			{
-				free(search->value);
-				search->value = new_key->value;
-				free(new_key->key);
-				free(new_key);
-				return ;
-			}
-			head = head->next;
-		}
-		new_env = ft_lstnew(new_key);
-		ft_lstadd_back(&data->envp, new_env);
+		process_export_arg(data, node->av[i]);
 		i++;
 	}
 }
 
-int	check_new_key(t_env *env)
+t_list	*envp_to_lst_export(char **envp, t_list **gc_head_env)
 {
-	int	i;
+	t_list	*env;
+	int		i;
+	t_list	*dummy;
+	t_env	*content;
 
-	i = 1;
-	if (env->key[0] != '_' && !ft_isalpha(env->key[0]))
-		return (0);
-	while(env->key[i])
+	i = 0;
+	env = NULL;
+	while (envp && envp[i])
 	{
-		if (env->key[i] != '_' && !ft_isalnum(env->key[i]))
-			return (0);
+		content = split_env_line_export(envp[i], gc_head_env);
+		if (!content)
+			return (NULL);
+		dummy = gc_malloc(sizeof(t_list), gc_head_env);
+		if (!dummy)
+			return (NULL);
+		dummy->content = content;
+		dummy->next = NULL;
+		ft_lstadd_back(&env, dummy);
 		i++;
 	}
-	return (1);
+	return (env);
+}
+
+t_env	*split_env_line_export(char *str, t_list **gc_head_env)
+{
+	t_env	*node;
+	char	*equal_sign;
+
+	while (*str && *str > 0 && *str < 32)
+		str++;
+	node = gc_malloc(sizeof(t_env), gc_head_env);
+	if (!node)
+		return (NULL);
+	equal_sign = ft_strchr(str, '=');
+	if (equal_sign)
+	{
+		node->key = gc_substr(str, 0, equal_sign - str, gc_head_env);
+		node->value = gc_strdup(equal_sign + 1, gc_head_env);
+		if (!node->value)
+			return (NULL);
+	}
+	else
+	{
+		node->key = gc_strdup(str, gc_head_env);
+		if (!node->key)
+			return (NULL);
+		node->value = NULL;
+	}
+	return (node);
 }
