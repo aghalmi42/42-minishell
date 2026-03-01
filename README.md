@@ -529,7 +529,6 @@ Use only ONE global variable for signal number (as per subject requirements)
 
 ### Norm Compliance
 - All code must follow 42's coding norm
-- Bonus files must be in `_bonus.{c/h}` format
 - Norm errors result in 0 grade
 
 ## 📚 Resources
